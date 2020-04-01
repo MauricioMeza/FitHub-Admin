@@ -1,4 +1,4 @@
-package com.javatechie.spring.mongo.api.modelo;
+package com.api.modelos;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString
 
 @Document(collection= "Usuario")
-
 public class Usuario {
 	
 	@Id

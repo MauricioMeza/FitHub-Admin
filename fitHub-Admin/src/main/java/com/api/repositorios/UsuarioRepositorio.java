@@ -1,10 +1,9 @@
-package com.javatechie.spring.mongo.api.repositorio;
+package com.api.repositorios;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.javatechie.spring.mongo.api.modelo.Usuario;
+import com.api.modelos.Usuario;
 
 public interface UsuarioRepositorio extends MongoRepository<Usuario,Integer>{
 
-	
 }
