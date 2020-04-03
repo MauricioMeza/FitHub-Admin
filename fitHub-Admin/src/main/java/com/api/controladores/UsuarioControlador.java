@@ -23,7 +23,7 @@ public class UsuarioControlador {
 	@PostMapping("/agregarUsuario")
 	public String GuardarUsuario(@RequestBody Usuario usuario) {
 		servicio.saveUsuario(usuario);
-		return "Usuario añadido con id: "+ usuario.getId();
+		return "Usuario añadido con id: "+ usuario.getCedula();
 	}
 	
 	@GetMapping("/encontrarTodosLosUsuarios")

@@ -4,18 +4,20 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection= "Plan")
 public class Plan {
 
 	@Id
-	public int idPlan;
-	public Date fechaInicio;
-	public Date fechaFin;
-	public int clasesDisponibles;
-	public boolean activo;
-	public List<Integer> SesionesReservadas;
+	private int idPlan;
+	private Date fechaInicio;
+	private Date fechaFin;
+	private int clasesDisponibles;
+	private boolean activo;
+	@DBRef
+	private List<Sesion> SesionesReservadas;
 	
 	
 	public int getIdPlan() {
@@ -48,10 +50,10 @@ public class Plan {
 	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
-	public List<Integer> getSesionesReservadas() {
+	public List<Sesion> getSesionesReservadas() {
 		return SesionesReservadas;
 	}
-	public void setSesionesReservadas(List<Integer> sesionesReservadas) {
+	public void setSesionesReservadas(List<Sesion> sesionesReservadas) {
 		SesionesReservadas = sesionesReservadas;
 	}
 	

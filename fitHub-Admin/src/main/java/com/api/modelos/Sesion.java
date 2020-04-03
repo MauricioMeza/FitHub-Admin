@@ -4,16 +4,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection= "Sesion")
 public class Sesion {
 
 	@Id
-	public int idSesion;
-	public Date fecha_hora;
-	public Instructor instructor;
-	public List<Integer> asistentes;
+	private int idSesion;
+	private Date fecha_hora;
+	@DBRef
+	private Instructor instructor;
+	@DBRef
+	private List<Usuario> asistentes;
 	
 	
 	public int getIdSesion() {
@@ -34,10 +37,10 @@ public class Sesion {
 	public void setInstructor(Instructor instructor) {
 		this.instructor = instructor;
 	}
-	public List<Integer> getAsistentes() {
+	public List<Usuario> getAsistentes() {
 		return asistentes;
 	}
-	public void setAsistentes(List<Integer> asistentes) {
+	public void setAsistentes(List<Usuario> asistentes) {
 		this.asistentes = asistentes;
 	}
 	

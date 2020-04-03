@@ -1,7 +1,5 @@
 package com.api.modelos;
 
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,18 +15,15 @@ import lombok.ToString;
 public class Instructor {
 	
 	@Id
-	public int cedula;
-	public String nombre;
-	public Date fechaNacimiento;
-	public int edad;
-	public String contacto;
+	private int cedula;
+	private String nombre;
+	private String correo;
+	private String contrasena;
 	
 	
 	
 	public int getCedula() {
 		return cedula;
-		
-		
 	}
 	public void setCedula(int cedula) {
 		this.cedula = cedula;
@@ -39,23 +34,17 @@ public class Instructor {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public Date getFechaNacimiento() {
-		return fechaNacimiento;
+	public String getContrasena() {
+		return contrasena;
 	}
-	public void setFechaNacimiento(Date fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
 	}
-	public int getEdad() {
-		return edad;
+	public String getCorreo() {
+		return correo;
 	}
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
-	public String getContacto() {
-		return contacto;
-	}
-	public void setContacto(String contacto) {
-		this.contacto = contacto;
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 	
 	
