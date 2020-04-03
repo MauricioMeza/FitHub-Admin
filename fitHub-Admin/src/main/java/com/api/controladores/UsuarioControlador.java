@@ -31,12 +31,12 @@ public class UsuarioControlador {
 		return servicio.findAllUsuarios();
 	}
 	
-	@GetMapping("/encontrarUsuario/{Id}")
+	@GetMapping("/encontrarUsuario/{id}")
 	public Optional<Usuario> getUsuario(@PathVariable int id){
 		return servicio.finUsuarioById(id);
 	}
 	
-	@DeleteMapping("/borrarUsuario/{Id}")
+	@DeleteMapping("/borrarUsuario/{id}")
 	public String borrarUsuario(@PathVariable int id){
 		servicio.deleteUsuarioById(id);
 		return "El usuario con el Id: "+ id+" ha sido borrado";

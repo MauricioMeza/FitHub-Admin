@@ -15,40 +15,31 @@ import lombok.ToString;
 public class Usuario {
 	
 	@Id
-	private int id;
-	private String Usuario_Nombre;
-	private String Usuario_Apellido;
-	private int edad;
+	public int cedula;
+	public String nombre;
+	public String correo;
 	
 	
 	
 	public int getId() {
-		return id;
+		return cedula;
 		
 		
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.cedula = id;
 	}
 	public String getUsuario_Nombre() {
-		return Usuario_Nombre;
+		return nombre;
 	}
-	public void setUsuario_Nombre(String usuario_Nombre) {
-		Usuario_Nombre = usuario_Nombre;
+	public void setUsuario_Nombre(String nombre) {
+		this.nombre = nombre;
 	}
 	public String getUsuario_Apellido() {
-		return Usuario_Apellido;
+		return correo;
 	}
-	public void setUsuario_Apellido(String usuario_Apellido) {
-		Usuario_Apellido = usuario_Apellido;
-	}
-	public int getEdad() {
-		return edad;
-	}
-	public void setEdad(int edad) {
-		this.edad = edad;
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 	
-	
-
 }
