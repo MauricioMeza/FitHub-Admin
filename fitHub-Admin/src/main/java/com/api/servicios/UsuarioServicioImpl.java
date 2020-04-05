@@ -6,6 +6,7 @@ import com.api.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,4 +42,28 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     public Optional<Usuario> finUsuarioById(int id) {
         return repositorio.findById(id);
     }
+
+	@Override
+	public Usuario getUsuarioByEmail(String email) {
+		List<Usuario> usuarios = this.findAllUsuarios();
+		Iterator<Usuario> it = usuarios.iterator();
+		while(it.hasNext()){
+			Usuario user=it.next();
+			if(user.getCorreo().equals(email))
+				return user; 
+		}
+		return null;
+	}
+	
+	@Override
+	public Usuario getUsuarioByCedula(int cedula) {
+		List<Usuario> usuarios = this.findAllUsuarios();
+		Iterator<Usuario> it = usuarios.iterator();
+		while(it.hasNext()){
+			Usuario user=it.next();
+			if(user.getCedula()==cedula)
+				return user; 
+		}
+		return null;
+	}
 }
