@@ -1,25 +1,26 @@
 package com.api.dto;
 
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Email;
 
+@contrasenaIgualValidacion
 public class UsuarioDTO {
     @NotNull
-    @NotEmpty
     @Digits(integer = 10, fraction=0)
     @Positive
     private int cedula;
 
-    @NotNull
     @NotEmpty
     private String nombre;
 
-    @NotNull
     @NotEmpty
     @Email
     private String correo;
 
-    @NotNull
     @NotEmpty
     private String contrasena;
     private String contrasenaRepetir;

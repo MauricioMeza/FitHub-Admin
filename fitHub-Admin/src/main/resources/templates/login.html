@@ -5,8 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-
-<form th:action="@{/Login}" th:object="${usuario}" method="post">
+<p>Login</p>
+<br>
+<form th:action="@{/login}" th:object="${usuarioLogin}" method="post">
 
     <div class="form-group" >
         <label for="email" class="control-label">Correo</label> <input id="email" class="form-control" th:field="*{correo}" />
