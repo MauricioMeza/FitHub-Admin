@@ -1,5 +1,6 @@
 package com.api.servicios;
 
+import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,14 @@ public class UsuarioServicioImpl implements UsuarioServicio {
     UsuarioRepositorio repositorio;
 
     @Override
-    public void saveUsuario(Usuario usuario) {
+    public void saveUsuario(UsuarioDTO usuarioDTO) {
+        Usuario usuario = new Usuario();
+
+        usuario.setCedula(usuarioDTO.getCedula());
+        usuario.setCorreo(usuarioDTO.getCorreo());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setContrasena(usuarioDTO.getContrasena());
+
         repositorio.save(usuario);
     }
 

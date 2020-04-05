@@ -19,12 +19,7 @@ public class UsuarioControlador {
 	
 	@Autowired
 	private UsuarioServicio servicio;
-	
-	@PostMapping("/agregarUsuario")
-	public String GuardarUsuario(@RequestBody Usuario usuario) {
-		servicio.saveUsuario(usuario);
-		return "Usuario añadido con id: "+ usuario.getCedula();
-	}
+
 	
 	@GetMapping("/encontrarTodosLosUsuarios")
 	public List<Usuario> getUsuarios(){
