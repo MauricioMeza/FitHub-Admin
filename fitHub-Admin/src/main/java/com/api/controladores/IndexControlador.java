@@ -1,6 +1,5 @@
 package com.api.controladores;
 
-import com.api.dto.LoginDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,6 @@ public class IndexControlador {
         if (result.hasErrors()) {
             return new ModelAndView("register", "user", accountDto);
         }
-
         if ((usuarioServicio.getUsuarioByEmail(accountDto.getCorreo()) == null) && (usuarioServicio.getUsuarioByCedula(accountDto.getCedula()) == null)){
             usuarioServicio.saveUsuario(accountDto);
             return new ModelAndView("index", "user", accountDto);
@@ -53,24 +51,7 @@ public class IndexControlador {
 
     //Login
     @GetMapping("/login")
-    public String loginUsuario(WebRequest request, Model model) {
-    	LoginDTO loginDTO = new LoginDTO();
-        model.addAttribute("usuarioLogin", loginDTO);
+    public String loginUsuario(WebRequest request) {
         return "login";
     }
-    
-    @PostMapping("/login")
-    public ModelAndView registroUsuario(@ModelAttribute("usuarioLogin") @Valid LoginDTO loginAccountDto,
-                                        BindingResult result, WebRequest request, Errors errors) {
-        if (!result.hasErrors()) {
-            //usuarioServicio.saveUsuario(loginAccountDto);
-        }
-
-        if (result.hasErrors()) {
-            return new ModelAndView("login", "user", loginAccountDto);
-        } else {
-            return new ModelAndView("index", "user", loginAccountDto);
-        }
-    }
-
 }

@@ -3,6 +3,7 @@ package com.api.modelos;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ public class Usuario {
 	private String nombre;
 	private String correo;
 	private String contrasena;
+	private String rol;
 	@DBRef
 	private Plan planActual;
 
@@ -42,6 +44,10 @@ public class Usuario {
 
 	public String getContrasena() { return contrasena; }
 	public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+
+	public String getRol() { return rol; }
+
+	public void setRol(String rol) { this.rol = rol;}
 
 	public Plan getPlanActual() { return planActual; }
 	public void setPlanActual(Plan planActual) { this.planActual = planActual; }

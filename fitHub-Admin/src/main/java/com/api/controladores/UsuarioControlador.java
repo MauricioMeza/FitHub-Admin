@@ -5,22 +5,28 @@ import java.util.Optional;
 
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Usuario;
 
-@RestController
+@Controller
+@RequestMapping("Usuario")
 public class UsuarioControlador {
 	
 	@Autowired
 	private UsuarioServicio servicio;
 
-	
+	@GetMapping("/index")
+	public String usuarioIndexGet(){
+		return "Usuario/index";
+	}
+	@PostMapping("/index")
+	public String usuarioIndexPost(){
+		return "Usuario/index";
+	}
+
+	/*
 	@GetMapping("/encontrarTodosLosUsuarios")
 	public List<Usuario> getUsuarios(){
 		return servicio.findAllUsuarios();
@@ -36,7 +42,12 @@ public class UsuarioControlador {
 		servicio.deleteUsuarioById(id);
 		return "El usuario con el Id: "+ id+" ha sido borrado";
 	}
-	
+	*/
+
+	@GetMapping("/encontrarTodosLosUsuarios")
+	public List<Usuario> getUsuarios(){
+		return servicio.findAllUsuarios();
+	}
 	
 	
 }
