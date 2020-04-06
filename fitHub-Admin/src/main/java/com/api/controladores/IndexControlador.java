@@ -39,7 +39,7 @@ public class IndexControlador {
         if (result.hasErrors()) {
             return new ModelAndView("register", "user", accountDto);
         }
-        if ((usuarioServicio.getUsuarioByEmail(accountDto.getCorreo()) == null) && (usuarioServicio.getUsuarioByCedula(accountDto.getCedula()) == null)){
+        if ((usuarioServicio.findUsuarioByCorreo(accountDto.getCorreo()) == null) && (usuarioServicio.findUsuarioByCedula(accountDto.getCedula()) == null)){
             usuarioServicio.saveUsuario(accountDto);
             return new ModelAndView("index", "user", accountDto);
 

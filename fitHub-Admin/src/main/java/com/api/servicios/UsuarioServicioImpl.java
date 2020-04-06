@@ -52,27 +52,13 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
 	@Override
-	public Usuario getUsuarioByEmail(String email) {
-		List<Usuario> usuarios = this.findAllUsuarios();
-		Iterator<Usuario> it = usuarios.iterator();
-		while(it.hasNext()){
-			Usuario user=it.next();
-			if(user.getCorreo().equals(email))
-				return user; 
-		}
-		return null;
+	public Usuario findUsuarioByCorreo(String correo) {
+		return repositorio.findUsuarioByCorreo(correo);
 	}
-	
+
 	@Override
-	public Usuario getUsuarioByCedula(int cedula) {
-		List<Usuario> usuarios = this.findAllUsuarios();
-		Iterator<Usuario> it = usuarios.iterator();
-		while(it.hasNext()){
-			Usuario user=it.next();
-			if(user.getCedula()==cedula)
-				return user; 
-		}
-		return null;
+	public Usuario findUsuarioByCedula(int cedula) {
+		return repositorio.findUsuarioByCedula(cedula);
 	}
 
 }

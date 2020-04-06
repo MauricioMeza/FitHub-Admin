@@ -12,7 +12,7 @@ public interface UsuarioServicio {
     void deleteUsuarioById(int id);
     List<Usuario> findAllUsuarios();
     Optional<Usuario> finUsuarioById(int id);
-    Usuario getUsuarioByEmail(String email);
-    Usuario getUsuarioByCedula(int cedula);
+    Usuario findUsuarioByCorreo(String correo);
+    Usuario findUsuarioByCedula(int cedula);
 
 }
