@@ -37,24 +37,18 @@ public class IndexControlador {
     @PostMapping("/register")
     public ModelAndView registroUsuario(@ModelAttribute("usuario") @Valid UsuarioDTO accountDto,
                                         BindingResult result, WebRequest request, Errors errors) {
-        if (!result.hasErrors()) {
-        	if((usuarioServicio.getUsuarioByEmail(accountDto.getCorreo())==null)&&(usuarioServicio.getUsuarioByCedula(accountDto.getCedula())==null))
-            usuarioServicio.saveUsuario(accountDto);
-        	else if(!(usuarioServicio.getUsuarioByCedula(accountDto.getCedula())==null))
-        	{
-        		return new ModelAndView("register", "user", accountDto);
-        	}
-        	else
-        	{
-        		return new ModelAndView("register", "user", accountDto);
-        	}
-        }
-
         if (result.hasErrors()) {
             return new ModelAndView("register", "user", accountDto);
-        } else {
-            return new ModelAndView("index", "user", accountDto);
         }
+
+        if ((usuarioServicio.getUsuarioByEmail(accountDto.getCorreo()) == null) && (usuarioServicio.getUsuarioByCedula(accountDto.getCedula()) == null)){
+            usuarioServicio.saveUsuario(accountDto);
+            return new ModelAndView("index", "user", accountDto);
+
+        }else{
+            return new ModelAndView("register", "user", accountDto);
+        }
+
     }
 
     //Login
