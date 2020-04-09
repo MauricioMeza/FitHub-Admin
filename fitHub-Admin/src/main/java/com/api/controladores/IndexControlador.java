@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
+@CrossOrigin(origins = { "http://localhost:8080"})
 @Controller
 public class IndexControlador {
 
