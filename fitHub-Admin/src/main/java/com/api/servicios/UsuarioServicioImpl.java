@@ -54,6 +54,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         user.setContrasena(usuarioDTO.getContrasena());
         user.setCorreo(usuarioDTO.getCorreo());
         user.setCedula(usuarioDTO.getCedula());
+        user.setRole("USER");
 
         addUser(user);
     };

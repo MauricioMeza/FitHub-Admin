@@ -11,10 +11,9 @@ import java.util.Objects;
 public class Usuario {
 
 	@Id
-	private ObjectId _id;
+	private int cedula;
 	private String nombre;
 	private String correo;
-	private int cedula;
 	private String contrasena;
 	private String role;
 
@@ -29,13 +28,6 @@ public class Usuario {
 		this.role = role;
 	}
 
-	public ObjectId get_id() {
-		return _id;
-	}
-
-	public void set_id(ObjectId _id) {
-		this._id = _id;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -77,26 +69,14 @@ public class Usuario {
 		this.role = role;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Usuario)) return false;
-		Usuario user = (Usuario) o;
-		return _id.equals(user._id);
-	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(_id);
-	}
 
 	@Override
 	public String toString() {
 		return "User{" +
-				"_id=" + _id +
+				"cedula=" + cedula + + '\'' +
 				", nombre='" + nombre + '\'' +
 				", correo='" + correo + '\'' +
-				", cedula=" + cedula +
 				", contrasena='" + contrasena + '\'' +
 				", role='" + role + '\'' +
 				'}';
