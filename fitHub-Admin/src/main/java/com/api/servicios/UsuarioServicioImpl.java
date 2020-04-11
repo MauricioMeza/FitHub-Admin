@@ -31,6 +31,11 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
     @Override
+    public Usuario getUserByCedula(int cedula){
+        return repositorio.findByCedula(cedula);
+    }
+
+    @Override
     public List<Usuario> getAllUsers(){
         return repositorio.findAll();
     }

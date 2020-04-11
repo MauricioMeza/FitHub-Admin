@@ -57,7 +57,11 @@ class SignUp extends React.Component{
 
   componentDidMount(){
     Axios.get("http://localhost:8080/register")
-      .then(response => console.log(response.data))
+      .then(response => {
+        console.log(response.data)})
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 
   submitUsuario(event){

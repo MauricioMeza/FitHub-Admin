@@ -23,7 +23,7 @@ public class UsuarioDTO {
 
     @NotEmpty
     private String contrasena;
-    private String contrasenaRepetir;
+    private String contrasenaRep;
 
     public int getCedula() { return cedula; }
     public void setCedula(int cedula) { this.cedula = cedula; }
@@ -37,6 +37,6 @@ public class UsuarioDTO {
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public String getContrasenaRepetir() { return contrasenaRepetir; }
-    public void setContrasenaRepetir(String contrasenaRepetir) { this.contrasenaRepetir = contrasenaRepetir; }
+    public String getContrasenaRep() { return contrasenaRep; }
+    public void setContrasenaRep(String contrasenaRep) { this.contrasenaRep = contrasenaRep; }
 }

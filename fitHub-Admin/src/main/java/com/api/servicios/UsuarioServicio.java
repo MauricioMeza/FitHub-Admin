@@ -10,6 +10,7 @@ public interface UsuarioServicio {
 
     Usuario getUserById(ObjectId id);
     Usuario getUserByCorreo(String correo);
+    Usuario getUserByCedula(int cedula);
     List<Usuario> getAllUsers();
     Usuario addUser(Usuario user);
     void addUsuario(UsuarioDTO usuarioDTO);

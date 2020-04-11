@@ -14,50 +14,33 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
-@CrossOrigin(origins = { "http://localhost:8080"})
-@Controller
+@CrossOrigin(origins = { "http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST})
+@RestController
 public class IndexControlador {
 
     @Autowired
     UsuarioServicio usuarioServicio;
 
-    // Index
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
     //Registro
     @GetMapping("/register")
-    public String registroUsuario(WebRequest request, Model model) {
+    public String registroUsuario(WebRequest request, Model model){
         UsuarioDTO usuarioDTO = new UsuarioDTO();
-        model.addAttribute("usuario", usuarioDTO);
-        return "register";
+        return "registro";
     }
 
     @PostMapping("/register")
-    public ModelAndView registroUsuario(@ModelAttribute("usuario") @Valid UsuarioDTO accountDto,
-                                        BindingResult result, WebRequest request, Errors errors) {
+    public String registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
         if (!result.hasErrors()) {
-            usuarioServicio.addUsuario(accountDto);
-            /*
-        	if((usuarioServicio.getUsuarioByEmail(accountDto.getCorreo())==null)&&(usuarioServicio.getUsuarioByCedula(accountDto.getCedula())==null))
-            usuarioServicio.saveUsuario(accountDto);
-        	else if(!(usuarioServicio.getUsuarioByCedula(accountDto.getCedula())==null))
-        	{
-        		return new ModelAndView("register", "user", accountDto);
+            if ((usuarioServicio.getUserByCorreo(accountDto.getCorreo()) == null) && (usuarioServicio.getUserByCedula(accountDto.getCedula()) == null)){
+                usuarioServicio.addUsuario(accountDto);
+                return "Usuario Creado";
+            }else if(!(usuarioServicio.getUserByCedula(accountDto.getCedula())==null)){
+        		return "Ya existe esa cedula en BD";
+        	}else{
+        		return "Ya existe ese correo en BD";
         	}
-        	else
-        	{
-        		return new ModelAndView("register", "user", accountDto);
-        	}
-        	*/
-        }
-
-        if (result.hasErrors()) {
-            return new ModelAndView("register", "user", accountDto);
-        } else {
-            return new ModelAndView("index", "user", accountDto);
+        }else{
+            return "Error de Validacion";
         }
     }
 

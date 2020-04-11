@@ -22,12 +22,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/registro").permitAll()
-                .antMatchers("/registro/user").hasRole("USER")
+                .cors()
                 .and()
-                .formLogin()
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .and()
+                .formLogin().loginPage("/login")
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
