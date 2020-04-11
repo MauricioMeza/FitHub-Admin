@@ -7,12 +7,12 @@ class NavigationBar extends React.Component {
     render(){
         return(
             <Navbar bg="primary" variant="dark">
-                <Link to={"welcome"} className="navbar-brand">
+                <Link to={"/"} className="navbar-brand">
                     FITHUB
                 </Link>
                 <Nav className="mr-auto">
-                <Link to={"registro"} className="nav-link"> Registrarse</Link>
-                <Link to={"login"} className="nav-link"> Ingresar</Link>
+                <Link to={"/registro"} className="nav-link"> Registrarse</Link>
+                <Link to={"/login"} className="nav-link"> Ingresar</Link>
                 </Nav>
 
             </Navbar>

@@ -12,6 +12,7 @@ import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
+import WelcomeUser from "./components/WelcomeUser";
 
 class App extends Component{
 
@@ -24,7 +25,8 @@ class App extends Component{
         <Row>
           <Col lg={12} >
             <Switch>
-              <Route path="/welcome" exact component={Welcome} />
+              <Route path="/" exact component={Welcome} />
+              <Route path="/Welcome" exact component={WelcomeUser} />
               <Route path="/registro" exact component={SignUp} />
               <Route path="/login" exact component={Login} />
             </Switch>
