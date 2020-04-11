@@ -18,7 +18,7 @@ public class Usuario {
 	private String contrasena;
 	private String role;
 
-	protected Usuario(){}
+	public Usuario(){}
 
 	public Usuario(String nombre, String correo, int cedula, String contrasena, String role) {
 		super();

@@ -39,6 +39,8 @@ public class IndexControlador {
     public ModelAndView registroUsuario(@ModelAttribute("usuario") @Valid UsuarioDTO accountDto,
                                         BindingResult result, WebRequest request, Errors errors) {
         if (!result.hasErrors()) {
+            usuarioServicio.addUsuario(accountDto);
+            /*
         	if((usuarioServicio.getUsuarioByEmail(accountDto.getCorreo())==null)&&(usuarioServicio.getUsuarioByCedula(accountDto.getCedula())==null))
             usuarioServicio.saveUsuario(accountDto);
         	else if(!(usuarioServicio.getUsuarioByCedula(accountDto.getCedula())==null))
@@ -49,6 +51,7 @@ public class IndexControlador {
         	{
         		return new ModelAndView("register", "user", accountDto);
         	}
+        	*/
         }
 
         if (result.hasErrors()) {

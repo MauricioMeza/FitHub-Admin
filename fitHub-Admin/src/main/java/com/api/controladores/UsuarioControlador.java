@@ -20,7 +20,7 @@ public class UsuarioControlador {
 	@Autowired
 	private UsuarioServicio servicio;
 
-	
+	/*
 	@GetMapping("/encontrarTodosLosUsuarios")
 	public List<Usuario> getUsuarios(){
 		return servicio.findAllUsuarios();
@@ -28,7 +28,7 @@ public class UsuarioControlador {
 	
 	@GetMapping("/encontrarUsuario/{id}")
 	public Optional<Usuario> getUsuario(@PathVariable int id){
-		return servicio.finUsuarioById(id);
+		return servicio.getUserById(id);
 	}
 	
 	@DeleteMapping("/borrarUsuario/{id}")
@@ -36,7 +36,7 @@ public class UsuarioControlador {
 		servicio.deleteUsuarioById(id);
 		return "El usuario con el Id: "+ id+" ha sido borrado";
 	}
-	
+	*/
 	
 	
 }

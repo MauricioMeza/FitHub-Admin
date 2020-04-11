@@ -1,5 +1,6 @@
 package com.api.servicios;
 
+import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import org.bson.types.ObjectId;
 
@@ -11,5 +12,6 @@ public interface UsuarioServicio {
     Usuario getUserByCorreo(String correo);
     List<Usuario> getAllUsers();
     Usuario addUser(Usuario user);
+    void addUsuario(UsuarioDTO usuarioDTO);
 
 }

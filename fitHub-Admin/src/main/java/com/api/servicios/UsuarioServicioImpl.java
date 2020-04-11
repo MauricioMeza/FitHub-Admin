@@ -1,5 +1,6 @@
 package com.api.servicios;
 
+import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
 import org.bson.types.ObjectId;
@@ -35,9 +36,21 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
     @Override
-    public Usuario addUser(Usuario usuario){
+    public Usuario addUser(Usuario user) {
+        Usuario usuario = user;
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         return repositorio.save(usuario);
+    }
+
+    @Override
+    public void addUsuario(UsuarioDTO usuarioDTO){
+        Usuario user = new Usuario();
+        user.setNombre(usuarioDTO.getNombre());
+        user.setContrasena(usuarioDTO.getContrasena());
+        user.setCorreo(usuarioDTO.getCorreo());
+        user.setCedula(usuarioDTO.getCedula());
+
+        addUser(user);
     };
 
 }
