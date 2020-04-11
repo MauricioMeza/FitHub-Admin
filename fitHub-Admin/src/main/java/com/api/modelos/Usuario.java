@@ -1,7 +1,7 @@
 package com.api.modelos;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
@@ -11,62 +11,94 @@ import java.util.Objects;
 public class Usuario {
 
 	@Id
-	private int cedula;
+	private ObjectId _id;
 	private String nombre;
 	private String correo;
+	private int cedula;
 	private String contrasena;
-	@DBRef
-	private Plan planActual;
+	private String role;
 
-	public Usuario(){
+	protected Usuario(){}
 
-	}
-
-	public Usuario(int cedula, String nombre, String correo, String contrasena, Plan planActual) {
+	public Usuario(String nombre, String correo, int cedula, String contrasena, String role) {
 		super();
-		this.cedula = cedula;
 		this.nombre = nombre;
 		this.correo = correo;
+		this.cedula = cedula;
 		this.contrasena = contrasena;
-		this.planActual = planActual;
+		this.role = role;
 	}
 
-	public int getCedula() { return cedula;}
-	public void setCedula(int cedula) { this.cedula = cedula; }
+	public ObjectId get_id() {
+		return _id;
+	}
 
-	public String getNombre() { return nombre; }
-	public void setNombre(String nombre) { this.nombre = nombre; }
+	public void set_id(ObjectId _id) {
+		this._id = _id;
+	}
 
-	public String getCorreo() { return correo; }
-	public void setCorreo(String correo) { this.correo = correo; }
+	public String getNombre() {
+		return nombre;
+	}
 
-	public String getContrasena() { return contrasena; }
-	public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-	public Plan getPlanActual() { return planActual; }
-	public void setPlanActual(Plan planActual) { this.planActual = planActual; }
+	public String getCorreo() {
+		return correo;
+	}
 
-	@Override
-	public String toString() {
-		return "Usuario{" +
-				"cedula=" + cedula +
-				", nombre='" + nombre + '\'' +
-				", correo='" + correo + '\'' +
-				", contrasena='" + contrasena + '\'' +
-				", planActual=" + planActual +
-				'}';
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
+	public int getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(int cedula) {
+		this.cedula = cedula;
+	}
+
+	public String getContrasena() {
+		return contrasena;
+	}
+
+	public void setContrasena(String contrasena) {
+		this.contrasena = contrasena;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof Usuario)) return false;
-		Usuario usuario = (Usuario) o;
-		return cedula == usuario.cedula;
+		Usuario user = (Usuario) o;
+		return _id.equals(user._id);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cedula);
+		return Objects.hash(_id);
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"_id=" + _id +
+				", nombre='" + nombre + '\'' +
+				", correo='" + correo + '\'' +
+				", cedula=" + cedula +
+				", contrasena='" + contrasena + '\'' +
+				", role='" + role + '\'' +
+				'}';
 	}
 }

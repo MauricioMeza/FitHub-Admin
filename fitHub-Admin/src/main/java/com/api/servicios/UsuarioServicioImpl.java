@@ -1,69 +1,43 @@
 package com.api.servicios;
 
-import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class UsuarioServicioImpl implements UsuarioServicio {
+public class UsuarioServicioImpl implements UsuarioServicio{
 
     @Autowired
     UsuarioRepositorio repositorio;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @Override
-    public void saveUsuario(UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario();
-
-        usuario.setCedula(usuarioDTO.getCedula());
-        usuario.setCorreo(usuarioDTO.getCorreo());
-        usuario.setNombre(usuarioDTO.getNombre());
-        usuario.setContrasena(usuarioDTO.getContrasena());
-
-        repositorio.save(usuario);
+    public Usuario getUserById(ObjectId id){
+        return repositorio.findBy_id(id);
     }
 
     @Override
-    public void deleteUsuarioById(int id) {
-        repositorio.deleteById(id);
+    public Usuario getUserByCorreo(String correo){
+        return repositorio.findByCorreo(correo);
     }
 
     @Override
-    public List<Usuario> findAllUsuarios() {
+    public List<Usuario> getAllUsers(){
         return repositorio.findAll();
     }
 
     @Override
-    public Optional<Usuario> finUsuarioById(int id) {
-        return repositorio.findById(id);
-    }
+    public Usuario addUser(Usuario usuario){
+        usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
+        return repositorio.save(usuario);
+    };
 
-	@Override
-	public Usuario getUsuarioByEmail(String email) {
-		List<Usuario> usuarios = this.findAllUsuarios();
-		Iterator<Usuario> it = usuarios.iterator();
-		while(it.hasNext()){
-			Usuario user=it.next();
-			if(user.getCorreo().equals(email))
-				return user; 
-		}
-		return null;
-	}
-	
-	@Override
-	public Usuario getUsuarioByCedula(int cedula) {
-		List<Usuario> usuarios = this.findAllUsuarios();
-		Iterator<Usuario> it = usuarios.iterator();
-		while(it.hasNext()){
-			Usuario user=it.next();
-			if(user.getCedula()==cedula)
-				return user; 
-		}
-		return null;
-	}
 }
