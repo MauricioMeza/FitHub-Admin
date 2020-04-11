@@ -8,48 +8,49 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private UserPrincipalDetailsService userPrincipalDetailsService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/register").permitAll()
-                .antMatchers("/Usuario/**").hasRole("USER")
-                .antMatchers("/Instructor/**").hasRole("INSTRUCTOR")
-                .anyRequest().authenticated()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/registro").permitAll()
+                .antMatchers("/registro/user").hasRole("USER")
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/Usuario/index")
-                .permitAll()
                 .and()
                 .logout()
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/")
-                .permitAll();
+                .logoutSuccessUrl("/login");
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(serviceDet());
+    protected void configure(AuthenticationManagerBuilder auth){
+        auth
+                .authenticationProvider(authenticationProvider());
     }
 
     @Bean
-    UserServiceDet serviceDet(){
-        return new UserServiceDet();
+    DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(this.userPrincipalDetailsService);
+
+        return daoAuthenticationProvider;
     }
 
     @Bean
-    BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder(){
+        return  new BCryptPasswordEncoder();
     }
 }
