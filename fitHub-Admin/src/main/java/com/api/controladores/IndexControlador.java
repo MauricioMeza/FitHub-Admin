@@ -4,6 +4,7 @@ import com.api.dto.LoginDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,18 +30,23 @@ public class IndexControlador {
     }
 
     @PostMapping("/register")
-    public String registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
+    public ResponseEntity<String> registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
         if (!result.hasErrors()) {
             if ((usuarioServicio.getUserByCorreo(accountDto.getCorreo()) == null) && (usuarioServicio.getUserByCedula(accountDto.getCedula()) == null)){
                 usuarioServicio.addUsuario(accountDto);
-                return "Usuario Creado";
+                //return "Usuario Creado";
+                return ResponseEntity.accepted().body("Usuario creado");
             }else if(!(usuarioServicio.getUserByCedula(accountDto.getCedula())==null)){
-        		return "Ya existe esa cedula en BD";
+        		//return "Ya existe esa cedula en BD";
+            	return ResponseEntity.badRequest().body("Ya existe esa cédula en BD");
         	}else{
-        		return "Ya existe ese correo en BD";
+        		//return "Ya existe ese correo en BD";
+        		return ResponseEntity.badRequest().body("Ya existe ese correo en BD");
         	}
         }else{
-            return "Error de Validacion";
+            //return "Error de Validacion";
+        	return ResponseEntity.badRequest().body("Error de validación");
+
         }
     }
 
