@@ -14,7 +14,7 @@ import java.net.URI;
 @RequestMapping("/registro")
 public class RegistroControllador {
 
-    @Autowired
+    /*@Autowired
     UsuarioServicio servicio;
 
     @PostMapping
@@ -36,5 +36,5 @@ public class RegistroControllador {
     @GetMapping("/user")
     public String logTest(){
         return "it work";
-    }
+    }*/
 }

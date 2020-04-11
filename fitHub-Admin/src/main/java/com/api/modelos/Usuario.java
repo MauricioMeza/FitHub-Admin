@@ -28,7 +28,6 @@ public class Usuario {
 		this.role = role;
 	}
 
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -68,8 +67,6 @@ public class Usuario {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-
 
 	@Override
 	public String toString() {

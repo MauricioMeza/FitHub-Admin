@@ -20,10 +20,10 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Override
+    /*@Override
     public Usuario getUserById(ObjectId id){
         return repositorio.findBy_id(id);
-    }
+    }*/
 
     @Override
     public Usuario getUserByCorreo(String correo){
