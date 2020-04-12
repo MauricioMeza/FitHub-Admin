@@ -3,7 +3,7 @@ package com.api.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 
@@ -13,6 +13,7 @@ public class UsuarioDTO {
     @Digits(integer = 10, fraction=0)
     
     @NotEmpty
+    @Pattern(regexp = "[0-9]{7,12}")
     private String cedula;
 
     @NotEmpty
