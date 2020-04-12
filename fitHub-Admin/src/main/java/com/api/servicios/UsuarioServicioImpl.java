@@ -3,9 +3,7 @@ package com.api.servicios;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +17,6 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    /*@Override
-    public Usuario getUserById(ObjectId id){
-        return repositorio.findBy_id(id);
-    }*/
 
     @Override
     public Usuario getUserByCorreo(String correo){

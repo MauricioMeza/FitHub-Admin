@@ -1,6 +1,5 @@
 package com.api.dto;
 
-import com.mongodb.lang.NonNull;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
@@ -25,7 +24,4 @@ public class LoginDTO {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
-
-
-
 }

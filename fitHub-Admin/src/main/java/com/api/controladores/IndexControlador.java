@@ -5,7 +5,6 @@ import com.api.dto.UsuarioDTO;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -34,19 +33,17 @@ public class IndexControlador {
         if (!result.hasErrors()) {
             if ((usuarioServicio.getUserByCorreo(accountDto.getCorreo()) == null) && (usuarioServicio.getUserByCedula(accountDto.getCedula()) == null)){
                 usuarioServicio.addUsuario(accountDto);
-                //return "Usuario Creado";
                 return ResponseEntity.accepted().body("Usuario creado");
-            }else if(!(usuarioServicio.getUserByCedula(accountDto.getCedula())==null)){
-        		//return "Ya existe esa cedula en BD";
+            } else if(!(usuarioServicio.getUserByCedula(accountDto.getCedula())==null)) {
             	return ResponseEntity.badRequest().body("Ya existe esa cédula en BD");
-        	}else{
-        		//return "Ya existe ese correo en BD";
+        	} else {
         		return ResponseEntity.badRequest().body("Ya existe ese correo en BD");
         	}
-        }else{
-            //return "Error de Validacion";
-        	return ResponseEntity.badRequest().body("Error de validación");
-
+        } else {
+        	if (!accountDto.getContrasena().equals(accountDto.getContrasenaRep())) {
+        		return ResponseEntity.badRequest().body("Las contraseñas son diferentes");
+        	}
+        	return ResponseEntity.badRequest().body("La cédula es muy corta o no es válida");
         }
     }
 
@@ -64,7 +61,6 @@ public class IndexControlador {
         if (!result.hasErrors()) {
             //usuarioServicio.saveUsuario(loginAccountDto);
         }
-
         if (result.hasErrors()) {
             return new ModelAndView("login", "user", loginAccountDto);
         } else {

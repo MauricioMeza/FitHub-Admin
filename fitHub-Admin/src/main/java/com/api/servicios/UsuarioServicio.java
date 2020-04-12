@@ -2,8 +2,6 @@ package com.api.servicios;
 
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
-import org.bson.types.ObjectId;
-
 import java.util.List;
 
 public interface UsuarioServicio {
