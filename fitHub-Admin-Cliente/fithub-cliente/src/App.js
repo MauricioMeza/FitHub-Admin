@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css"
 
-import {Row, Col} from "react-bootstrap";
+import {Row, Col, Alert} from "react-bootstrap";
 import {BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Container} from '@material-ui/core';
 

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 
+import 'react-alert'
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -78,10 +79,20 @@ class SignUp extends React.Component{
     
     Axios.post("http://localhost:8080/register", usuario, {headers:{"Content-Type" : "application/json"}})
       .then(response => {
-        console.log(response.data)
+        alert(response.data)
       })
       .catch(error => {
-        console.log(error.response)
+        alert(error.response.data)
+        /*switch (error.response) {
+          case "Ya existe esa cédula en BD":
+            alert.show(<div style={{ color: 'blue' }}>Ya existe esa cédula en BD</div>)
+            break
+          case "Ya existe ese correo en BD":
+            alert.show(<div style={{ color: 'blue' }}>Ya existe ese correo en BD</div>)
+            break
+          default:
+            alert.show(<div style={{ color: 'blue' }}>Error de validación</div>)
+        }*/
       })
     
   }
