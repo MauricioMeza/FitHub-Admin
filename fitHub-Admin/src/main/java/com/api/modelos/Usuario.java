@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Usuario {
 
 	@Id
-	private int cedula;
+	private String cedula;
 	private String nombre;
 	private String correo;
 	private String contrasena;
@@ -19,7 +19,7 @@ public class Usuario {
 
 	public Usuario(){}
 
-	public Usuario(String nombre, String correo, int cedula, String contrasena, String role) {
+	public Usuario(String nombre, String correo, String cedula, String contrasena, String role) {
 		super();
 		this.nombre = nombre;
 		this.correo = correo;
@@ -44,11 +44,11 @@ public class Usuario {
 		this.correo = correo;
 	}
 
-	public int getCedula() {
+	public String getCedula() {
 		return cedula;
 	}
 
-	public void setCedula(int cedula) {
+	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
 

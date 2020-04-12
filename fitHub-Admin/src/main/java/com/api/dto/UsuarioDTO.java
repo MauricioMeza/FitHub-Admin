@@ -11,8 +11,9 @@ import javax.validation.constraints.Email;
 public class UsuarioDTO {
     @NotNull
     @Digits(integer = 10, fraction=0)
-    @Positive
-    private int cedula;
+    
+    @NotEmpty
+    private String cedula;
 
     @NotEmpty
     private String nombre;
@@ -25,8 +26,8 @@ public class UsuarioDTO {
     private String contrasena;
     private String contrasenaRep;
 
-    public int getCedula() { return cedula; }
-    public void setCedula(int cedula) { this.cedula = cedula; }
+    public String getCedula() { return cedula; }
+    public void setCedula(String cedula) { this.cedula = cedula; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
