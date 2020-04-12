@@ -40,10 +40,7 @@ public class IndexControlador {
         		return ResponseEntity.badRequest().body("Ya existe ese correo en BD");
         	}
         } else {
-        	if (!accountDto.getContrasena().equals(accountDto.getContrasenaRep())) {
-        		return ResponseEntity.badRequest().body("Las contraseñas son diferentes");
-        	}
-        	return ResponseEntity.badRequest().body("La cédula es muy corta o no es válida");
+        	return ResponseEntity.badRequest().body(result.getAllErrors().get(0).getDefaultMessage());
         }
     }
 
@@ -56,15 +53,11 @@ public class IndexControlador {
     }
     
     @PostMapping("/login")
-    public ModelAndView registroUsuario(@ModelAttribute("usuarioLogin") @Valid LoginDTO loginAccountDto,
-                                        BindingResult result, WebRequest request, Errors errors) {
+    public ResponseEntity<String> registroUsuario(@RequestBody @Valid LoginDTO loginAccountDto, BindingResult result, WebRequest request, Errors errors) {
         if (!result.hasErrors()) {
-            //usuarioServicio.saveUsuario(loginAccountDto);
-        }
-        if (result.hasErrors()) {
-            return new ModelAndView("login", "user", loginAccountDto);
-        } else {
-            return new ModelAndView("index", "user", loginAccountDto);
+            return ResponseEntity.ok().body("Usuario validado");
+        }else{
+            return ResponseEntity.badRequest().body(result.getAllErrors().get(0).getDefaultMessage());
         }
     }
 

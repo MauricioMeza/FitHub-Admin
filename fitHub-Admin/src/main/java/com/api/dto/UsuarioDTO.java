@@ -4,17 +4,17 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Email;
 
-@contrasenaIgualValidacion
+@contrasenaIgualValidacion(message = "Contraseñas no coinciden")
 public class UsuarioDTO {
     @NotEmpty
-    @Pattern(regexp = "^(?!0)([0-9]{7,12})")
+    @Pattern(regexp = "^(?!0)([0-9]{7,12})", message = "Numero de cedula no valido")
     private String cedula;
 
     @NotEmpty
     private String nombre;
 
     @NotEmpty
-    @Email
+    @Email(message = "Formato de correo no valido")
     private String correo;
 
     @NotEmpty

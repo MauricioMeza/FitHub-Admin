@@ -5,7 +5,7 @@ import javax.validation.constraints.NotEmpty;
 
 public class LoginDTO {
     @NotEmpty
-    @Email
+    @Email(message = "Formato de correo no valido")
     private String correo;
 
     @NotEmpty

@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
 
-import 'react-alert'
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -79,20 +76,21 @@ class SignUp extends React.Component{
     
     Axios.post("http://localhost:8080/register", usuario, {headers:{"Content-Type" : "application/json"}})
       .then(response => {
-        alert(response.data)
+        console.log(response.data)
+        this.props.history.push('/login')
       })
       .catch(error => {
-        alert(error.response.data)
-        /*switch (error.response) {
+        console.log(error.response)
+        switch (error.response.data) {
           case "Ya existe esa cédula en BD":
-            alert.show(<div style={{ color: 'blue' }}>Ya existe esa cédula en BD</div>)
+            alert(error.response.data)
             break
           case "Ya existe ese correo en BD":
-            alert.show(<div style={{ color: 'blue' }}>Ya existe ese correo en BD</div>)
+            alert(error.response.data)
             break
           default:
-            alert.show(<div style={{ color: 'blue' }}>Error de validación</div>)
-        }*/
+            alert(error.response.data)
+        }
       })
     
   }
@@ -182,12 +180,6 @@ class SignUp extends React.Component{
                   id="contraseñaRep"
                   value={this.state.contraseñaRep}
                   onChange={this.changeUsuario}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="Estoy de acuerdo con los terminos y condiciones."
                 />
               </Grid>
             </Grid>

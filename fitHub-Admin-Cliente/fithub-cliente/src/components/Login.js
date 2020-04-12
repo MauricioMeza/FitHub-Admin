@@ -52,11 +52,41 @@ const styles = theme => ({
   
   constructor(props){
     super(props);
+    this.state = {correo: "", contrasena: ""}
+    this.submitLogin = this.submitLogin.bind(this)
+    this.changeLogin = this.changeLogin.bind(this)
   }
 
   componentDidMount(){
     Axios.get("http://localhost:8080/login")
       .then(response => console.log(response.data))
+  }
+
+  submitLogin(event){
+    event.preventDefault()
+    
+    const login = JSON.stringify({
+      correo: this.state.correo,
+      contrasena: this.state.contrasena,
+    })
+    
+    
+    Axios.post("http://localhost:8080/login", login, {headers:{"Content-Type" : "application/json"}})
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error.response)
+        alert(error.response.data)
+      })
+  }
+
+  changeLogin(event){
+    event.preventDefault()
+
+    this.setState({
+      [event.target.name] : event.target.value
+    });
   }
 
   render(){
@@ -69,7 +99,7 @@ const styles = theme => ({
           <Typography component="h1" variant="h5">
             Iniciar sesión
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={this.submitLogin}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -79,7 +109,8 @@ const styles = theme => ({
                   id="correo"
                   label="Correo electronico"
                   name="correo"
-                  autoComplete="correo"
+                  value={this.state.correo}
+                  onChange={this.changeLogin}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -87,11 +118,12 @@ const styles = theme => ({
                   variant="outlined"
                   required
                   fullWidth
-                  name="contraseña"
+                  name="contrasena"
                   label="Contraseña"
-                  type="passworld"
-                  id="contraseña"
-                  autoComplete="current-password"
+                  type="password"
+                  id="contrasena"
+                  value={this.state.contrasena}
+                  onChange={this.changeLogin}
                 />
               </Grid>  
             </Grid>
