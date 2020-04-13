@@ -32,6 +32,15 @@ public class UserPrincipal implements UserDetails {
         return this.usuario.getCorreo();
     }
 
+
+    public String getName() {
+        return this.usuario.getNombre();
+    }
+
+    public String getRol() {
+        return this.usuario.getRole();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

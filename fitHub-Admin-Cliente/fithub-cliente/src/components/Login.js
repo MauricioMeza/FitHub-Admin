@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import Axios from 'axios';
+import AuthService from '../services/AuthService';
 
 
 
@@ -64,21 +65,17 @@ const styles = theme => ({
 
   submitLogin(event){
     event.preventDefault()
-    
-    const login = JSON.stringify({
-      correo: this.state.correo,
-      contrasena: this.state.contrasena,
+    AuthService.login(this.state.correo, this.state.contrasena)
+    .then(() => {
+      this.props.history.push('/welcomeUser')
+      window.location.reload();
     })
-    
-    
-    Axios.post("http://localhost:8080/login", login, {headers:{"Content-Type" : "application/json"}})
-      .then(response => {
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.log(error.response)
-        alert(error.response.data)
-      })
+    .catch(error => {
+      console.log(error.response)
+      if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
+        alert("Usuario o contraseña no pertenecen a un usuario")
+      }
+    })
   }
 
   changeLogin(event){

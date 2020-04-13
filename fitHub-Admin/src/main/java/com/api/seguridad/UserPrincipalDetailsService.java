@@ -17,6 +17,11 @@ public class UserPrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Usuario user = repositorio.findByCorreo(s);
+
+        if(user == null){
+            throw new UsernameNotFoundException("No existe usuario con el correo");
+        }
+
         UserPrincipal userPrincipal = new UserPrincipal(user);
 
         return  userPrincipal;

@@ -51,14 +51,4 @@ public class IndexControlador {
         model.addAttribute("usuarioLogin", loginDTO);
         return "login";
     }
-    
-    @PostMapping("/login")
-    public ResponseEntity<String> registroUsuario(@RequestBody @Valid LoginDTO loginAccountDto, BindingResult result, WebRequest request, Errors errors) {
-        if (!result.hasErrors()) {
-            return ResponseEntity.ok().body("Usuario validado");
-        }else{
-            return ResponseEntity.badRequest().body(result.getAllErrors().get(0).getDefaultMessage());
-        }
-    }
-
 }

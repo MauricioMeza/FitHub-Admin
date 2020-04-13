@@ -12,23 +12,23 @@ import SignUp from "./components/SignUp";
 import Login from "./components/Login";
 import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
-import WelcomeUser from "./components/WelcomeUser";
+import WelcomeUser from "./components/User/WelcomeUser";
+import AuthService from './services/AuthService';
 
 class App extends Component{
-
-  
   render(){
     return(
+
     <Router>
       <NavigationBar/>
       <Container>
         <Row>
           <Col lg={12} >
             <Switch>
-              <Route path="/" exact component={Welcome} />
-              <Route path="/Welcome" exact component={WelcomeUser} />
-              <Route path="/registro" exact component={SignUp} />
-              <Route path="/login" exact component={Login} />
+              <Route exact path={"/"}  component={Welcome} />
+              <Route exact path="/welcomeUser"  component={WelcomeUser} />
+              <Route exact path="/registro"  component={SignUp} />
+              <Route exact path="/login"  component={Login} />
             </Switch>
           </Col>
         </Row>
