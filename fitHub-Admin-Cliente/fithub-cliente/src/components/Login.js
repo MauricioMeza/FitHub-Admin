@@ -70,12 +70,12 @@ const styles = theme => ({
       this.props.history.push('/welcomeUser')
       window.location.reload();
     })
-    .catch(error => {
-      console.log(error.response)
-      if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
-        alert("Usuario o contraseña no pertenecen a un usuario")
-      }
     })
+      }
+        alert("Usuario o contraseña no pertenecen a un usuario")
+    .catch(error => {
+      if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
+      console.log(error.response)
   }
 
   changeLogin(event){
