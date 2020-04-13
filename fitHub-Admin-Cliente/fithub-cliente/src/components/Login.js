@@ -69,13 +69,12 @@ const styles = theme => ({
     .then(() => {
       this.props.history.push('/welcomeUser')
       window.location.reload();
-    })
-    })
-      }
-        alert("Usuario o contraseña no pertenecen a un usuario")
+    })   
     .catch(error => {
       if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
-      console.log(error.response)
+        alert("Usuario o contraseña No Validas")
+      }
+    })
   }
 
   changeLogin(event){
