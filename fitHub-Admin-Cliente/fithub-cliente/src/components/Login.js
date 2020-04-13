@@ -73,7 +73,7 @@ const styles = theme => ({
     
     Axios.post("http://localhost:8080/login", login, {headers:{"Content-Type" : "application/json"}})
       .then(response => {
-        console.log(response.data)
+        console.log(response)
       })
       .catch(error => {
         console.log(error.response)
