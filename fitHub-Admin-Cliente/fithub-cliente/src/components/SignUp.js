@@ -5,14 +5,13 @@ import {Link} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import Axios from 'axios';
+import AuthService from '../services/AuthService';
 
 function Copyright() {
   return (
@@ -50,36 +49,40 @@ const styles = theme => ({
 class SignUp extends React.Component{
   constructor(props){
     super(props);
-    this.state = {cedula: "", nombre: "", correo: "", contraseña: "", contraseñaRep: ""}
+    this.state = {cedula: "", nombre: "", correo: "", contrasena: "", contrasenaRep: ""}
     this.submitUsuario = this.submitUsuario.bind(this)
     this.changeUsuario = this.changeUsuario.bind(this)
   }
 
   componentDidMount(){
     Axios.get("http://localhost:8080/register")
-      .then(response => console.log(response.data))
+      .then(response => {
+        console.log(response.data)})
+      .catch(error => {
+        console.log(error.response)
+      })
   }
 
   submitUsuario(event){
     event.preventDefault()
-    
-    const usuario = JSON.stringify({
-      cedula: this.state.cedula,
-      nombre: this.state.nombre,
-      correo: this.state.correo,
-      contrasena: this.state.contraseña,
-      contrasenaRep: this.state.contraseñaRep
+    AuthService.register(this.state.cedula, this.state.nombre, this.state.correo, this.state.contrasena, this.state.contrasenaRep)
+    .then(()=> {
+        this.props.history.push("/login");
+        window.location.reload();
     })
-    
-    
-    Axios.post("http://localhost:8080/register", usuario, {headers:{"Content-Type" : "application/json"}})
-      .then(response => {
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.log(error.response)
-      })
-    
+    .catch(error => {
+      console.log(error.response)
+      switch (error.response.data) {
+        case "Ya existe esa cédula en BD":
+          alert(error.response.data)
+          break
+        case "Ya existe ese correo en BD":
+          alert(error.response.data)
+          break
+        default:
+          alert(error.response.data)
+      }
+    })
   }
 
   changeUsuario(event){
@@ -147,11 +150,11 @@ class SignUp extends React.Component{
                   variant="outlined"
                   required
                   fullWidth
-                  name="contraseña"
+                  name="contrasena"
                   label="Contraseña"
                   type="password"
-                  id="contraseña"
-                  value={this.state.contraseña}
+                  id="contrasena"
+                  value={this.state.contrasena}
                   onChange={this.changeUsuario}
                 />
               </Grid>
@@ -161,18 +164,12 @@ class SignUp extends React.Component{
                   variant="outlined"
                   required
                   fullWidth
-                  name="contraseñaRep"
+                  name="contrasenaRep"
                   label="Confirmar contraseña"
                   type="password"
-                  id="contraseñaRep"
-                  value={this.state.contraseñaRep}
+                  id="contrasenaRep"
+                  value={this.state.contrasenaRep}
                   onChange={this.changeUsuario}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="Estoy de acuerdo con los terminos y condiciones."
                 />
               </Grid>
             </Grid>

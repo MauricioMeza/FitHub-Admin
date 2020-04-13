@@ -1,32 +1,28 @@
 package com.api.dto;
 
-
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Digits;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Email;
 
-@contrasenaIgualValidacion
+@contrasenaIgualValidacion(message = "Contraseñas no coinciden")
 public class UsuarioDTO {
-    @NotNull
-    @Digits(integer = 10, fraction=0)
-    @Positive
-    private int cedula;
+    @NotEmpty
+    @Pattern(regexp = "^(?!0)([0-9]{7,12})", message = "Numero de cedula no valido")
+    private String cedula;
 
     @NotEmpty
     private String nombre;
 
     @NotEmpty
-    @Email
+    @Email(message = "Formato de correo no valido")
     private String correo;
 
     @NotEmpty
     private String contrasena;
-    private String contrasenaRepetir;
+    private String contrasenaRep;
 
-    public int getCedula() { return cedula; }
-    public void setCedula(int cedula) { this.cedula = cedula; }
+    public String getCedula() { return cedula; }
+    public void setCedula(String cedula) { this.cedula = cedula; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
@@ -37,6 +33,6 @@ public class UsuarioDTO {
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public String getContrasenaRepetir() { return contrasenaRepetir; }
-    public void setContrasenaRepetir(String contrasenaRepetir) { this.contrasenaRepetir = contrasenaRepetir; }
+    public String getContrasenaRep() { return contrasenaRep; }
+    public void setContrasenaRep(String contrasenaRep) { this.contrasenaRep = contrasenaRep; }
 }

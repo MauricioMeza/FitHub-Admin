@@ -4,13 +4,11 @@ import com.api.modelos.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class UserPrincipal implements UserDetails {
-
     private Usuario usuario;
 
     public UserPrincipal(Usuario usuario){
@@ -34,6 +32,15 @@ public class UserPrincipal implements UserDetails {
         return this.usuario.getCorreo();
     }
 
+
+    public String getName() {
+        return this.usuario.getNombre();
+    }
+
+    public String getRol() {
+        return this.usuario.getRole();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -54,3 +61,4 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 }
+

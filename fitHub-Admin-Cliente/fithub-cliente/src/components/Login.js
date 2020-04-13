@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import Axios from 'axios';
+import AuthService from '../services/AuthService';
 
 
 
@@ -52,11 +53,37 @@ const styles = theme => ({
   
   constructor(props){
     super(props);
+    this.state = {correo: "", contrasena: ""}
+    this.submitLogin = this.submitLogin.bind(this)
+    this.changeLogin = this.changeLogin.bind(this)
   }
 
   componentDidMount(){
     Axios.get("http://localhost:8080/login")
       .then(response => console.log(response.data))
+  }
+
+  submitLogin(event){
+    event.preventDefault()
+    AuthService.login(this.state.correo, this.state.contrasena)
+    .then(() => {
+      this.props.history.push('/welcomeUser')
+      window.location.reload();
+    })
+    })
+      }
+        alert("Usuario o contraseña no pertenecen a un usuario")
+    .catch(error => {
+      if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
+      console.log(error.response)
+  }
+
+  changeLogin(event){
+    event.preventDefault()
+
+    this.setState({
+      [event.target.name] : event.target.value
+    });
   }
 
   render(){
@@ -69,7 +96,7 @@ const styles = theme => ({
           <Typography component="h1" variant="h5">
             Iniciar sesión
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={this.submitLogin}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -79,7 +106,8 @@ const styles = theme => ({
                   id="correo"
                   label="Correo electronico"
                   name="correo"
-                  autoComplete="correo"
+                  value={this.state.correo}
+                  onChange={this.changeLogin}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -87,11 +115,12 @@ const styles = theme => ({
                   variant="outlined"
                   required
                   fullWidth
-                  name="contraseña"
+                  name="contrasena"
                   label="Contraseña"
-                  type="passworld"
-                  id="contraseña"
-                  autoComplete="current-password"
+                  type="password"
+                  id="contrasena"
+                  value={this.state.contrasena}
+                  onChange={this.changeLogin}
                 />
               </Grid>  
             </Grid>

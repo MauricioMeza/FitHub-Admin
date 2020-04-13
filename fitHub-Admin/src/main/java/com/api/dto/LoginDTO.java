@@ -1,12 +1,11 @@
 package com.api.dto;
 
-import com.mongodb.lang.NonNull;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 public class LoginDTO {
     @NotEmpty
-    @Email
+    @Email(message = "Formato de correo no valido")
     private String correo;
 
     @NotEmpty
@@ -25,7 +24,4 @@ public class LoginDTO {
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
     }
-
-
-
 }
