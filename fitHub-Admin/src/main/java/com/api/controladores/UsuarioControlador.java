@@ -18,23 +18,15 @@ public class UsuarioControlador {
 	@Autowired
 	private UsuarioServicio servicio;
 
-	/*
+
 	@GetMapping("/encontrarTodosLosUsuarios")
 	public List<Usuario> getUsuarios(){
-		return servicio.findAllUsuarios();
+		return servicio.getAllUsers();
 	}
 	
 	@GetMapping("/encontrarUsuario/{id}")
-	public Optional<Usuario> getUsuario(@PathVariable int id){
-		return servicio.getUserById(id);
+	public Usuario getUsuario(@PathVariable String id){
+		return servicio.getUserByCedula(id);
 	}
-	
-	@DeleteMapping("/borrarUsuario/{id}")
-	public String borrarUsuario(@PathVariable int id){
-		servicio.deleteUsuarioById(id);
-		return "El usuario con el Id: "+ id+" ha sido borrado";
-	}
-	*/
-	
 	
 }
