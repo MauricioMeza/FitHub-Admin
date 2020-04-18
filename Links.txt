@@ -7,13 +7,9 @@ https://github.com/MauricioMeza/FitHub-Admin
 Drive Folder:
 https://drive.google.com/drive/folders/1nqnhwp3AIXvtjbgs5ymmcbJi2Ni8IA7N?usp=sharing
 
-Tutoriales:
-- Mongo con Spring Boot:  https://www.youtube.com/watch?v=k5PeywcbVYc
-
-
 mmezab@unal.edu.co
 dcalbarracinv@unal.edu.co
 nfdelgador@unal.edu.co
 hadiazo@unal.edu.co
 caldanam@unal.edu.co
-esperemos que esto cause error
+
