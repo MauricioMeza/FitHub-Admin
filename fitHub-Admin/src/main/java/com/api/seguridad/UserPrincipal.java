@@ -1,5 +1,6 @@
 package com.api.seguridad;
 
+import com.api.modelos.Instructor;
 import com.api.modelos.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,35 +11,60 @@ import java.util.List;
 
 public class UserPrincipal implements UserDetails {
     private Usuario usuario;
+    private Instructor instructor;
 
     public UserPrincipal(Usuario usuario){
         this.usuario = usuario;
     }
 
+    public UserPrincipal(Instructor instructor){
+        this.instructor = instructor;
+    }
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.usuario.getRole()));
+        if(!this.instructor.equals(null))
+        	authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.usuario.getRole()));
+        else if(!this.usuario.equals(null))
+        	authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.instructor.getRole()));
         return authorityList;
     }
 
     @Override
     public String getPassword() {
-        return this.usuario.getContrasena();
+    	String mensaje = "";
+    	if(!this.instructor.equals(null))
+    		mensaje = this.instructor.getContrasena();
+    	else if(!this.usuario.equals(null))
+            mensaje = this.usuario.getContrasena();
+		return mensaje;
     }
 
     @Override
     public String getUsername() {
-        return this.usuario.getCorreo();
+    	String mensaje = "";
+    	if(!this.instructor.equals(null))
+    		mensaje = this.instructor.getCorreo();
+    	if(!this.usuario.equals(null))
+    		mensaje = this.usuario.getCorreo();
+		return mensaje;
     }
 
 
     public String getName() {
-        return this.usuario.getNombre();
+    	String mensaje = "";
+    	if(!usuario.equals(null))
+    		mensaje = this.usuario.getNombre();
+    	if(!instructor.equals(null))
+    		mensaje = this.instructor.getNombre();
+		return mensaje;
     }
 
     public String getRol() {
+    	if(!usuario.equals(null))
         return this.usuario.getRole();
+    	else return null;
     }
 
     @Override
