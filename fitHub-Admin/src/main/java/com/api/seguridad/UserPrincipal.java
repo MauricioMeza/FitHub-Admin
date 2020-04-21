@@ -24,19 +24,19 @@ public class UserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        if(!this.instructor.equals(null))
-        	authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.usuario.getRole()));
-        else if(!this.usuario.equals(null))
+        if(this.instructor!=null)
         	authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.instructor.getRole()));
+        else if(this.usuario!=null)
+        	authorityList.add(new SimpleGrantedAuthority("ROLE_" + this.usuario.getRole()));
         return authorityList;
     }
 
     @Override
     public String getPassword() {
     	String mensaje = "";
-    	if(!this.instructor.equals(null))
+    	if(this.instructor!=null)
     		mensaje = this.instructor.getContrasena();
-    	else if(!this.usuario.equals(null))
+    	else if(this.usuario!=null)
             mensaje = this.usuario.getContrasena();
 		return mensaje;
     }
@@ -44,9 +44,9 @@ public class UserPrincipal implements UserDetails {
     @Override
     public String getUsername() {
     	String mensaje = "";
-    	if(!this.instructor.equals(null))
+    	if(this.instructor!=null)
     		mensaje = this.instructor.getCorreo();
-    	if(!this.usuario.equals(null))
+    	if(this.usuario!=null)
     		mensaje = this.usuario.getCorreo();
 		return mensaje;
     }
@@ -54,17 +54,20 @@ public class UserPrincipal implements UserDetails {
 
     public String getName() {
     	String mensaje = "";
-    	if(!usuario.equals(null))
+    	if(this.usuario!=null)
     		mensaje = this.usuario.getNombre();
-    	if(!instructor.equals(null))
+    	if(this.instructor!=null)
     		mensaje = this.instructor.getNombre();
 		return mensaje;
     }
 
     public String getRol() {
-    	if(!usuario.equals(null))
-        return this.usuario.getRole();
-    	else return null;
+    	String mensaje = "";
+    	if(this.usuario!=null)
+    		mensaje = this.usuario.getRole();
+    	else if(this.instructor != null)
+    		mensaje = this.instructor.getRole();
+    	return mensaje;
     }
 
     @Override
