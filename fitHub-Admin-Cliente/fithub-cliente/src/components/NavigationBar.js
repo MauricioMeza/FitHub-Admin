@@ -28,6 +28,9 @@ class NavigationBar extends React.Component {
 
     logOut(){
         AuthService.logout()
+        this.setState({
+            showUserBoard: false
+            });
     }
 
 
@@ -41,7 +44,9 @@ class NavigationBar extends React.Component {
                         FITHUB
                     </Link>
                     <Nav className="mr-auto">
-                    <Button onClick={this.logOut} className="nav-button"> Log Out</Button>
+                        <Link to={"/"} className="navbar-brand">
+                            <Button onClick={this.logOut} className="nav-button"> Log Out</Button>
+                        </Link>
                     </Nav>
                 </Navbar>
             )           
