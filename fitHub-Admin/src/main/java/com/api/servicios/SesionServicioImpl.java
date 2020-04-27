@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SesionServicioImpl implements SesionServicio {
@@ -16,13 +15,8 @@ public class SesionServicioImpl implements SesionServicio {
     SesionRepositorio repositorio;
 
     @Override
-    public void saveSesion(Sesion sesion) {
-        repositorio.save(sesion);
-    }
-
-    @Override
-    public void deleteSesionById(int idSesion) {
-        repositorio.deleteById(idSesion);
+    public Sesion addSesion(Sesion sesion) {
+        return repositorio.save(sesion);
     }
 
     @Override
@@ -31,7 +25,7 @@ public class SesionServicioImpl implements SesionServicio {
     }
 
     @Override
-    public Optional<Sesion> findSesionById(int idSesion) {
+    public Sesion getSesionById(int idSesion) {
         return repositorio.findById(idSesion);
     }
 
