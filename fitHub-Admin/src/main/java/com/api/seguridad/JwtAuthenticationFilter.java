@@ -32,7 +32,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, 
+    		HttpServletResponse response) throws AuthenticationException 
+    {
         if (CorsUtils.isPreFlightRequest(request)) {
             response.setStatus(HttpServletResponse.SC_OK);
             return null;
@@ -46,21 +48,30 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         LoginDTO credentials = null;
         try {
-            credentials = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
+            credentials = new ObjectMapper().readValue(request.getInputStream(),
+            		LoginDTO.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                credentials.getCorreo(), credentials.getContrasena(), new ArrayList<>());
+        UsernamePasswordAuthenticationToken authenticationToken = 
+        		new UsernamePasswordAuthenticationToken(
+                credentials.getCorreo(), 
+                credentials.getContrasena(),
+                new ArrayList<>());
 
-        Authentication auth = authenticationManager.authenticate(authenticationToken);
+        Authentication auth = 
+        		authenticationManager.authenticate(authenticationToken);
 
         return auth;
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, 
+    		HttpServletResponse response, 
+    		FilterChain chain, 
+    		Authentication authResult) throws IOException, ServletException 
+    {
 
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
 

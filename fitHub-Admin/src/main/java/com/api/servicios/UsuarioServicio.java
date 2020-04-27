@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface UsuarioServicio {
 
-    //Usuario getUserById(ObjectId id);
     Usuario getUserByCorreo(String correo);
     Usuario getUserByCedula(String cedula);
     List<Usuario> getAllUsers();
