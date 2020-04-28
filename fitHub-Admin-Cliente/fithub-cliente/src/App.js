@@ -13,7 +13,7 @@ import Login from "./components/Login";
 import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
 import WelcomeUser from "./components/User/WelcomeUser";
-import AuthService from './services/AuthService';
+import WelcomeAdmin from "./components/Admin/WelcomeAdmin";
 
 class App extends Component{
   render(){
@@ -27,6 +27,7 @@ class App extends Component{
             <Switch>
               <Route exact path={"/"}  component={Welcome} />
               <Route exact path="/welcomeUser"  component={WelcomeUser} />
+              <Route exact path="/welcomeAdmin"  component={WelcomeAdmin} />
               <Route exact path="/registro"  component={SignUp} />
               <Route exact path="/login"  component={Login} />
             </Switch>
