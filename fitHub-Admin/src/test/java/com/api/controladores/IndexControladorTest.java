@@ -4,7 +4,6 @@ import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
 import com.api.seguridad.UserPrincipalDetailsService;
 import com.api.servicios.UsuarioServicio;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,8 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-@WithMockUser(username = "user1", password = "secret1")
-@EnableAutoConfiguration(exclude = WebSecurityEnablerConfiguration.class)
+//@EnableAutoConfiguration(exclude = WebSecurityEnablerConfiguration.class)
 @WebMvcTest(IndexControlador.class)
 class IndexControladorTest {
 
@@ -52,7 +49,7 @@ class IndexControladorTest {
                 "112233",
                 "USER");
 
-        String usuario = "{\"nombre\":\"usuarioTest\",\"correo\":\"usuariotest@micorreo.com\",\"cedula\":\"12345633\",\"contrasena\":\"112233\",\"role\":\"USER\"}";
+        String usuario = "{\"cedula\":\"12345655\",\"nombre\":\"usuarioTest\",\"correo\":\"usuariotest@micorreo.com\",\"contrasena\":\"112233\",\"contrasenaRep\":\"112233\"}";
 
         Mockito.when(usuarioServicio.addUser(Mockito.any(Usuario.class))).thenReturn(mockUsuario);
 
@@ -63,11 +60,8 @@ class IndexControladorTest {
 
         MockHttpServletResponse response = result.getResponse();
 
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        assertEquals(HttpStatus.ACCEPTED.value(), response.getStatus());
 
     }
 
-    @Test
-    void loginUsuario() {
-    }
 }
