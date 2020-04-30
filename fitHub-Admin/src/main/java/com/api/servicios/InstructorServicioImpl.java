@@ -24,9 +24,10 @@ public class InstructorServicioImpl implements InstructorServicio {
 	}
 
 	@Override
-	public Instructor getInstructorByCedula(String cedula) {
-		return repositorio.findByCedula(cedula);
-	}
+	public Instructor getInstructorByCedula(String cedula) { return repositorio.findByCedula(cedula); }
+
+	@Override
+	public Instructor getInstructorByNombre(String nombre) { return repositorio.findByNombre(nombre); }
 
 	@Override
 	public List<Instructor> getAllInstructors() {

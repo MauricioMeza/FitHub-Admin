@@ -9,4 +9,5 @@ public interface InstructorRepositorio extends MongoRepository<Instructor,Intege
 
 	Instructor findByCorreo(String correo);
 	Instructor findByCedula(String cedula);
+	Instructor findByNombre(String nombre);
 }

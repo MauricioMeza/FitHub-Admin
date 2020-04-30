@@ -17,12 +17,6 @@ public class SesionControlador {
 	@Autowired
 	private SesionServicio servicio;
 
-	@PostMapping("/agregarSesion")
-	public String GuardarInstructor(@RequestBody Sesion sesion) {
-		servicio.addSesion(sesion);
-		return "Usuario añadido con id: "+ sesion.getIdSesion();
-	}
-	
 	@GetMapping("/encontrarTodasLasSesiones")
 	public List<Sesion> getSesiones(){
 		return servicio.findAllSesiones();

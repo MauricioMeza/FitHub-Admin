@@ -13,6 +13,6 @@ public class fechaFuturaValidador implements ConstraintValidator<fechaFuturaVali
     public boolean isValid(Object value, ConstraintValidatorContext context) {
        SesionDTO sesion = (SesionDTO) value;
        Date fecha_actual = new Date();
-       return sesion.getFecha_hora().before(fecha_actual);
+       return sesion.getFecha().before(fecha_actual);
     }
 }
