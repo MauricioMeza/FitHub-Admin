@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 //@EnableAutoConfiguration(exclude = WebSecurityEnablerConfiguration.class)
 @WebMvcTest(IndexControlador.class)
-class IndexControladorTest {
+public class IndexControladorTest {
 
     @Autowired
     private MockMvc mockMvc;
