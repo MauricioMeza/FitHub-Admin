@@ -21,13 +21,13 @@ public class InstructorControlador {
 	@Autowired
 	private SesionServicio servicioSes;
 
-	@PostMapping("/agregarInstructor")
+	@PostMapping("/ADMIN/agregarInstructor")
 	public String GuardarInstructor(@RequestBody Instructor instructor) {
 		servicioIns.addInstructor(instructor);
 		return "Instructor añadido con id: "+ instructor.getCedula();
 	}
 	
-	@GetMapping("/encontrarTodosLosInstructores")
+	@GetMapping("/ADMIN/encontrarTodosLosInstructores")
 	public List<Instructor> getInstructores(){
 		return servicioIns.getAllInstructors();
 	}
@@ -43,7 +43,7 @@ public class InstructorControlador {
 		return insNombres;
 	}
 
-	@PostMapping("/agregarSesion")
+	@PostMapping("/ADMIN/agregarSesion")
 	public String GuardarSesion(@Valid SesionDTO sesion) {
 		servicioSes.addSesion(sesion);
 		return "Sesion añadida para el dia: "+ sesion.getFecha() + " A las: "+ sesion.getHora();
