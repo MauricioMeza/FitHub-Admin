@@ -1,12 +1,18 @@
 package com.api.seguridad;
 
 import com.api.modelos.Usuario;
+import com.api.modelos.Instructor;
+import com.api.repositorios.InstructorRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -15,14 +21,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
-
+	
+	@Autowired
     UsuarioRepositorio usuarioRepositorio;
+	@Autowired
+    InstructorRepositorio instructorRepositorio;
+    
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UsuarioRepositorio usuarioRepositorio) {
         super(authenticationManager);
-        this.usuarioRepositorio = this.usuarioRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     @Override
@@ -43,6 +55,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private Authentication getUsernamePasswordAuthentication(HttpServletRequest request){
 
         String token = request.getHeader(JwtProperties.HEADER_STRING);
+        Instructor instructor;
+        UserPrincipal principal;
+        Usuario usuario;
+        List<GrantedAuthority> authorityList = new ArrayList<>();
 
         if(token != null){
 
@@ -52,10 +68,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .getSubject();
 
             if(userName != null){
-                Usuario usuario = usuarioRepositorio.findByCorreo(userName);
-                UserPrincipal principal = new UserPrincipal(usuario);
+            	if(userName.contains("@Fithub.com")) {
+            		//instructor = instructorRepositorio.findByCorreo(userName);
+            		authorityList.add(new SimpleGrantedAuthority("ROLE_" + "ADMIN"));
+            		//principal = new UserPrincipal(instructor);
+            	} else{
+            		//usuario = usuarioRepositorio.findByCorreo(userName);
+            		authorityList.add(new SimpleGrantedAuthority("ROLE_" + "USER"));
+            		//principal = new UserPrincipal(instructor);
+            	}
 
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userName,null,principal.getAuthorities());
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userName,null,authorityList);
                 return auth;
 
             }
