@@ -7,6 +7,7 @@ public interface InstructorServicio {
 
 	Instructor getInstructorByCorreo(String correo);
 	Instructor getInstructorByCedula(String cedula);
+    Instructor getInstructorByNombre(String nombre);
     List<Instructor> getAllInstructors();
     Instructor addInstructor(Instructor instructor);
 
