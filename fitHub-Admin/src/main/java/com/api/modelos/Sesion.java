@@ -1,10 +1,8 @@
 package com.api.modelos;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,6 +15,16 @@ public class Sesion {
 	private Instructor instructor;
 	@DBRef
 	private List<Usuario> asistentes;
+
+	public Sesion(){};
+
+	public Sesion(Date fecha_hora, String tipo, Instructor instructor, List<Usuario> asistentes) {
+		super();
+		this.fecha_hora = fecha_hora;
+		this.tipo = tipo;
+		this.instructor = instructor;
+		this.asistentes = asistentes;
+	}
 
 
 	public Date getFecha_hora() {
