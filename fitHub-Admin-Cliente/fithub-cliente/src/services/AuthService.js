@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 import Axios from "axios";
 
 const API_URL = "http://localhost:8080/";

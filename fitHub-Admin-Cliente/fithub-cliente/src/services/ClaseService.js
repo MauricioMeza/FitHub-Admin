@@ -1,5 +1,7 @@
 import Axios from "axios";
+import AuthService from "./AuthService";
 
+const token = AuthService.getCurrentUser().Authorization
 const API_URL = "http://localhost:8080/Admin/";
 
 class ClaseService {
@@ -15,11 +17,12 @@ class ClaseService {
   }
 
   getClases(){
-    return Axios.get(API_URL + "buscarTodasSesiones")
+    
+    return Axios.get(API_URL + "buscarTodasSesiones" /*, {headers:{"Authorization": token}}*/)
   }
 
   getInstNombres(){
-    return Axios.get( API_URL + "instructoresNombres")
+    return Axios.get( API_URL + "instructoresNombres" /*, {headers:{"Authorization": token}}*/)
   }
 
   getClasesNombres(){

@@ -53,7 +53,7 @@ public class InstructorControlador {
 	@PostMapping("/agregarSesion")
 	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
 		servicioSes.addSesion(sesion);
-		return "Sesion añadida para la fecha: "+ sesion.getFecha() ;
+		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
 	}
 
 	@ResponseBody
