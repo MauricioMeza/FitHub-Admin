@@ -67,7 +67,13 @@ const styles = theme => ({
     event.preventDefault()
     AuthService.login(this.state.correo, this.state.contrasena)
     .then(() => {
-      this.props.history.push('/welcomeUser')
+      const user = AuthService.getCurrentUser();
+      if(user.Rol == "USER"){
+        this.props.history.push('/welcomeUser')
+      }else if(user.Rol == "ADMIN"){
+        this.props.history.push('/welcomeAdmin')
+      }
+      
       window.location.reload();
     })   
     .catch(error => {

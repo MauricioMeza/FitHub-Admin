@@ -1,46 +1,69 @@
 package com.api.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import com.api.dto.SesionDTO;
+import com.api.modelos.Sesion;
 import com.api.servicios.InstructorServicio;
+import com.api.servicios.SesionServicio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Instructor;
 
+import javax.validation.Valid;
+
 @RestController
+@RequestMapping("/Admin")
 public class InstructorControlador {
 	
 	@Autowired
-	private InstructorServicio servicio;
-	
+	private InstructorServicio servicioIns;
+	@Autowired
+	private SesionServicio servicioSes;
+
 	@PostMapping("/agregarInstructor")
-	public String GuardarUsuario(@RequestBody Instructor instructor) {
-		servicio.saveInstructor(instructor);
-		return "Usuario añadido con id: "+ instructor.getCedula();
+	public String GuardarInstructor(@RequestBody Instructor instructor) {
+		servicioIns.addInstructor(instructor);
+		return "Instructor añadido con id: "+ instructor.getCedula();
 	}
 	
 	@GetMapping("/encontrarTodosLosInstructores")
-	public List<Instructor> getUsuarios(){
-		return servicio.findAllInstructores();
+	public List<Instructor> getInstructores(){
+		return servicioIns.getAllInstructors();
 	}
+
+	@GetMapping("/encontrarInstructor/{id}")
+	public Instructor getInstructor(@PathVariable String id){
+		return servicioIns.getInstructorByCedula(id);
+	}
+
+	@ResponseBody
+	@GetMapping("/instructoresNombres")
+	public List<String> getInstructoresNombres(){
+		List<Instructor> instructores = servicioIns.getAllInstructors();
+		ArrayList<String> insNombres = new ArrayList<>();
+		for (Instructor ins: instructores) {
+			insNombres.add(ins.getNombre());
+		}
+		return insNombres;
+	}
+
+	@PostMapping("/agregarSesion")
+	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
+		servicioSes.addSesion(sesion);
+		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
+	}
+
+	@ResponseBody
+	@GetMapping("/buscarTodasSesiones")
+	public List<Sesion> BuscarSesiones( ) {
+		return servicioSes.findAllSesiones();
+	}
+
 	
-	@GetMapping("/encontrarInstructor/{Id}")
-	public Optional<Instructor> getInstructor(@PathVariable int cedula){
-		return servicio.findInstructorById(cedula);
-	}
-	
-	@DeleteMapping("/borrarInstructor/{Id}")
-	public String borrarInstructor(@PathVariable int cedula){
-		servicio.deleteInstructorById(cedula);
-		return "El instructor con el Id: "+ cedula+" ha sido borrado";
-	}
+
 	
 	
 	
