@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.api.dto.SesionDTO;
+import com.api.modelos.Sesion;
 import com.api.servicios.InstructorServicio;
 import com.api.servicios.SesionServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.api.modelos.Instructor;
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/Admin")
 public class InstructorControlador {
 	
 	@Autowired
@@ -21,15 +23,20 @@ public class InstructorControlador {
 	@Autowired
 	private SesionServicio servicioSes;
 
-	@PostMapping("/ADMIN/agregarInstructor")
+	@PostMapping("/agregarInstructor")
 	public String GuardarInstructor(@RequestBody Instructor instructor) {
 		servicioIns.addInstructor(instructor);
 		return "Instructor añadido con id: "+ instructor.getCedula();
 	}
 	
-	@GetMapping("/ADMIN/encontrarTodosLosInstructores")
+	@GetMapping("/encontrarTodosLosInstructores")
 	public List<Instructor> getInstructores(){
 		return servicioIns.getAllInstructors();
+	}
+
+	@GetMapping("/encontrarInstructor/{id}")
+	public Instructor getInstructor(@PathVariable String id){
+		return servicioIns.getInstructorByCedula(id);
 	}
 
 	@ResponseBody
@@ -43,17 +50,20 @@ public class InstructorControlador {
 		return insNombres;
 	}
 
-	@PostMapping("/ADMIN/agregarSesion")
-	public String GuardarSesion(@Valid SesionDTO sesion) {
+	@PostMapping("/agregarSesion")
+	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
 		servicioSes.addSesion(sesion);
-		return "Sesion añadida para el dia: "+ sesion.getFecha() + " A las: "+ sesion.getHora();
+		return "Sesion añadida para la fecha: "+ sesion.getFecha() ;
+	}
+
+	@ResponseBody
+	@GetMapping("/buscarTodasSesiones")
+	public List<Sesion> BuscarSesiones( ) {
+		return servicioSes.findAllSesiones();
 	}
 
 	
-	@GetMapping("/encontrarInstructor/{id}")
-	public Instructor getInstructor(@PathVariable String id){
-		return servicioIns.getInstructorByCedula(id);
-	}
+
 	
 	
 	

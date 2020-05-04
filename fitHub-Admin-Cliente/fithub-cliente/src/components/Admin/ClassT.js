@@ -12,9 +12,10 @@ class ClassT extends Component{
     render(){
         const {clas} = this.props;
         return <div style={this.styleCompleted()} >
-            {clas.id} -
-            {clas.startDate} -  
-            {clas.type} 
+            {clas.fecha} -
+            {clas.hora} -  
+            {clas.tipo} -
+            {clas.instructor}  
         </div>
 }
 

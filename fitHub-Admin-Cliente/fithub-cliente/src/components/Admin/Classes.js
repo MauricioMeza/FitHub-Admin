@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
-import App from '../App';
 
 import PropTypes from "prop-types";
 
 import Class from './ClassT';
 
 class Classes extends Component{
+    constructor(props) {
+        super(props)
+      }
+
     render(){
-        return this.props.classes.map(clas => <Class clas ={clas} key={clas.id}/>)
+        return (
+            this.props.classes.map((clas, i) => <Class clas ={clas} key={i}/>)
+        )
     }
 
 }
