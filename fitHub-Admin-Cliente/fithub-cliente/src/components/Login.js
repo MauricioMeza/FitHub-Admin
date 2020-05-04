@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import Axios from 'axios';
+import AuthService from '../services/AuthService';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,11 +12,6 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
-import Axios from 'axios';
-import AuthService from '../services/AuthService';
-
-
-
 
 function Copyright() {
   return (
@@ -49,8 +46,7 @@ const styles = theme => ({
   },
 });
 
- class Login extends React.Component{
-  
+class Login extends React.Component{
   constructor(props){
     super(props);
     this.state = {correo: "", contrasena: ""}
@@ -59,19 +55,24 @@ const styles = theme => ({
   }
 
   componentDidMount(){
-    Axios.get("http://localhost:8080/login")
-      .then(response => console.log(response.data))
+    Axios.get("http://localhost:8080/login").then(response => console.log(response.data))
   }
 
   submitLogin(event){
     event.preventDefault()
     AuthService.login(this.state.correo, this.state.contrasena)
     .then(() => {
-      this.props.history.push('/welcomeUser')
+      const user = AuthService.getCurrentUser();
+      if(user.Rol === "USER"){
+        this.props.history.push('/welcomeUser')
+      }else if(user.Rol === "ADMIN"){
+        this.props.history.push('/welcomeAdmin')
+      }
+      
       window.location.reload();
     })   
     .catch(error => {
-      if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
+      if(error.response.status === 401 && error.response.data.message === "Unauthorized"){
         alert("Usuario o contraseña No Validas")
       }
     })
