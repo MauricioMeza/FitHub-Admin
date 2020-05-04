@@ -26,13 +26,9 @@ public class SesionServicioImpl implements SesionServicio {
 
         Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
         nuevaSesion.setInstructor(instructor);
+        nuevaSesion.setTipo(sesionDTO.getSesion());
+        nuevaSesion.setFecha_hora(sesionDTO.getFecha());
 
-        Calendar ahora = Calendar.getInstance();
-        ahora.setTime(sesionDTO.getFecha());
-        ahora.set(Calendar.HOUR_OF_DAY, sesionDTO.getHora());
-        ahora.set(Calendar.MINUTE, sesionDTO.getMinuto());
-
-        nuevaSesion.setFecha_hora(ahora.getTime());
         return repositorio.save(nuevaSesion);
     }
 

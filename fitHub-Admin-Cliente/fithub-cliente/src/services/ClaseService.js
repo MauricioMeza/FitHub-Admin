@@ -1,21 +1,28 @@
-const API_URL = "http://localhost:8080/";
+import Axios from "axios";
+import AuthService from "./AuthService";
+
+const token = AuthService.getCurrentUser().Authorization
+const API_URL = "http://localhost:8080/Admin/";
 
 class ClaseService {
 
   addClase(fecha, clase, instructor) {
-    const usuario = JSON.stringify({
+    const sesion = JSON.stringify({
         fecha: fecha,
-        clase: clase,
+        sesion: clase,
         instructor: instructor,
       })
 
-      return usuario
-      //return Axios.post( API_URL +"addSesion", usuario, {headers:{"Content-Type" : "application/json"}})
+      return Axios.post( API_URL + "agregarSesion", sesion, {headers:{"Content-Type" : "application/json"}})
+  }
+
+  getClases(){
+    
+    return Axios.get(API_URL + "buscarTodasSesiones" /*, {headers:{"Authorization": token}}*/)
   }
 
   getInstNombres(){
-    //return Axios.get( API_URL +"encontrarTodosLosInstructores")
-    return ["Juan", "Ivan", "Daniela"]
+    return Axios.get( API_URL + "instructoresNombres" /*, {headers:{"Authorization": token}}*/)
   }
 
   getClasesNombres(){
