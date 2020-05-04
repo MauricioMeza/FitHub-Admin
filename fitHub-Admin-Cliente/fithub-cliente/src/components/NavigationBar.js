@@ -75,7 +75,7 @@ class NavigationBar extends React.Component {
                             FITHUB-ADMIN
                         </Link>
                         <Nav className="mr-auto">
-                        <Link to={"/"} className="navbar-brand">
+                        <Link to={"/ClassForm"} className="navbar-brand">
                             <Button>Clases</Button>
                         </Link>
                         <Link to={"/"} className="navbar-brand">

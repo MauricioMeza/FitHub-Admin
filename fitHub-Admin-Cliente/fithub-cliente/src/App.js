@@ -49,6 +49,7 @@ class App extends Component{
               <Route exact path="/welcomeAdmin"  component={WelcomeAdmin} />
               <Route exact path="/registro"  component={SignUp} />
               <Route exact path="/login"  component={Login} />
+              <Route exact path="/ClassForm"  component={ClassForm} />
             </Switch>
           </Col>
         </Row>
