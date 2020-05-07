@@ -1,7 +1,9 @@
 import Axios from "axios";
 import AuthService from "./AuthService";
 
-const token = AuthService.getCurrentUser().Authorization
+if(AuthService.getCurrentUser()){
+  const token = AuthService.getCurrentUser().Authorization
+}
 const API_URL = "http://localhost:8080/Admin/";
 
 class ClaseService {
