@@ -67,16 +67,16 @@ const styles = theme => ({
     event.preventDefault()
     AuthService.login(this.state.correo, this.state.contrasena)
     .then(() => {
-      const user = AuthService.getCurrentUser();
-      if(user.Rol == "USER"){
+      const userRole = AuthService.getCurrentUserRole();
+      if(userRole == "USER"){
         this.props.history.push('/welcomeUser')
-      }else if(user.Rol == "ADMIN"){
+      }else if(userRole == "ADMIN"){
         this.props.history.push('/welcomeAdmin')
       }
-      
       window.location.reload();
     })   
     .catch(error => {
+      console.log(error)
       if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
         alert("Usuario o contraseña No Validas")
       }

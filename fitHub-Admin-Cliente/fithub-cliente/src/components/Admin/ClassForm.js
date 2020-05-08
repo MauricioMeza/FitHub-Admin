@@ -62,9 +62,20 @@ class ClassForm extends React.Component{
     this.handleDateChange = this.handleDateChange.bind(this);
     this.reloadClases = this.reloadClases.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);    
+    
   }
 
   componentDidMount(){
+    ClaseService.validarInstructor()
+    .then((response) => {
+        console.log(response)
+    })
+    .catch((error) =>{
+        console.log(error)
+        alert("Entrando a un lugar sin permiso")
+        this.props.history.push("/")
+    })  
+
     ClaseService.getInstNombres()
     .then(response => {
       this.setState({

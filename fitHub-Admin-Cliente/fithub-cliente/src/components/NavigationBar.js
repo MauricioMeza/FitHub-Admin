@@ -10,38 +10,21 @@ class NavigationBar extends React.Component {
         this.logOut = this.logOut.bind(this);
 
         this.state = {
-            showUserBoard: 0,
-            currentUser: undefined
+            showUserBoard: AuthService.getCurrentUserRole(),
         }; 
     }
 
     componentDidMount(){
         // Escoge que barra de navegacion mostrar dependiendo del usuario loggeado
-        if(localStorage.getItem('user') == null){
-            this.setState({
-                currentUser: undefined,
-                showUserBoard: 0
-                });
-        }else{
-            const user = AuthService.getCurrentUser()
-            if(user.Rol == "USER"){
-                this.setState({
-                currentUser: user,
-                showUserBoard: 1
-                });
-            }else if(user.Rol == "ADMIN"){
-                this.setState({
-                    currentUser: user,
-                    showUserBoard: 2
-                });
-            }
-        }          
+        this.setState({
+            showUserBoard: AuthService.getCurrentUserRole()
+        });        
     }
 
     logOut(){
         AuthService.logout()
         this.setState({
-            showUserBoard: 0
+            showUserBoard: AuthService.getCurrentUserRole()
         });
     }
 
@@ -49,7 +32,7 @@ class NavigationBar extends React.Component {
     render(){
         const{currentUser, showUserBoard} = this.state
         switch(showUserBoard){
-            case 1:
+            case "USER":
                 return(
                     <Navbar bg="primary" variant="dark">
                         <Link to={"/welcomeUser"} className="navbar-brand">
@@ -68,7 +51,7 @@ class NavigationBar extends React.Component {
                         </Nav>
                     </Navbar>
                 )
-            case 2:
+            case "ADMIN":
                 return(
                     <Navbar bg="primary" variant="dark">
                         <Link to={"/welcomeAdmin"} className="navbar-brand">
@@ -87,7 +70,7 @@ class NavigationBar extends React.Component {
                         </Nav>
                     </Navbar>
                 )
-            case 0:
+            case "NULL":
                 return(
                     <Navbar bg="primary" variant="dark">
                         <Link to={"/"} className="navbar-brand">

@@ -28,6 +28,11 @@ public class InstructorControlador {
 		servicioIns.addInstructor(instructor);
 		return "Instructor añadido con id: "+ instructor.getCedula();
 	}
+
+	@GetMapping("/validarInstructor")
+	public String validacionInstructor(){
+		return "Valido";
+	}
 	
 	@GetMapping("/encontrarTodosLosInstructores")
 	public List<Instructor> getInstructores(){

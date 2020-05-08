@@ -2,6 +2,7 @@ import React from "react";
 
 import {Jumbotron} from "react-bootstrap";
 import AuthService from "../../services/AuthService";
+import ClaseService from "../../services/ClaseService";
 
 class WelcomeAdmin extends React.Component{
     constructor(props){
@@ -13,7 +14,15 @@ class WelcomeAdmin extends React.Component{
     }
 
     componentDidMount(){
-        console.log(this.state.currentUser)
+        ClaseService.validarInstructor()
+        .then((response) => {
+            console.log(response)
+        })
+        .catch((error) =>{
+            console.log(error)
+            alert("Entrando a un lugar sin permiso")
+            this.props.history.push("/")
+        })  
     }
 
     render(){
