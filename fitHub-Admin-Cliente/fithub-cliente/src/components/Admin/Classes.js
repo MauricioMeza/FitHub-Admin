@@ -10,11 +10,10 @@ class Classes extends Component{
       }
 
     render(){
-        return (
+          return (
             this.props.classes.map((clas, i) => <Class clas ={clas} key={i}/>)
         )
     }
-
 }
 
 Classes.propTypes ={

@@ -128,7 +128,7 @@ class ClassForm extends React.Component{
       console.log(error)
     })    
   }
-    
+  
   onFormSubmit(e) {
     e.preventDefault();
     ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
