@@ -30,25 +30,22 @@ public class InstructorControlador {
 	@Autowired
 	private SesionServicio servicioSes;
 
-	@PostMapping("/agregarInstructor")
-	public String GuardarInstructor(@RequestBody Instructor instructor) {
-		servicioIns.addInstructor(instructor);
-		return "Instructor añadido con id: "+ instructor.getCedula();
-	}
+	// ----------- Controladores Instructor ----------------
 
 	@GetMapping("/validarInstructor")
 	public String validacionInstructor(){
 		return "Valido";
 	}
+
+	@PostMapping("/agregarInstructor")
+	public String GuardarInstructor(@RequestBody Instructor instructor) {
+		servicioIns.addInstructor(instructor);
+		return "Instructor añadido con id: "+ instructor.getCedula();
+	}
 	
 	@GetMapping("/encontrarTodosLosInstructores")
 	public List<Instructor> getInstructores(){
 		return servicioIns.getAllInstructors();
-	}
-
-	@GetMapping("/encontrarInstructor/{id}")
-	public Instructor getInstructor(@PathVariable String id){
-		return servicioIns.getInstructorByCedula(id);
 	}
 
 	@ResponseBody
@@ -61,6 +58,13 @@ public class InstructorControlador {
 		}
 		return insNombres;
 	}
+
+	@GetMapping("/encontrarInstructor/{id}")
+	public Instructor getInstructor(@PathVariable String id){
+		return servicioIns.getInstructorByCedula(id);
+	}
+
+	// ---------------- Controladores Sesion -----------------------
 
 	@PostMapping("/agregarSesion")
 	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
@@ -81,8 +85,18 @@ public class InstructorControlador {
 
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
-	public List<Sesion> BuscarSesiones( ) {
-		return servicioSes.findAllSesionesByFecha();
+	public List<SesionDTO> BuscarSesiones( ) {
+		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
+		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
+		for (Sesion ses: sesiones) {
+			SesionDTO sesionData = new SesionDTO();
+			sesionData.setFecha(ses.getFecha_hora());
+			sesionData.setSesion(ses.getTipo());
+			sesionData.setInstructor(ses.getInstructor().getNombre());
+
+			sesionFormat.add(sesionData);
+		}
+		return sesionFormat;
 	}
 
 	
