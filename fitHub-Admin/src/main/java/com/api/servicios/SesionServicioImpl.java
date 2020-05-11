@@ -7,6 +7,7 @@ import com.api.repositorios.InstructorRepositorio;
 import com.api.repositorios.SesionRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -33,13 +34,18 @@ public class SesionServicioImpl implements SesionServicio {
     }
 
     @Override
-    public List<Sesion> findAllSesiones() {
-        return repositorio.findAll();
+    public List<Sesion> findAllSesionesByFecha() {
+        return repositorio.findAll(Sort.by(Sort.Direction.ASC, "fecha_hora") );
     }
 
     @Override
-    public Sesion getSesionById(int idSesion) {
+    public Sesion getSesionById(String idSesion) {
         return repositorio.findById(idSesion);
+    }
+
+    @Override
+    public void deleteSesion(Sesion sesion){
+        repositorio.delete(sesion);
     }
 
 }

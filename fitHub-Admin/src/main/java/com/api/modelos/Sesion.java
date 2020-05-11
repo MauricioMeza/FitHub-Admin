@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection= "Sesion")
 public class Sesion {
 
+
+	private String id;
 	private Date fecha_hora;
 	private String tipo;
 	@DBRef
@@ -50,4 +52,12 @@ public class Sesion {
 
 	public String getTipo() { return tipo; }
 	public void setTipo(String tipo) { this.tipo = tipo; }
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 }
