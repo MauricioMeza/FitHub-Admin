@@ -36,6 +36,10 @@ class ClaseService {
     return ["Clase de boxeo", "Clase de spinning", "Clase de cardio", "Clase de yoga"]
   }
 
+  deleteSesion(claseId){
+    return Axios.delete(API_URL + "eliminarSesion", {headers:{"Authorization": token}, data: claseId})
+  }
+
   validarInstructor(){
     return Axios.get( API_URL +"validarInstructor", {headers:{"Authorization": token}})
   }

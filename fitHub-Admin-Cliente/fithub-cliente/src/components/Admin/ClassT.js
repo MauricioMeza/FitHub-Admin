@@ -1,7 +1,7 @@
 import React, {Component} from "react"; 
 import PropTypes from "prop-types";
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,6 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import CalendarIcon from '@material-ui/icons/CalendarToday';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+
+import ClaseService from "../../services/ClaseService";
 
 const styles = theme => ({
   root: {
@@ -31,6 +33,21 @@ const styles = theme => ({
 
 
 class ClassT extends Component{
+  constructor(props){
+    super(props);
+    this.deleteClase = this.deleteClase.bind(this)
+  }
+
+  deleteClase(i){
+    ClaseService.deleteSesion(i)
+    .then(response => {
+      console.log(response)
+      this.props.reload()
+    })
+    .catch(error => {
+      console.log(error.response)
+    })
+  }
     
   render(){
     const {clas, classes} = this.props;
@@ -47,8 +64,8 @@ class ClassT extends Component{
                 secondary = {clas.instructor}
               />
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete" size="medium">
-                  <DeleteIcon />
+                <IconButton edge="end" aria-label="delete" size="medium" onClick={(e) => {this.deleteClase(clas.id)}}>
+                <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
@@ -62,7 +79,8 @@ class ClassT extends Component{
 
 ClassT.propTypes ={
   clas: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  reload: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(ClassT);

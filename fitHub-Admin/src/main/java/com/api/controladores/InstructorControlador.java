@@ -72,8 +72,8 @@ public class InstructorControlador {
 		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
 	}
 
-	@DeleteMapping("/eliminarSesion/{id}")
-	public ResponseEntity<String> eliminarSesion(@PathVariable String id) {
+	@DeleteMapping("/eliminarSesion")
+	public ResponseEntity<String> eliminarSesion(@RequestBody String id) {
 		Sesion sesion = servicioSes.getSesionById(id);
 		if (sesion != null) {
 			servicioSes.deleteSesion(sesion);
@@ -93,6 +93,7 @@ public class InstructorControlador {
 			sesionData.setFecha(ses.getFecha_hora());
 			sesionData.setSesion(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
+			sesionData.setId(ses.getId());
 
 			sesionFormat.add(sesionData);
 		}
