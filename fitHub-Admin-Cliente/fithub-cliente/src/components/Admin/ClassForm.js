@@ -118,15 +118,15 @@ class ClassForm extends React.Component{
     .then(response => {
       console.log(response)
       var clas = response.data.map((c, i) => {
-        var fecha = new Date(c.fecha_hora)
+        var fecha = new Date(c.fecha)
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
         var horaMin = fecha.getMinutes()
         if(horaMin == 0) horaMin = "00"
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
-          "tipo" : " " + c.tipo + " ",
-          "instructor": " " + c.instructor.nombre + " "
+          "tipo" : " " + c.sesion + " ",
+          "instructor": " " + c.instructor + " "
         }
       })
       this.setState({
@@ -176,6 +176,7 @@ class ClassForm extends React.Component{
           </Grid>
           
         </Container>
+
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>

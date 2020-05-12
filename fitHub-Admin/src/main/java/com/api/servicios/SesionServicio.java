@@ -8,7 +8,8 @@ import java.util.List;
 public interface SesionServicio {
 
     Sesion addSesion(SesionDTO sesionDTO);
-    List<Sesion> findAllSesiones();
-    Sesion getSesionById(int idSesion);
+    List<Sesion> findAllSesionesByFecha();
+    Sesion getSesionById(String idSesion);
+    void deleteSesion(Sesion sesion);
 
 }
