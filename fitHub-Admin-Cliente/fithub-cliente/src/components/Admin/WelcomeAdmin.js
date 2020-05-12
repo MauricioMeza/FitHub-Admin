@@ -29,7 +29,7 @@ class WelcomeAdmin extends React.Component{
         const {currentUser} = this.state
         return(
             <Jumbotron className = "bg-dark text-white">
-            <h1 className="text-center">¡Bienvenido a FitHub {this.state.currentUser.User}!</h1>
+            <h1 className="text-center">¡Bienvenido a FitHub {currentUser.User}!</h1>
             <br></br>
             <h2 className="text-center">Esta es la Pagina Principal para Instructores</h2>
             </Jumbotron>

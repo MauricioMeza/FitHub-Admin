@@ -9,9 +9,6 @@ class Welcome extends React.Component{
     }
 
     componentDidMount(){
-        //Revisa si ya existe un usuario actualmente logeado
-        //  - Si el usuario es de tipo USER redirige a WelcomeUser
-        //  - Si el usuario es de tipo ADMIN redirige a WelcomeAdmin
         const userRole = AuthService.getCurrentUserRole()
 
         if(userRole == "USER"){

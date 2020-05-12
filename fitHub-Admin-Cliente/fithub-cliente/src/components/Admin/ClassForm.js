@@ -42,6 +42,13 @@ const styles = theme => ({
   dateControl: {
     width: "100%"
   },
+  containerC: {
+    /*
+    maxHeight: "100%",
+    overflow: "auto",
+    */
+    padding: theme.spacing(3, 0, 1)
+  }
 });
 
 class ClassForm extends React.Component{
@@ -109,13 +116,15 @@ class ClassForm extends React.Component{
   reloadClases(){
     ClaseService.getClases()
     .then(response => {
-
+      console.log(response)
       var clas = response.data.map((c, i) => {
         var fecha = new Date(c.fecha)
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
+        var horaMin = fecha.getMinutes()
+        if(horaMin == 0) horaMin = "00"
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
-          "hora" : " " + fecha.getHours() + ":" + fecha.getMinutes() + " ",
+          "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
           "tipo" : " " + c.sesion + " ",
           "instructor": " " + c.instructor + " "
         }
@@ -128,7 +137,7 @@ class ClassForm extends React.Component{
       console.log(error)
     })    
   }
-    
+  
   onFormSubmit(e) {
     e.preventDefault();
     ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
@@ -152,9 +161,8 @@ class ClassForm extends React.Component{
 
     return(
       <React.Fragment>
-        
-        <Container component="main" maxWidth="xl">
-        <Grid container 
+        <Container className={classes.containerC} component="main" maxWidth="xl">
+          <Grid container 
                   spacing={3} 
                   direction = "column" 
                   display="flex" 
