@@ -24,7 +24,6 @@ class ClaseService {
   }
 
   getClases(){
-    
     return Axios.get(API_URL + "buscarTodasSesiones" , {headers:{"Authorization": token}})
   }
 
