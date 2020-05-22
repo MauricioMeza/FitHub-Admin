@@ -1,6 +1,6 @@
 import Axios from "axios";
 import AuthService from "./AuthService";
-
+ 
 var token = ""
 if(AuthService.getCurrentUser() != null){
   token = AuthService.getCurrentUser().Authorization
@@ -34,6 +34,10 @@ class ClaseService {
   getClasesNombres(){
     //return Axios.get( API_URL +"encontrarTodasLasClases")
     return ["Clase de boxeo", "Clase de spinning", "Clase de cardio", "Clase de yoga"]
+  }
+
+  deleteSesion(claseId){
+    return Axios.delete(API_URL + "eliminarSesion", {headers:{"Authorization": token}, data: claseId})
   }
 
   validarInstructor(){

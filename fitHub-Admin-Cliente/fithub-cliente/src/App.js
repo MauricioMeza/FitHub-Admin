@@ -6,6 +6,8 @@ import {Row, Col, Alert} from "react-bootstrap";
 import {BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Container} from '@material-ui/core';
 
+
+
 //importar componentes
 
 import SignUp from "./components/SignUp";

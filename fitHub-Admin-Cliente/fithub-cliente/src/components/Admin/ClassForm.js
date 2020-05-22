@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
 //import addDays from 'date-fns/addDays'
-
+ 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -126,7 +126,8 @@ class ClassForm extends React.Component{
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
           "tipo" : " " + c.sesion + " ",
-          "instructor": " " + c.instructor + " "
+          "instructor": " " + c.instructor + " ",
+          "id": c.id
         }
       })
       this.setState({
@@ -172,7 +173,7 @@ class ClassForm extends React.Component{
                 Clases Actuales
             </Typography>
             <br></br>
-            <Classes classes={clasesBD}></Classes>
+            <Classes classes={clasesBD} reload ={this.reloadClases}></Classes>
           </Grid>
           
         </Container>
