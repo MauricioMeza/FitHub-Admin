@@ -2,39 +2,24 @@ import {EventSettingsModel} from "@syncfusion/ej2-react-schedule";
 import {DataManager, WebApiAdaptor} from "@syncfusion/ej2-data";
 
 class classData {
-    localData: EventSettingsModel = {
-        dataSource: [{
-            Id: 1,
-            Subject: 'Meeting - 1',
-            EndTime: new Date(2020, 4, 21, 6, 30),
-            StartTime: new Date(2020, 4, 21, 4, 0),
-            IsAllDay: false,
-            IsReadonly: true
-        }]
-    }
+     getClassData = (clasData: [{id: string, sesion: string, instructor: string, fecha: Date, }]) => {
+        var dataSource: {Id:string, Subject:string, EndTime:Date, StartTime:Date, IsAllDay:boolean, IsReadonly:boolean}[] =[];
+        clasData.forEach(clas => {
+            let fechaClase = new Date(clas.fecha) 
+            var clasDataS = {
+                Id: clas.id,
+                Subject: clas.sesion,
+                EndTime: new Date(fechaClase.getTime() + 40 * 60000),
+                StartTime: fechaClase,
+                IsAllDay: false,
+                IsReadonly: true
+            }
+            dataSource.push(clasDataS);
+        });
 
-    remoteData = new DataManager({
-        url: "https://js.syncfusion.com/demos/ejservices/api/Schedule/LoadData",
-        adaptor: new WebApiAdaptor,
-        crossDomain: true
-    });
-    /*private data: object [] = [{
-        {
-        Id: 1,
-        Subject: 'Meeting - 1',
-        StartTime: new Date(2018, 1, 15, 10, 0),
-        EndTime: new Date(2018, 1, 16, 12, 30),
-        IsAllDay: false
-        },
-        {
-            Id: 2,
-            Subject: 'Meeting - 1',
-            StartTime: new Date(2018, 1, 15, 10, 0),
-            EndTime: new Date(2018, 1, 16, 12, 30),
-            IsAllDay: false
-        }
-        
-    }]*/
+        console.log(dataSource)
+        return dataSource
+    }
 }
 
 export default new classData();
