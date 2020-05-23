@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
 //import addDays from 'date-fns/addDays'
-
+ 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -21,6 +21,11 @@ import { withStyles } from '@material-ui/core/styles';
 import ClaseService from "../../services/ClaseService";
 import Classes from "./Classes";
 //import Class from "./ClassT";
+
+import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
+import { extend } from '@syncfusion/ej2-base';
+import classData from './ClassData.ts'
+
 
 const styles = theme => ({
   paper: {
@@ -43,18 +48,18 @@ const styles = theme => ({
     width: "100%"
   },
   containerC: {
-    /*
-    maxHeight: "100%",
-    overflow: "auto",
-    */
     padding: theme.spacing(3, 0, 1)
-  }
+  },
+  containerCalendar: {
+    padding: theme.spacing(10, 0, 10)
+  },
 });
 
 class ClassForm extends React.Component{
 
   constructor (props) {
     super(props)
+    this.data = extend([], null, null, true);
 
     this.state = {
       instructores : [], 
@@ -73,16 +78,6 @@ class ClassForm extends React.Component{
   }
 
   componentDidMount(){
-    ClaseService.validarInstructor()
-    .then((response) => {
-        console.log(response)
-    })
-    .catch((error) =>{
-        console.log(error)
-        alert("Entrando a un lugar sin permiso")
-        this.props.history.push("/")
-    })  
-
     ClaseService.getInstNombres()
     .then(response => {
       this.setState({
@@ -138,22 +133,14 @@ class ClassForm extends React.Component{
       console.log(error)
     })    
   }
-  
-  onFormSubmit(e) {
-    e.preventDefault();
-    ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
-    .then(response => {
-      console.log(response)
-      this.reloadClases()
-    })
-    .catch(error => {
-      if(error.response.status == 400){
-        alert(error.response.data.errors[0].defaultMessage) 
-      }
-      console.log(error.response.data)
-    })
-    //this.props.addClass(this.state.startDate, this.state.type)
-  }
+
+  onPopupOpen(args) {
+    console.log(args)
+    if(args.data.Id){
+    }else{
+      args.cancel = true
+    }
+}
 
   render() {
     const {classes} = this.props;
@@ -170,14 +157,13 @@ class ClassForm extends React.Component{
                   alignItems="center" 
                   justify="center">
             <Typography component="h1" variant="h5">
-                Clases Actuales
+                Clases Creadas
             </Typography>
             <br></br>
             <Classes classes={clasesBD} reload ={this.reloadClases}></Classes>
           </Grid>
-          
         </Container>
-
+      
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>
@@ -257,6 +243,30 @@ class ClassForm extends React.Component{
               </form>
           </div>
         </Container>
+
+        <Container className={classes.containerCalendar} component="main" maxWidth="md">
+          <Grid container 
+                  spacing={3} 
+                  direction = "column" 
+                  display="flex" 
+                  alignItems="center" 
+                  justify="center">
+            <Typography component="h1" variant="h5">
+                Horario de Clases
+            </Typography>
+            <br></br>
+            <ScheduleComponent currentView='Week' eventSettings={classData.localData} popupOpen={this.onPopupOpen.bind(this)}
+            startHour='05:00' endHour='22:00' > 
+              <ViewsDirective>
+                <ViewDirective option='Day'/>
+                <ViewDirective option='Week'/>
+                <ViewDirective option='Month'/>
+              </ViewsDirective>
+              <Inject services = {[Day, Week, Month]}/>
+            </ScheduleComponent>
+          </Grid>
+        </Container>
+
       </React.Fragment>
     );
   }

@@ -43,7 +43,7 @@ class AuthService {
     return JSON.parse(usuario);
   }
 
-  getCurrentUserRole(){
+  getCurrentUserRole(){ 
     const usuario = localStorage.getItem('user');
     if(usuario == null){
       return "NULL"

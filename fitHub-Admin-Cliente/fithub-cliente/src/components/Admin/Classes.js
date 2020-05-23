@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
-
 import Class from './ClassT';
+
+//let cd = new classData();
 
 class Classes extends Component{
     constructor(props) {
         super(props)
-      }
+    }
 
     render(){
         if(this.props.classes.length == 0){
@@ -20,7 +21,6 @@ class Classes extends Component{
                 this.props.classes.map((clas, i) => <Class clas ={clas} reload={this.props.reload} key={i}/>)
             )
         }
-        
     }
 }
 

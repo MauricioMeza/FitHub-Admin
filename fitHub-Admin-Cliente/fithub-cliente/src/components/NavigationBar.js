@@ -45,29 +45,27 @@ class NavigationBar extends React.Component {
         switch(showUserBoard){
             case "USER":
                 return(
-                    <Navbar className={classes.navBar} bg="primary" variant="dark" expand="lg"> 
+                    <Navbar className={classes.navBar} bg="primary" variant="dark" expand="lg" sticky="top"> 
                         <Link to={"/welcomeUser"} className="navbar-brand">
                             FITHUB-USER
                         </Link>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav"></Navbar.Collapse>
-                        <Nav className="mr-auto p-2">
-                        <Link to={"/"} className="navbar-brand">
-                            <Button>Mis Clases</Button>
-                        </Link>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button>Mis Planes</Button>
-                        </Link>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
-                        </Link>
-                        </Nav>
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="mr-auto p-2">
+                                <Link to={"ClassUser"} className="navbar-brand">
+                                    <Button>Mis Clases</Button>
+                                </Link>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button>Mis Planes</Button>
+                                </Link>
+                            </Nav>
 
-                        <Nav>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
-                        </Link>
-                        </Nav>
+                            <Nav>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
+                                </Link>
+                            </Nav>
+                        </Navbar.Collapse>
                     </Navbar>
                 )
             case "ADMIN":
@@ -79,18 +77,17 @@ class NavigationBar extends React.Component {
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="mr-auto p-2">
-                            <Link to={"/ClassForm"} className="navbar-brand">
-                                <Button>Clases</Button>
-                            </Link>
-                            <Link to={"/"} className="navbar-brand">
-                                <Button>Usuarios</Button>
-                            </Link>
+                                <Link to={"/ClassForm"} className="navbar-brand">
+                                    <Button>Clases</Button>
+                                </Link>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button>Usuarios</Button>
+                                </Link>
                             </Nav>
-
                             <Nav>
-                            <Link to={"/"} className="navbar-brand">
-                                <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
-                            </Link>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
+                                </Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
