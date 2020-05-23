@@ -19,7 +19,7 @@ class Classes extends Component{
         else{
             return (
                 this.props.classes.map((clas, i) => <Class clas ={clas} reload={this.props.reload} key={i}/>)
-            ) 
+            )
         }
     }
 }
