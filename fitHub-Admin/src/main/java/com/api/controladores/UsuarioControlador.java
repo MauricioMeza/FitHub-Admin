@@ -3,6 +3,7 @@ package com.api.controladores;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.api.dto.SesionDTO;
 import com.api.servicios.SesionServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,16 +66,22 @@ public class UsuarioControlador {
 	}
 	
 	
-	@GetMapping("/verSesionesReservadas/{id}")
-	public String verSesionesReservadas(@PathVariable("id") String id){
-		Usuario usuario = servicio.getUserByCedula(id);
+	@GetMapping("/verSesionesReservadas/{email}")
+	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String id){
+		Usuario usuario = servicio.getUserByCorreo(id);
 		List <Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
-		List <Sesion> sesionesInscritas = new ArrayList<>();
-		for(int i = 0; i < sesiones.size(); i++)
-			if(servicioSesion.usuarioInscrito(sesiones.get(i), usuario))
-				sesionesInscritas.add(sesiones.get(i));
-		
-		return sesionesInscritas.toString();
+		List <SesionDTO> sesionesInscritas = new ArrayList<>();
+		for(int i = 0; i < sesiones.size(); i++) {
+			if (servicioSesion.usuarioInscrito(sesiones.get(i), usuario)){
+				SesionDTO sesionSend = new SesionDTO();
+				sesionSend.setId(sesiones.get(i).getId());
+				sesionSend.setInstructor(sesiones.get(i).getInstructor().getNombre());
+				sesionSend.setSesion(sesiones.get(i).getTipo());
+				sesionSend.setFecha(sesiones.get(i).getFecha_hora());
+				sesionesInscritas.add(sesionSend);
+			}
+		}
+		return sesionesInscritas;
 	}
 	
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")

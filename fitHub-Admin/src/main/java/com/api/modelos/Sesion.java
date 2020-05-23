@@ -21,7 +21,10 @@ public class Sesion {
 	private List<Usuario> asistentes;
 	private int cupos;
 
-	public Sesion(){};
+	public Sesion(){
+		this.asistentes = new ArrayList<Usuario>();
+		this.cupos = 10;
+	};
 
 	public Sesion(String id, Date fecha_hora, String tipo, Instructor instructor, List<Usuario> asistentes, int cupos) {
 		super();

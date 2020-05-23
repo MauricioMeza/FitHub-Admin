@@ -134,13 +134,28 @@ class ClassForm extends React.Component{
     })    
   }
 
+  onFormSubmit(e) {
+    e.preventDefault();
+    ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
+    .then(response => {
+      console.log(response)
+      this.reloadClases()
+    })
+    .catch(error => {
+      if(error.response.status == 400){
+        alert(error.response.data.errors[0].defaultMessage) 
+      }
+      console.log(error.response.data)
+    })
+  }
+
   onPopupOpen(args) {
     console.log(args)
     if(args.data.Id){
     }else{
       args.cancel = true
     }
-}
+  }
 
   render() {
     const {classes} = this.props;

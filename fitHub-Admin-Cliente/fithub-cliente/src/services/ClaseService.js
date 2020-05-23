@@ -25,8 +25,9 @@ class ClaseService {
   }
 
   getClasesUser(){
-    //TODO: Add this shit
-    return Axios.get(API_URL + "buscarTodasSesiones" , {headers:{"Authorization": token}})
+    let user = AuthService.getCurrentUser()
+    console.log(user)
+    return Axios.get(API_URL_User + "verSesionesReservadas/" + user.Mail , {headers:{"Authorization": token}})
   }
 
   getClases(){
