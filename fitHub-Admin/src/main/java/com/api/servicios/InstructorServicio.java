@@ -3,6 +3,9 @@ package com.api.servicios;
 import com.api.modelos.Instructor;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface InstructorServicio {
 
 	Instructor getInstructorByCorreo(String correo);
