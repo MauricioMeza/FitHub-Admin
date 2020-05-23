@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
-import {Inject, ScheduleComponent, Day, Week, WorkWeek, Month, Agenda} from "@syncfusion/ej2-react-schedule";
 import Class from './ClassT';
-import classData from './ClassData.ts'
 
 //let cd = new classData();
 
@@ -13,7 +11,7 @@ class Classes extends Component{
     }
 
     render(){
-        /*if(this.props.classes.length == 0){
+        if(this.props.classes.length == 0){
             return (
                 <Typography component="h1" variant="body2"> No hay clases registradas</Typography>
             )
@@ -22,14 +20,7 @@ class Classes extends Component{
             return (
                 this.props.classes.map((clas, i) => <Class clas ={clas} reload={this.props.reload} key={i}/>)
             ) 
-        }*/
-       
-        return(
-            <ScheduleComponent currentView='Month' selectedDate={new Date(2017, 5, 5)} 
-            eventSettings={{dataSource: classData.remoteData}}> 
-                <Inject services = {[Day, Week, WorkWeek, Month, Agenda]}/>
-            </ScheduleComponent>
-        )
+        }
     }
 }
 

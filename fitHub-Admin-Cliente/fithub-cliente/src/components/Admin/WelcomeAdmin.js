@@ -14,15 +14,6 @@ class WelcomeAdmin extends React.Component{
     }
 
     componentDidMount(){
-        ClaseService.validarInstructor()
-        .then((response) => {
-            console.log(response)
-        })
-        .catch((error) =>{
-            console.log(error)
-            alert("Entrando a un lugar sin permiso")
-            this.props.history.push("/")
-        })  
     }
 
     render(){

@@ -7,6 +7,7 @@ if(AuthService.getCurrentUser() != null){
 }
 
 const API_URL = "http://localhost:8080/Admin/";
+const API_URL_User = "http://localhost:8080/";
 
 class ClaseService {
 
@@ -21,6 +22,11 @@ class ClaseService {
       {headers:{"Content-Type" : "application/json",
                 "Authorization": token
               }})
+  }
+
+  getClasesUser(){
+    //TODO: Add this shit
+    return Axios.get(API_URL + "buscarTodasSesiones" , {headers:{"Authorization": token}})
   }
 
   getClases(){
