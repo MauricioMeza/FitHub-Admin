@@ -11,7 +11,7 @@ class Classes extends Component{
     }
 
     render(){
-        if(this.props.classes.length == 0){
+        if(this.props.classes.length === 0){
             return (
                 <Typography component="h1" variant="body2"> No hay clases registradas</Typography>
             )

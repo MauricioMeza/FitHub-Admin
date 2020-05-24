@@ -13,7 +13,7 @@ class classData {
                 StartTime: fechaClase,
                 IsAllDay: false,
                 IsReadonly: true
-            }
+            } 
             dataSource.push(clasDataS);
         });
 

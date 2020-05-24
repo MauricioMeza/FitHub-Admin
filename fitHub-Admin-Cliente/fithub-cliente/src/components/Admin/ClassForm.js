@@ -24,9 +24,7 @@ import Classes from "./Classes";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
 import { extend } from '@syncfusion/ej2-base';
-import classData from './ClassData.ts'
 import ClassData from "./ClassData";
-
 
 const styles = theme => ({
   paper: {
@@ -152,8 +150,37 @@ class ClassForm extends React.Component{
     })
   }
 
+  content(props) {
+    return (<div>
+    {props.elementType === 'cell' ?
+      <div className="e-cell-content e-template">
+        <form className="e-schedule-form">
+          <div>
+            <input className="subject e-field" type="text" name="Subject" placeholder="Title"/>
+          </div>
+          <div>
+            <input className="location e-field" type="text" name="Location" placeholder="Location"/>
+          </div>
+        </form>
+      </div> :
+      <div className="e-event-content e-template">
+        <div className="e-subject-wrap">
+          {(props.Subject !== undefined) ?
+          <div className="subject">{props.Subject}</div> : ""}
+          {(props.Location !== undefined) ?
+          <div className="location">{props.Location}</div> : ""}
+          {(props.Description !== undefined) ?
+          <div className="description">{props.Description}</div> : ""}
+        </div>
+      </div>}
+    </div>);
+  }
+
   onPopupOpen(args) {
     console.log(args)
+    if (args.type === 'Editor') {
+      args.duration = 60;
+    }
     if(args.data.Id){
     }else{
       args.cancel = true
@@ -273,8 +300,8 @@ class ClassForm extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} popupOpen={this.onPopupOpen.bind(this)}
-            startHour='05:00' endHour='22:00' > 
+            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
+            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{content: this.content.bind(this)}}> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>
