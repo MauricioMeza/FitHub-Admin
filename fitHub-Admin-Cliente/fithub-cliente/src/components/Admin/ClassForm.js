@@ -150,47 +150,26 @@ class ClassForm extends React.Component{
     })
   }
 
-  content(props) {
-    return (<div>
-    {props.elementType === 'cell' ?
-      <div className="e-cell-content e-template">
-        <form className="e-schedule-form">
-          <div>
-            <input className="subject e-field" type="text" name="Subject" placeholder="Title"/>
-          </div>
-          <div>
-            <input className="location e-field" type="text" name="Location" placeholder="Location"/>
-          </div>
-        </form>
-      </div> :
-      <div className="e-event-content e-template">
-        <div className="e-subject-wrap">
-          {(props.Subject !== undefined) ?
-          <div className="subject">{props.Subject}</div> : ""}
-          {(props.Location !== undefined) ?
-          <div className="location">{props.Location}</div> : ""}
-          {(props.Description !== undefined) ?
-          <div className="description">{props.Description}</div> : ""}
-        </div>
-      </div>}
-    </div>);
-  }
-
   onPopupOpen(args) {
     console.log(args)
-    if (args.type === 'Editor') {
-      args.duration = 60;
-    }
     if(args.data.Id){
     }else{
       args.cancel = true
     }
   }
 
+  footer(props) {
+    this.render()
+    return (
+      <div>
+        {props.Description}
+      </div>
+    );
+  }
+
   render() {
     const {classes} = this.props;
     const {instructores, clases, clasesBD, clasesHorario} = this.state;
-
 
     return(
       <React.Fragment>
@@ -301,7 +280,7 @@ class ClassForm extends React.Component{
             </Typography>
             <br></br>
             <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
-            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{content: this.content.bind(this)}}> 
+            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>
