@@ -37,7 +37,7 @@ public class UsuarioControlador {
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
 	public String reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
 
-		Usuario usuario = servicio.getUserByCedula(idUsuario);
+		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		//List<Sesion> sesionesReservadas = usuario.getSesionesReservadas();
 		
@@ -62,7 +62,7 @@ public class UsuarioControlador {
 				servicioSesion.cambiarSesion(sesion);
 			}
 		}
-		return "El usuario " + usuario.getNombre() + " ha reservado un cupo con éxito";
+		return "El usuario ha reservado un cupo con éxito";
 	}
 	
 	
@@ -87,7 +87,7 @@ public class UsuarioControlador {
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")
 	public String cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
-		Usuario usuario = servicio.getUserByCedula(idUsuario);
+		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		return servicioSesion.cancelarCupo(sesion, usuario);
 	}
 	

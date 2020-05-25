@@ -14,7 +14,7 @@ import Classes from "../Admin/Classes";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
 import { extend } from '@syncfusion/ej2-base';
-import classData from '../Admin/ClassData'
+import ClassData from "./ClassData";
 
 
 const styles = theme => ({
@@ -77,6 +77,11 @@ class ClassUser extends React.Component{
     })
     
     ClaseService.getClases()
+    .then(response => {
+      this.setState({
+        clasesHorario : response.data 
+      })
+    })
   }
 
   onPopupOpen(args) {
@@ -84,23 +89,27 @@ class ClassUser extends React.Component{
     if(args.data.Id){
       if(args.type == "DeleteAlert"){
         args.cancel = true
-        /*
-        ClaseService.cancelSesion(args.data.Id)
+        ClaseService.cancelClase(args.data.Id)
         .then(response => {
-          console.log(response)
-          this.reloadClases();  
+          if(response.data == "El usuario ha cancelado su cupo en la sesion"){
+            console.log(response)
+            this.reloadClases();  
+          }else{
+            alert(response.data)
+          }
         })
-        */
       }
       if(args.type == "Editor"){
         args.cancel = true
-        /*
-        ClaseService.reserveSesion(args.data.Id)
+        ClaseService.reserveClase(args.data.Id)
         .then(response => {
-          console.log(response)
-          this.reloadClases();  
+          if(response.data == "El usuario ha reservado un cupo con éxito"){
+            console.log(response)
+            this.reloadClases();  
+          }else{
+            alert(response.data)
+          }  
         })
-        */
       }
     }else{
       args.cancel = true
@@ -118,7 +127,7 @@ class ClassUser extends React.Component{
 
   render() {
     const {classes} = this.props;
-    const {clasesBD} = this.state;
+    const {clasesBD, clasesHorario} = this.state;
 
 
     return(
@@ -150,8 +159,8 @@ class ClassUser extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={classData.localData} popupOpen={this.onPopupOpen.bind(this)}
-            startHour='05:00' endHour='22:00' > 
+            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
+            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}>
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

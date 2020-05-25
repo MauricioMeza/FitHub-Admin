@@ -109,7 +109,7 @@ class ClassForm extends React.Component{
   }
 
   reloadClases(){
-    ClaseService.getClases()
+    ClaseService.getClasesAdmin()
     .then(response => {
       console.log(response)
       var clas = response.data.map((c, i) => {

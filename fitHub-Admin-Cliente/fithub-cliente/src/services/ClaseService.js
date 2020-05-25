@@ -24,20 +24,14 @@ class ClaseService {
               }})
   }
 
-  getClasesUser(){
-    let user = AuthService.getCurrentUser()
-    console.log(user)
-    return Axios.get(API_URL_User + "verSesionesReservadas/" + user.Mail , {headers:{"Authorization": token}})
-  }
-
-  getClases(){
-    return Axios.get(API_URL + "buscarTodasSesiones" , {headers:{"Authorization": token}})
+  // Acciones Administrador----------------------
+  getClasesAdmin(){
+    return Axios.get(API_URL + "buscarTodasSesiones", {headers:{"Authorization": token}})
   }
 
   getInstNombres(){
     return Axios.get( API_URL + "instructoresNombres" , {headers:{"Authorization": token}})
   }
-
   getClasesNombres(){
     //return Axios.get( API_URL +"encontrarTodasLasClases")
     return ["Clase de boxeo", "Clase de spinning", "Clase de cardio", "Clase de yoga"]
@@ -46,9 +40,27 @@ class ClaseService {
   deleteSesion(claseId){
     return Axios.delete(API_URL + "eliminarSesion", {headers:{"Authorization": token}, data: claseId})
   }
+  
 
-  validarInstructor(){
-    return Axios.get( API_URL +"validarInstructor", {headers:{"Authorization": token}})
+  // Acciones Usuario ----------------------------
+  getClasesUser(){
+    let user = AuthService.getCurrentUser()
+    console.log(user)
+    return Axios.get(API_URL_User + "verSesionesReservadas/" + user.Mail , {headers:{"Authorization": token}})
+  }
+  
+  reserveClase(ClaseId){
+    let user = AuthService.getCurrentUser()
+    return Axios.get(API_URL_User + "reservarCupo/" + user.Mail + "/" + ClaseId , {headers:{"Authorization": token}})
+  }
+
+  cancelClase(ClaseId ){
+    let user = AuthService.getCurrentUser()
+    return Axios.get(API_URL_User + "cancelarCupo/" + user.Mail + "/" + ClaseId , {headers:{"Authorization": token}})
+  }
+
+  getClases(){
+    return Axios.get(API_URL_User + "listaSesiones")
   }
 }
 
