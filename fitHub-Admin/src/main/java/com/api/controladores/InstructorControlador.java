@@ -94,7 +94,11 @@ public class InstructorControlador {
 			sesionData.setSesion(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
 			sesionData.setId(ses.getId());
-
+			List<String> nombres = new ArrayList<>();
+			for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
+				nombres.add(ses.getAsistentes().get(i).getNombre());
+			}
+			sesionData.setNombresAsistentes(nombres);
 			sesionFormat.add(sesionData);
 		}
 		return sesionFormat;
