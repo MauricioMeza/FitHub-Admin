@@ -9,19 +9,15 @@ class Welcome extends React.Component{
     }
 
     componentDidMount(){
-        //Revisa si ya existe un usuario actualmente logeado
-        //  - Si el usuario es de tipo USER redirige a WelcomeUser
-        //  - Si el usuario es de tipo ADMIN redirige a WelcomeAdmin
-        if(localStorage.getItem('user') != null){
-            const user = AuthService.getCurrentUser()
+        const userRole = AuthService.getCurrentUserRole()
 
-            if(user.Rol == "USER"){
-                this.props.history.push('/welcomeUser')
-            }else if(user.Rol == "ADMIN"){
-                this.props.history.push('/welcomeAdmin')
-            }
-        }      
-    }
+        if(userRole == "USER"){
+            this.props.history.push('/welcomeUser')
+        }else if(userRole == "ADMIN"){
+            this.props.history.push('/welcomeAdmin')
+        }
+    }      
+    
 
     render(){
         return(

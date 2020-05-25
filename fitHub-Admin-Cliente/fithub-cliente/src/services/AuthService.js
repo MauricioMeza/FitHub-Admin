@@ -1,4 +1,6 @@
 import Axios from "axios";
+import {loginUser, logoutUser } from "../reducers/actions"
+import store from '../reducers/store';
 
 const API_URL = "http://localhost:8080/";
 
@@ -12,14 +14,16 @@ class AuthService {
       
       return Axios.post( API_URL + "login", login, {headers:{"Content-Type" : "application/json"}})
         .then(response => {
-          console.log(response.data)
-          localStorage.setItem("user", JSON.stringify(response.data))
+          const usuario = response.data
+          console.log(usuario)
+          localStorage.setItem("user", JSON.stringify(usuario))
+          store.dispatch(loginUser(usuario))
         })
-  
   }
 
   logout() {
     localStorage.removeItem("user");
+    store.dispatch(logoutUser())
   }
 
   register(cedula, nombre, correo, contrasena, contrasenaRep) {
@@ -35,9 +39,20 @@ class AuthService {
   }
 
   getCurrentUser() {
-    const user = localStorage.getItem('user');
-    return JSON.parse(user);
+    const usuario = localStorage.getItem('user');
+    return JSON.parse(usuario);
+  }
+
+  getCurrentUserRole(){ 
+    const usuario = localStorage.getItem('user');
+    if(usuario == null){
+      return "NULL"
+    }else{
+      const usuario = JSON.parse(localStorage.getItem('user'))
+      return usuario.Rol
+    }          
   }
 }
+
 
 export default new AuthService();

@@ -2,6 +2,7 @@ import React from "react";
 
 import {Jumbotron} from "react-bootstrap";
 import AuthService from "../../services/AuthService";
+import ClaseService from "../../services/ClaseService";
 
 class WelcomeAdmin extends React.Component{
     constructor(props){
@@ -13,14 +14,13 @@ class WelcomeAdmin extends React.Component{
     }
 
     componentDidMount(){
-        console.log(this.state.currentUser)
     }
 
     render(){
         const {currentUser} = this.state
         return(
             <Jumbotron className = "bg-dark text-white">
-            <h1 className="text-center">¡Bienvenido a FitHub {this.state.currentUser.User}!</h1>
+            <h1 className="text-center">¡Bienvenido a FitHub {currentUser.User}!</h1>
             <br></br>
             <h2 className="text-center">Esta es la Pagina Principal para Instructores</h2>
             </Jumbotron>

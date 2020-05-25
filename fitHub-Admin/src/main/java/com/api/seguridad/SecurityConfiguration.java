@@ -44,9 +44,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), this.usuarioRepositorio))
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/**").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/**").hasRole("ADMIN")
                 .antMatchers("/login").permitAll()
-                .antMatchers("Admin/**").hasRole("ADMIN")
-                .antMatchers("/register").permitAll();
+                .antMatchers("/Admin/**").hasRole("ADMIN")
+                .antMatchers("/register").permitAll()
+                .antMatchers("/User/**").hasRole("USER");
     }
 
     @Override

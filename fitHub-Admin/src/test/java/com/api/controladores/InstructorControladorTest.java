@@ -70,7 +70,7 @@ class InstructorControladorTest {
 
         Date date = new Date(2020, 05, 17);
 
-        Sesion mockSesion = new Sesion(date, "Clase de cardio", instructor, usuarioList);
+        Sesion mockSesion = new Sesion("id", date, "Clase de cardio", instructor, usuarioList, 20);
 
         String sesion = "{\"fecha\":\"2020-05-17\",\"sesion\":\"Clase de cardio\",\"instructor\":\"admin\"}";
 

@@ -1,10 +1,11 @@
 package com.api.repositorios;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import com.api.modelos.Instructor;
-import com.api.modelos.Usuario;
 
+@Repository
 public interface InstructorRepositorio extends MongoRepository<Instructor,Integer>{
 
 	Instructor findByCorreo(String correo);

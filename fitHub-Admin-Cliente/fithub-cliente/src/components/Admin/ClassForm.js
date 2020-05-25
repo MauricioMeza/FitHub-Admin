@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
 //import addDays from 'date-fns/addDays'
-
+ 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -21,6 +21,10 @@ import { withStyles } from '@material-ui/core/styles';
 import ClaseService from "../../services/ClaseService";
 import Classes from "./Classes";
 //import Class from "./ClassT";
+
+import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
+import { extend } from '@syncfusion/ej2-base';
+import ClassData from "./ClassData";
 
 const styles = theme => ({
   paper: {
@@ -42,17 +46,25 @@ const styles = theme => ({
   dateControl: {
     width: "100%"
   },
+  containerC: {
+    padding: theme.spacing(3, 0, 1)
+  },
+  containerCalendar: {
+    padding: theme.spacing(10, 0, 10)
+  },
 });
 
 class ClassForm extends React.Component{
 
   constructor (props) {
     super(props)
+    this.data = extend([], null, null, true);
 
     this.state = {
       instructores : [], 
       clases : [],
       clasesBD : [],
+      clasesHorario : [],
       startDate: new Date(),
       type: "",
       instructor: "",
@@ -62,6 +74,7 @@ class ClassForm extends React.Component{
     this.handleDateChange = this.handleDateChange.bind(this);
     this.reloadClases = this.reloadClases.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);    
+    
   }
 
   componentDidMount(){
@@ -96,28 +109,32 @@ class ClassForm extends React.Component{
   }
 
   reloadClases(){
-    ClaseService.getClases()
+    ClaseService.getClasesAdmin()
     .then(response => {
-
+      console.log(response)
       var clas = response.data.map((c, i) => {
-        var fecha = new Date(c.fecha_hora)
+        var fecha = new Date(c.fecha)
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
+        var horaMin = fecha.getMinutes()
+        if(horaMin == 0) horaMin = "00"
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
-          "hora" : " " + fecha.getHours() + ":" + fecha.getMinutes() + " ",
-          "tipo" : " " + c.tipo + " ",
-          "instructor": " " + c.instructor.nombre + " "
+          "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
+          "tipo" : " " + c.sesion + " ",
+          "instructor": " " + c.instructor + " ",
+          "id": c.id
         }
       })
       this.setState({
-        clasesBD : clas 
+        clasesBD : clas,
+        clasesHorario: response.data
       })
     })
     .catch(error => {
       console.log(error)
     })    
   }
-    
+
   onFormSubmit(e) {
     e.preventDefault();
     ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
@@ -131,32 +148,58 @@ class ClassForm extends React.Component{
       }
       console.log(error.response.data)
     })
-    //this.props.addClass(this.state.startDate, this.state.type)
+  }
+
+  onPopupOpen(args) {
+    console.log(args)
+    if(args.data.Id){
+      if(args.type == "DeleteAlert"){
+        args.cancel = true
+        ClaseService.deleteSesion(args.data.Id)
+          .then(response => {
+          console.log(response)
+          this.reloadClases();  
+        })
+      }
+      if(args.type == "Editor"){
+        args.cancel = true
+        alert("Esta funcionalidad todavia no esta implementada")
+      }
+    }else{
+      args.cancel = true
+    }
+  }
+
+  footer(props) {
+    this.render()
+    return (
+      <div>
+        {props.Description}
+      </div>
+    );
   }
 
   render() {
     const {classes} = this.props;
-    const {instructores, clases, clasesBD} = this.state;
-
+    const {instructores, clases, clasesBD, clasesHorario} = this.state;
 
     return(
       <React.Fragment>
-        <Container component="main" maxWidth="xl">
-        <Grid container 
+        <Container className={classes.containerC} component="main" maxWidth="xl">
+          <Grid container 
                   spacing={3} 
                   direction = "column" 
                   display="flex" 
                   alignItems="center" 
                   justify="center">
-          >
             <Typography component="h1" variant="h5">
-                Clases Actuales
+                Clases Creadas
             </Typography>
             <br></br>
-            <Classes classes={clasesBD}></Classes>
+            <Classes classes={clasesBD} reload ={this.reloadClases}></Classes>
           </Grid>
-          
         </Container>
+      
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>
@@ -236,6 +279,30 @@ class ClassForm extends React.Component{
               </form>
           </div>
         </Container>
+
+        <Container className={classes.containerCalendar} component="main" maxWidth="md">
+          <Grid container 
+                  spacing={3} 
+                  direction = "column" 
+                  display="flex" 
+                  alignItems="center" 
+                  justify="center">
+            <Typography component="h1" variant="h5">
+                Horario de Clases
+            </Typography>
+            <br></br>
+            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
+            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}> 
+              <ViewsDirective>
+                <ViewDirective option='Day'/>
+                <ViewDirective option='Week'/>
+                <ViewDirective option='Month'/>
+              </ViewsDirective>
+              <Inject services = {[Day, Week, Month]}/>
+            </ScheduleComponent>
+          </Grid>
+        </Container>
+
       </React.Fragment>
     );
   }

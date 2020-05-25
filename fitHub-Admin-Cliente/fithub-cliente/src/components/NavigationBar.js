@@ -1,8 +1,17 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 import {Navbar, Nav, Button} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import AuthService from '../services/AuthService';
+
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+    navBar: {
+        marginBottom: theme.spacing(2)
+    }
+});
 
 class NavigationBar extends React.Component {
     constructor(props){
@@ -10,99 +19,97 @@ class NavigationBar extends React.Component {
         this.logOut = this.logOut.bind(this);
 
         this.state = {
-            showUserBoard: 0,
-            currentUser: undefined
+            showUserBoard: AuthService.getCurrentUserRole(),
         }; 
     }
 
     componentDidMount(){
         // Escoge que barra de navegacion mostrar dependiendo del usuario loggeado
-        if(localStorage.getItem('user') == null){
-            this.setState({
-                currentUser: undefined,
-                showUserBoard: 0
-                });
-        }else{
-            const user = AuthService.getCurrentUser()
-            if(user.Rol == "USER"){
-                this.setState({
-                currentUser: user,
-                showUserBoard: 1
-                });
-            }else if(user.Rol == "ADMIN"){
-                this.setState({
-                    currentUser: user,
-                    showUserBoard: 2
-                });
-            }
-        }          
+        this.setState({
+            showUserBoard: AuthService.getCurrentUserRole()
+        });        
     }
 
     logOut(){
         AuthService.logout()
         this.setState({
-            showUserBoard: 0
+            showUserBoard: AuthService.getCurrentUserRole()
         });
     }
 
 
     render(){
         const{currentUser, showUserBoard} = this.state
+        const {classes} = this.props;
+
         switch(showUserBoard){
-            case 1:
+            case "USER":
                 return(
-                    <Navbar bg="primary" variant="dark">
+                    <Navbar className={classes.navBar} bg="primary" variant="dark" expand="lg" sticky="top"> 
                         <Link to={"/welcomeUser"} className="navbar-brand">
                             FITHUB-USER
                         </Link>
-                        <Nav className="mr-auto">
-                        <Link to={"/"} className="navbar-brand">
-                            <Button>Mis Clases</Button>
-                        </Link>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button>Mis Planes</Button>
-                        </Link>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
-                        </Link>
-                        </Nav>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="mr-auto p-2">
+                                <Link to={"ClassUser"} className="navbar-brand">
+                                    <Button>Mis Clases</Button>
+                                </Link>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button>Mis Planes</Button>
+                                </Link>
+                            </Nav>
+
+                            <Nav>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
+                                </Link>
+                            </Nav>
+                        </Navbar.Collapse>
                     </Navbar>
                 )
-            case 2:
+            case "ADMIN":
                 return(
-                    <Navbar bg="primary" variant="dark">
+                    <Navbar className={classes.navBar} bg="primary" variant="dark"  expand="lg" sticky="top">
                         <Link to={"/welcomeAdmin"} className="navbar-brand">
                             FITHUB-ADMIN
                         </Link>
-                        <Nav className="mr-auto">
-                        <Link to={"/ClassForm"} className="navbar-brand">
-                            <Button>Clases</Button>
-                        </Link>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button>Usuarios</Button>
-                        </Link>
-                        <Link to={"/"} className="navbar-brand">
-                            <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
-                        </Link>
-                        </Nav>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="mr-auto p-2">
+                                <Link to={"/ClassForm"} className="navbar-brand">
+                                    <Button>Clases</Button>
+                                </Link>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button>Usuarios</Button>
+                                </Link>
+                            </Nav>
+                            <Nav>
+                                <Link to={"/"} className="navbar-brand">
+                                    <Button onClick={this.logOut} className="nav-button"> LogOut</Button>
+                                </Link>
+                            </Nav>
+                        </Navbar.Collapse>
                     </Navbar>
                 )
-            case 0:
+            case "NULL":
                 return(
-                    <Navbar bg="primary" variant="dark">
+                    <Navbar className={classes.navBar} bg="primary" variant="dark" expand="lg" sticky="top">
                         <Link to={"/"} className="navbar-brand">
                             FITHUB
                         </Link>
-                        <Nav className="mr-auto">
+                        <Nav className="mr-auto p-2">
                         <Link to={"/registro"} className="nav-link"> Registrarse</Link>
                         <Link to={"/login"} className="nav-link"> Ingresar</Link>
                         </Nav>
                     </Navbar>
                 )  
-
-        }
-                       
+        }                   
     }
 }
 
-export default NavigationBar;
+NavigationBar.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(NavigationBar);

@@ -19,11 +19,11 @@ public class SesionControlador {
 
 	@GetMapping("/encontrarTodasLasSesiones")
 	public List<Sesion> getSesiones(){
-		return servicio.findAllSesiones();
+		return servicio.findAllSesionesByFecha();
 	}
 	
 	@GetMapping("/encontrarSesion/{id}")
-	public Sesion getSesion(@PathVariable int id){
+	public Sesion getSesion(@PathVariable String id){
 		return servicio.getSesionById(id);
 	}
 
