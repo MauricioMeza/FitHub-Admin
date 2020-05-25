@@ -40,6 +40,7 @@ class ClassUser extends React.Component{
 
     this.state = {
       clasesBD : [],
+      clasesHorario : [],
       selectedClass: ""
     };
 
@@ -73,16 +74,47 @@ class ClassUser extends React.Component{
     })
     .catch(error => {
       console.log(error)
-    })    
+    })
+    
+    ClaseService.getClases()
   }
 
   onPopupOpen(args) {
     console.log(args)
     if(args.data.Id){
+      if(args.type == "DeleteAlert"){
+        args.cancel = true
+        /*
+        ClaseService.cancelSesion(args.data.Id)
+        .then(response => {
+          console.log(response)
+          this.reloadClases();  
+        })
+        */
+      }
+      if(args.type == "Editor"){
+        args.cancel = true
+        /*
+        ClaseService.reserveSesion(args.data.Id)
+        .then(response => {
+          console.log(response)
+          this.reloadClases();  
+        })
+        */
+      }
     }else{
       args.cancel = true
     }
-}
+  }
+
+  footer(props) {
+    this.render()
+    return (
+      <div>
+        {props.Description}
+      </div>
+    );
+  }
 
   render() {
     const {classes} = this.props;

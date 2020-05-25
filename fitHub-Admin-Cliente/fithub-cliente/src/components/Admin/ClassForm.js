@@ -153,6 +153,18 @@ class ClassForm extends React.Component{
   onPopupOpen(args) {
     console.log(args)
     if(args.data.Id){
+      if(args.type == "DeleteAlert"){
+        args.cancel = true
+        ClaseService.deleteSesion(args.data.Id)
+          .then(response => {
+          console.log(response)
+          this.reloadClases();  
+        })
+      }
+      if(args.type == "Editor"){
+        args.cancel = true
+        alert("Esta funcionalidad todavia no esta implementada")
+      }
     }else{
       args.cancel = true
     }
