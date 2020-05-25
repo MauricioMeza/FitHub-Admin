@@ -24,8 +24,7 @@ import Classes from "./Classes";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
 import { extend } from '@syncfusion/ej2-base';
-import classData from './ClassData.ts'
-
+import ClassData from "./ClassData";
 
 const styles = theme => ({
   paper: {
@@ -65,6 +64,7 @@ class ClassForm extends React.Component{
       instructores : [], 
       clases : [],
       clasesBD : [],
+      clasesHorario : [],
       startDate: new Date(),
       type: "",
       instructor: "",
@@ -109,7 +109,7 @@ class ClassForm extends React.Component{
   }
 
   reloadClases(){
-    ClaseService.getClases()
+    ClaseService.getClasesAdmin()
     .then(response => {
       console.log(response)
       var clas = response.data.map((c, i) => {
@@ -126,7 +126,8 @@ class ClassForm extends React.Component{
         }
       })
       this.setState({
-        clasesBD : clas 
+        clasesBD : clas,
+        clasesHorario: response.data
       })
     })
     .catch(error => {
@@ -134,18 +135,53 @@ class ClassForm extends React.Component{
     })    
   }
 
+  onFormSubmit(e) {
+    e.preventDefault();
+    ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
+    .then(response => {
+      console.log(response)
+      this.reloadClases()
+    })
+    .catch(error => {
+      if(error.response.status == 400){
+        alert(error.response.data.errors[0].defaultMessage) 
+      }
+      console.log(error.response.data)
+    })
+  }
+
   onPopupOpen(args) {
     console.log(args)
     if(args.data.Id){
+      if(args.type == "DeleteAlert"){
+        args.cancel = true
+        ClaseService.deleteSesion(args.data.Id)
+          .then(response => {
+          console.log(response)
+          this.reloadClases();  
+        })
+      }
+      if(args.type == "Editor"){
+        args.cancel = true
+        alert("Esta funcionalidad todavia no esta implementada")
+      }
     }else{
       args.cancel = true
     }
-}
+  }
+
+  footer(props) {
+    this.render()
+    return (
+      <div>
+        {props.Description}
+      </div>
+    );
+  }
 
   render() {
     const {classes} = this.props;
-    const {instructores, clases, clasesBD} = this.state;
-
+    const {instructores, clases, clasesBD, clasesHorario} = this.state;
 
     return(
       <React.Fragment>
@@ -255,8 +291,8 @@ class ClassForm extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={classData.localData} popupOpen={this.onPopupOpen.bind(this)}
-            startHour='05:00' endHour='22:00' > 
+            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
+            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

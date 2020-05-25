@@ -1,7 +1,10 @@
 package com.api.controladores;
 
 import com.api.dto.LoginDTO;
+import com.api.dto.SesionDTO;
 import com.api.dto.UsuarioDTO;
+import com.api.modelos.Sesion;
+import com.api.servicios.SesionServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -20,6 +25,9 @@ public class IndexControlador {
 
     @Autowired
     UsuarioServicio usuarioServicio;
+    
+    @Autowired
+    SesionServicio servicioSes;
 
     //Registro
     @GetMapping("/register")
@@ -51,4 +59,20 @@ public class IndexControlador {
         model.addAttribute("usuarioLogin", loginDTO);
         return "login";
     }
+    
+    @GetMapping("/listaSesiones")
+    public List<SesionDTO> BuscarSesiones( ) {
+		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
+		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
+		for (Sesion ses: sesiones) {
+			SesionDTO sesionData = new SesionDTO();
+			sesionData.setFecha(ses.getFecha_hora());
+			sesionData.setSesion(ses.getTipo());
+			sesionData.setInstructor(ses.getInstructor().getNombre());
+			sesionData.setId(ses.getId());
+			sesionFormat.add(sesionData);
+		}
+		return sesionFormat;
+    }
+    
 }

@@ -3,17 +3,20 @@ package com.api.controladores;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.api.dto.SesionDTO;
 import com.api.servicios.SesionServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.modelos.Sesion;
 import com.api.modelos.Usuario;
 
 @RestController
+@RequestMapping("/User")
 public class UsuarioControlador {
 	
 	@Autowired
@@ -36,7 +39,7 @@ public class UsuarioControlador {
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
 	public String reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
 
-		Usuario usuario = servicio.getUserByCedula(idUsuario);
+		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		//List<Sesion> sesionesReservadas = usuario.getSesionesReservadas();
 		
@@ -61,26 +64,32 @@ public class UsuarioControlador {
 				servicioSesion.cambiarSesion(sesion);
 			}
 		}
-		return "El usuario " + usuario.getNombre() + " ha reservado un cupo con éxito";
+		return "El usuario ha reservado un cupo con éxito";
 	}
 	
 	
-	@GetMapping("/verSesionesReservadas/{id}")
-	public String verSesionesReservadas(@PathVariable("id") String id){
-		Usuario usuario = servicio.getUserByCedula(id);
+	@GetMapping("/verSesionesReservadas/{email}")
+	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String id){
+		Usuario usuario = servicio.getUserByCorreo(id);
 		List <Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
-		List <Sesion> sesionesInscritas = new ArrayList<>();
-		for(int i = 0; i < sesiones.size(); i++)
-			if(servicioSesion.usuarioInscrito(sesiones.get(i), usuario))
-				sesionesInscritas.add(sesiones.get(i));
-		
-		return sesionesInscritas.toString();
+		List <SesionDTO> sesionesInscritas = new ArrayList<>();
+		for(int i = 0; i < sesiones.size(); i++) {
+			if (servicioSesion.usuarioInscrito(sesiones.get(i), usuario)){
+				SesionDTO sesionSend = new SesionDTO();
+				sesionSend.setId(sesiones.get(i).getId());
+				sesionSend.setInstructor(sesiones.get(i).getInstructor().getNombre());
+				sesionSend.setSesion(sesiones.get(i).getTipo());
+				sesionSend.setFecha(sesiones.get(i).getFecha_hora());
+				sesionesInscritas.add(sesionSend);
+			}
+		}
+		return sesionesInscritas;
 	}
 	
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")
 	public String cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
-		Usuario usuario = servicio.getUserByCedula(idUsuario);
+		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		return servicioSesion.cancelarCupo(sesion, usuario);
 	}
 	

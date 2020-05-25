@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 
 import ClaseService from "../../services/ClaseService";
+import AuthService from "../../services/AuthService";
 
 const styles = theme => ({
   root: {
@@ -39,14 +40,27 @@ class ClassT extends Component{
   }
 
   deleteClase(i){
-    ClaseService.deleteSesion(i)
-    .then(response => {
-      console.log(response)
-      this.props.reload()
-    })
-    .catch(error => {
-      console.log(error.response)
-    })
+    let user = AuthService.getCurrentUserRole()
+
+    if(user == "ADMIN"){
+      ClaseService.deleteSesion(i)
+      .then(response => {
+        console.log(response)
+        this.props.reload()
+      })
+      .catch(error => {
+        console.log(error.response)
+      })
+    }else if(user == "USER"){
+      ClaseService.cancelClase(i)
+      .then(response => {
+        console.log(response)
+        this.props.reload()
+      })
+      .catch(error => {
+        console.log(error.response)
+      })  
+    }
   }
     
   render(){

@@ -74,14 +74,14 @@ public class SesionServicioImpl implements SesionServicio {
 	public String cancelarCupo(Sesion sesion, Usuario usuario) {
 		boolean inscrito = this.usuarioInscrito(sesion, usuario);
 		if (!inscrito) 
-			return "El usuario " + usuario.getNombre() + " no está inscrito en la sesion";
+			return "El usuario no está inscrito en la sesion";
 		else {
 			List<Usuario> inscritos = sesion.quitarAsistente(usuario);
 			sesion.setAsistentes(inscritos);
 			int cupos = sesion.getCupos();
 			sesion.setCupos(cupos+ 1);
 			this.cambiarSesion(sesion);
-			return "El usuario " + usuario.getNombre() + " ha cancelado su cupo en la sesion";
+			return "El usuario ha cancelado su cupo en la sesion";
 		}
 	}
 
