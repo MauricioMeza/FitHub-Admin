@@ -6,8 +6,9 @@ if(AuthService.getCurrentUser() != null){
   token = AuthService.getCurrentUser().Authorization
 }
 
-const API_URL = "http://localhost:8080/Admin/";
-const API_URL_User = "http://localhost:8080/";
+const API_URL = "http://localhost:8080/"
+const API_URL_Admin = API_URL + "Admin/";
+const API_URL_User = API_URL + "User/";
 
 class ClaseService {
 
@@ -26,11 +27,11 @@ class ClaseService {
 
   // Acciones Administrador----------------------
   getClasesAdmin(){
-    return Axios.get(API_URL + "buscarTodasSesiones", {headers:{"Authorization": token}})
+    return Axios.get(API_URL_Admin + "buscarTodasSesiones", {headers:{"Authorization": token}})
   }
 
   getInstNombres(){
-    return Axios.get( API_URL + "instructoresNombres" , {headers:{"Authorization": token}})
+    return Axios.get(API_URL_Admin + "instructoresNombres" , {headers:{"Authorization": token}})
   }
   getClasesNombres(){
     //return Axios.get( API_URL +"encontrarTodasLasClases")
@@ -38,7 +39,7 @@ class ClaseService {
   }
 
   deleteSesion(claseId){
-    return Axios.delete(API_URL + "eliminarSesion", {headers:{"Authorization": token}, data: claseId})
+    return Axios.delete(API_URL_Admin + "eliminarSesion", {headers:{"Authorization": token}, data: claseId})
   }
   
 
@@ -60,7 +61,7 @@ class ClaseService {
   }
 
   getClases(){
-    return Axios.get(API_URL_User + "listaSesiones")
+    return Axios.get(API_URL + "listaSesiones")
   }
 }
 
