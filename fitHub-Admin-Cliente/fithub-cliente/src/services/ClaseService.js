@@ -19,7 +19,7 @@ class ClaseService {
         instructor: instructor,
       })
 
-      return Axios.post( API_URL + "agregarSesion", sesion, 
+      return Axios.post( API_URL_Admin + "agregarSesion", sesion, 
       {headers:{"Content-Type" : "application/json",
                 "Authorization": token
               }})
