@@ -40,6 +40,7 @@ class ClassUser extends React.Component{
 
     this.state = {
       clasesBD : [],
+      clasesList : [],
       clasesHorario : [],
       selectedClass: ""
     };
@@ -54,7 +55,6 @@ class ClassUser extends React.Component{
   reloadClases(){
     ClaseService.getClasesUser()
     .then(response => {
-      console.log(response)
       var clas = response.data.map((c, i) => {
         var fecha = new Date(c.fecha)
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
@@ -69,7 +69,8 @@ class ClassUser extends React.Component{
         }
       })
       this.setState({
-        clasesBD : clas 
+        clasesBD : clas, 
+        clasesList : response.data 
       })
     })
     .catch(error => {
@@ -116,18 +117,25 @@ class ClassUser extends React.Component{
     }
   }
 
+  onEventRendered(args) {
+    if(args.data.Reserved){
+      args.element.style.backgroundColor = "DarkGoldenRod";
+    }
+  }
+
   footer(props) {
     this.render()
     return (
       <div>
-        {props.Description}
+        {props.Instructor}
+        {props.Reserved}
       </div>
     );
   }
 
   render() {
     const {classes} = this.props;
-    const {clasesBD, clasesHorario} = this.state;
+    const {clasesBD, clasesHorario, clasesList} = this.state;
 
 
     return(
@@ -159,8 +167,8 @@ class ClassUser extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
-            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}>
+            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario, clasesList)}} startHour='05:00'  
+            endHour='22:00' eventRendered={this.onEventRendered.bind(this)} popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}>
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>
