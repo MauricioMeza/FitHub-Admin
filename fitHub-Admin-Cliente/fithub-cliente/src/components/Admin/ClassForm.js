@@ -170,28 +170,25 @@ class ClassForm extends React.Component{
           this.reloadClases();  
         })
       }
-      /*if(args.type == "Editor"){
-        args.cancel = true
-        alert("Esta funcionalidad todavia no esta implementada")
-      }*/
     }else{
       args.cancel = true
     }
   }
 
-  onEditClick() {
-    let Data = [{
-      Id: 1,
-      Subject: 'Conference',
-      StartTime: new Date(2019, 4, 28, 9, 0),
-      EndTime: new Date(2019, 4, 28, 10, 0),
-      IsAllDay: false
-  }];
-    this.scheduleObj.saveEvent(Data[0], 'EditOccurrence');
-    this.reloadClases();
+  onActionBegin(args) {
+    if(args.requestType == "eventChange"){  
+    ClaseService.updateClase(args.data)
+      .then(response => {
+        console.log(response)
+        this.reloadClases()
+      })
+    console.log(args)
+    }
   }
+    
 
-  footer(props) {
+
+  footer(props){
     this.render()
     return (
       <div>
@@ -203,15 +200,15 @@ class ClassForm extends React.Component{
   editorWindowTemplate(props) {
     return (
       props !== undefined ? <table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
-      <tr><td className="e-textlabel">Motivo</td><td colSpan={4}>
-        <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Description || null}></DropDownListComponent>
+      <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
+        <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
       </td></tr>
-      <tr><td className="e-textlabel">Desde</td><td colSpan={4}>
+      <tr><td className="e-textlabel">Fecha</td><td colSpan={4}>
         <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
       </td></tr>
      
       <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
-        <DropDownListComponent id="Description" placeholder='Elija un profesor' data-name="Description" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Description || null}></DropDownListComponent>
+        <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
       </td></tr>
       </tbody></table> : <div></div>
     )
@@ -330,10 +327,10 @@ class ClassForm extends React.Component{
             </Typography>
             <br></br>
             
-            <ButtonComponent id='edit' title='Edit' ref={t => this.buttonObj = t} onClick={this.onEditClick.bind(this)}>Edit</ButtonComponent>
             <ScheduleComponent ref={t => this.scheduleObj = t} quickInfoTemplates={{footer: this.footer.bind(this)}} 
             eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}}  startHour='05:00' endHour='22:00'
-            currentView='Week' popupOpen={this.onPopupOpen.bind(this)} editorTemplate={this.editorWindowTemplate.bind(this)}> 
+            currentView='Week' popupOpen={this.onPopupOpen.bind(this)} editorTemplate={this.editorWindowTemplate.bind(this)}
+            actionBegin={this.onActionBegin.bind(this)} > 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

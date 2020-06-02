@@ -32,6 +32,19 @@ public class SesionServicioImpl implements SesionServicio {
         return repositorio.save(nuevaSesion); 
     }
 
+	@Override
+	public Sesion cambiarSesion(SesionDTO sesionDTO) {
+		Sesion nuevaSesion = new Sesion();
+
+		Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
+		nuevaSesion.setInstructor(instructor);
+		nuevaSesion.setTipo(sesionDTO.getSesion());
+		nuevaSesion.setFecha_hora(sesionDTO.getFecha());
+		nuevaSesion.setId(sesionDTO.getId());
+
+		return repositorio.save(nuevaSesion);
+	}
+
     @Override
     public List<Sesion> findAllSesionesByFecha() {
         return repositorio.findAll(Sort.by(Sort.Direction.ASC, "fecha_hora") );

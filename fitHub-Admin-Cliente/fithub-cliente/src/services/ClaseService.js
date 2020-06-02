@@ -12,20 +12,34 @@ const API_URL_User = API_URL + "User/";
 
 class ClaseService {
 
+  // Acciones Administrador----------------------
   addClase(fecha, clase, instructor) {
     const sesion = JSON.stringify({
         fecha: fecha,
         sesion: clase,
         instructor: instructor,
-      })
+    })
 
-      return Axios.post( API_URL + "agregarSesion", sesion, 
+      return Axios.post( API_URL_Admin + "agregarSesion", sesion, 
       {headers:{"Content-Type" : "application/json",
                 "Authorization": token
               }})
   }
 
-  // Acciones Administrador----------------------
+  updateClase(sesion){
+    const sesionDTO = JSON.stringify({
+      id: sesion.Id,
+      fecha: sesion.StartTime,
+      sesion: sesion.Subject,
+      instructor: sesion.Instructor
+    })
+    
+    return Axios.put(API_URL_Admin + "actualizarSesion", sesionDTO,
+    {headers:{"Content-Type" : "application/json",
+              "Authorization": token
+             }})
+  }
+
   getClasesAdmin(){
     return Axios.get(API_URL_Admin + "buscarTodasSesiones", {headers:{"Authorization": token}})
   }
