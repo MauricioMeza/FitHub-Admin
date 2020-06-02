@@ -83,6 +83,12 @@ public class InstructorControlador {
 		}
 	}
 
+	@PutMapping("/actualizarSesion")
+	public String actualizarSesion(@Valid @RequestBody SesionDTO sesion) {
+		servicioSes.cambiarSesion(sesion);
+		return "Sesion Actualizada";
+	}
+
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
 	public List<SesionDTO> BuscarSesiones( ) {

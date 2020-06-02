@@ -23,7 +23,11 @@ import Classes from "./Classes";
 //import Class from "./ClassT";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
-import { extend } from '@syncfusion/ej2-base';
+import {extend, L10n, setCulture} from '@syncfusion/ej2-base';
+import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
+import {DateTimePickerComponent} from "@syncfusion/ej2-react-calendars";
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+
 import ClassData from "./ClassData";
 
 const styles = theme => ({
@@ -54,8 +58,16 @@ const styles = theme => ({
   },
 });
 
-class ClassForm extends React.Component{
+L10n.load({'en-US': {
+    'schedule': {
+        'saveButton': 'Guardar',
+        'cancelButton': 'Cerrar',
+        'deleteButton': 'Eliminar',
+    },
+  }
+});
 
+class ClassForm extends React.Component{
   constructor (props) {
     super(props)
     this.data = extend([], null, null, true);
@@ -87,13 +99,10 @@ class ClassForm extends React.Component{
     .catch(error => {
       console.log(error)
     })
-
     this.setState({
       clases :ClaseService.getClasesNombres(), 
     })
-
     this.reloadClases()
-    
   }
 
   handleChange(event) {
@@ -161,22 +170,48 @@ class ClassForm extends React.Component{
           this.reloadClases();  
         })
       }
-      if(args.type == "Editor"){
-        args.cancel = true
-        alert("Esta funcionalidad todavia no esta implementada")
-      }
     }else{
       args.cancel = true
     }
   }
 
-  footer(props) {
+  onActionBegin(args) {
+    if(args.requestType == "eventChange"){  
+    ClaseService.updateClase(args.data)
+      .then(response => {
+        console.log(response)
+        this.reloadClases()
+      })
+    console.log(args)
+    }
+  }
+    
+
+
+  footer(props){
     this.render()
     return (
       <div>
         {props.Description}
       </div>
     );
+  }
+
+  editorWindowTemplate(props) {
+    return (
+      props !== undefined ? <table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
+      <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
+        <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
+      </td></tr>
+      <tr><td className="e-textlabel">Fecha</td><td colSpan={4}>
+        <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
+      </td></tr>
+     
+      <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
+        <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
+      </td></tr>
+      </tbody></table> : <div></div>
+    )
   }
 
   render() {
@@ -291,8 +326,11 @@ class ClassForm extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
-            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}> 
+            
+            <ScheduleComponent ref={t => this.scheduleObj = t} quickInfoTemplates={{footer: this.footer.bind(this)}} 
+            eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}}  startHour='05:00' endHour='22:00'
+            currentView='Week' popupOpen={this.onPopupOpen.bind(this)} editorTemplate={this.editorWindowTemplate.bind(this)}
+            actionBegin={this.onActionBegin.bind(this)} > 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>
