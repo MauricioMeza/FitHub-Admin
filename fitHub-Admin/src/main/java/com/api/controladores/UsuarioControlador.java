@@ -1,6 +1,7 @@
 package com.api.controladores;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.api.dto.SesionDTO;
@@ -41,7 +42,11 @@ public class UsuarioControlador {
 
 		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
+		Date fecha_actual = new Date();
 		//List<Sesion> sesionesReservadas = usuario.getSesionesReservadas();
+		
+		if(sesion.getFecha_hora().before(fecha_actual))
+			return "La sesión ya pasó";
 		
 		if(servicioSesion.usuarioInscrito(sesion, usuario)) {
 			return "El usuario " + usuario.getNombre() + " ya está inscrito en la Sesion";
