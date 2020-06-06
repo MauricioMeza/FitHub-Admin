@@ -2,6 +2,9 @@ package com.api.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+
+import com.api.modelos.Plan;
+
 import javax.validation.constraints.Email;
 
 @contrasenaIgualValidacion(message = "Contraseñas no coinciden")
@@ -20,8 +23,16 @@ public class UsuarioDTO {
     @NotEmpty
     private String contrasena;
     private String contrasenaRep;
-
-    public String getCedula() { return cedula; }
+    private Plan plan;
+    
+    
+    public Plan getPlan() {
+		return plan;
+	}
+	public void setPlan(Plan plan) {
+		this.plan = plan;
+	}
+	public String getCedula() { return cedula; }
     public void setCedula(String cedula) { this.cedula = cedula; }
 
     public String getNombre() { return nombre; }

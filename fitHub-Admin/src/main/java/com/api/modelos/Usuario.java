@@ -1,6 +1,7 @@
 package com.api.modelos;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection= "Usuario")
@@ -12,16 +13,27 @@ public class Usuario {
 	private String correo;
 	private String contrasena;
 	private String role;
+	@DBRef
+	private Plan plan;
 
 	public Usuario(){}
 
-	public Usuario(String nombre, String correo, String cedula, String contrasena, String role) {
+	public Usuario(String nombre, String correo, String cedula, String contrasena, String role, Plan plan) {
 		super();
 		this.nombre = nombre;
 		this.correo = correo;
 		this.cedula = cedula;
 		this.contrasena = contrasena;
 		this.role = role;
+		this.plan = plan;
+	}
+	
+	public Plan getPlan() {
+		return plan;
+	}
+
+	public void setPlan(Plan plan) {
+		this.plan = plan;
 	}
 
 	public String getNombre() {

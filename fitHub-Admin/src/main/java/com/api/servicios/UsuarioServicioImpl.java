@@ -48,6 +48,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         user.setCorreo(usuarioDTO.getCorreo());
         user.setCedula(usuarioDTO.getCedula());
         user.setRole("USER");
+        user.setPlan(usuarioDTO.getPlan());
 
         addUser(user);
     };

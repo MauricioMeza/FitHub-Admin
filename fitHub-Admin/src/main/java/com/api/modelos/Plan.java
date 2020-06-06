@@ -1,5 +1,6 @@
 package com.api.modelos;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -11,20 +12,52 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Plan {
 
 	@Id
-	private int idPlan;
+	private String id;
 	private Date fechaInicio;
 	private Date fechaFin;
 	private int clasesDisponibles;
-	private boolean activo;
 	@DBRef
-	private List<Sesion> SesionesReservadas;
+	private List<Sesion> sesionesReservadas;
+	@DBRef
+	private List<Sesion> sesionesAsistidas;
+	@DBRef
+	private TipoPlan tipoPlan;
 	
-	
-	public int getIdPlan() {
-		return idPlan;
+	public void SesionReservada_Asistida(String idSesion) {
+		List<Sesion> sesionesReservadas = this.sesionesReservadas;
+		List<Sesion> sesionesAsistidas = this.sesionesAsistidas;
+		for(int i = 0; i < sesionesReservadas.size(); i++)
+			if(sesionesReservadas.get(i).getId() == idSesion){
+				sesionesReservadas.remove(i);
+				sesionesAsistidas.add(sesionesReservadas.get(i));
+		}
 	}
-	public void setIdPlan(int idPlan) {
-		this.idPlan = idPlan;
+	
+	public Date SumarDias(Date fecha, int dias) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.DAY_OF_YEAR, dias);
+		return calendar.getTime();
+		
+	}
+	
+	public List<Sesion> getSesionesAsistidas() {
+		return sesionesAsistidas;
+	}
+	public void setSesionesAsistidas(List<Sesion> sesionesAsistidas) {
+		this.sesionesAsistidas = sesionesAsistidas;
+	}
+	public List<Sesion> getSesionesReservadas() {
+		return sesionesReservadas;
+	}
+	public void setSesionesReservadas(List<Sesion> sesionesReservadas) {
+		this.sesionesReservadas = sesionesReservadas;
+	}
+	public String getIdPlan() {
+		return id;
+	}
+	public void setIdPlan(String string) {
+		this.id = string;
 	}
 	public Date getFechaInicio() {
 		return fechaInicio;
@@ -44,22 +77,12 @@ public class Plan {
 	public void setClasesDisponibles(int clasesDisponibles) {
 		this.clasesDisponibles = clasesDisponibles;
 	}
-	public boolean isActivo() {
-		return activo;
+	public TipoPlan getTipoPlan() {
+		return tipoPlan;
 	}
-	public void setActivo(boolean activo) {
-		this.activo = activo;
+	public void setTipoPlan(TipoPlan tipoPlan) {
+		this.tipoPlan = tipoPlan;
 	}
-	public List<Sesion> getSesionesReservadas() {
-		return SesionesReservadas;
-	}
-	public void setSesionesReservadas(List<Sesion> sesionesReservadas) {
-		SesionesReservadas = sesionesReservadas;
-	}
-	
-	
-	
-	
 	
 	
 }
