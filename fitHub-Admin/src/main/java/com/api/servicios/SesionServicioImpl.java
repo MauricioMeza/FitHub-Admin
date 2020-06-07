@@ -3,6 +3,7 @@ package com.api.servicios;
 import com.api.dto.SesionDTO;
 import com.api.modelos.Instructor;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoSesion;
 import com.api.modelos.Usuario;
 import com.api.repositorios.InstructorRepositorio;
 import com.api.repositorios.SesionRepositorio;
@@ -26,8 +27,11 @@ public class SesionServicioImpl implements SesionServicio {
 
         Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
         nuevaSesion.setInstructor(instructor);
-        nuevaSesion.setTipo(sesionDTO.getSesion());
+        nuevaSesion.setTipo(sesionDTO.getTipoSesion());
         nuevaSesion.setFecha_hora(sesionDTO.getFecha());
+
+		TipoSesion tipoSesion = sesionDTO.getTipoSesion();
+		nuevaSesion.setCupos(tipoSesion.getCupos());
 
         return repositorio.save(nuevaSesion); 
     }
@@ -38,7 +42,7 @@ public class SesionServicioImpl implements SesionServicio {
 
 		Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
 		nuevaSesion.setInstructor(instructor);
-		nuevaSesion.setTipo(sesionDTO.getSesion());
+		nuevaSesion.setTipo(sesionDTO.getTipoSesion());
 		nuevaSesion.setFecha_hora(sesionDTO.getFecha());
 		nuevaSesion.setId(sesionDTO.getId());
 

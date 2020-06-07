@@ -67,7 +67,7 @@ public class IndexControlador {
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
-			sesionData.setSesion(ses.getTipo());
+			sesionData.setTipoSesion(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
 			sesionData.setId(ses.getId());
 			sesionFormat.add(sesionData);

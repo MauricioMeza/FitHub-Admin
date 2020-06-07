@@ -78,7 +78,7 @@ public class UsuarioControlador {
 				SesionDTO sesionSend = new SesionDTO();
 				sesionSend.setId(sesiones.get(i).getId());
 				sesionSend.setInstructor(sesiones.get(i).getInstructor().getNombre());
-				sesionSend.setSesion(sesiones.get(i).getTipo());
+				sesionSend.setTipoSesion(sesiones.get(i).getTipo());
 				sesionSend.setFecha(sesiones.get(i).getFecha_hora());
 				sesionesInscritas.add(sesionSend);
 			}

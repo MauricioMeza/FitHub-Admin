@@ -13,6 +13,8 @@ public class TipoSesion {
     private String nombre;
     private int cupos;
 
+    public TipoSesion(){};
+
     public TipoSesion(String nombre, int cupos) {
         super();
         this.nombre = nombre;

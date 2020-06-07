@@ -20,17 +20,19 @@ public class Sesion {
 	private Instructor instructor;
 	@DBRef
 	private List<Usuario> asistentes;
+	private int cupos;
 
 	public Sesion(){
 		this.asistentes = new ArrayList<Usuario>();
 	};
 
-	public Sesion(String id, Date fecha_hora, TipoSesion tipo, Instructor instructor, List<Usuario> asistentes) {
+	public Sesion(String id, Date fecha_hora, TipoSesion tipo, Instructor instructor, int cupos, List<Usuario> asistentes) {
 		super();
 		this.id = id;
 		this.fecha_hora = fecha_hora;
 		this.tipo = tipo;
 		this.instructor = instructor;
+		this.cupos = cupos;
 		this.asistentes = asistentes;
 	}
 
@@ -80,5 +82,13 @@ public class Sesion {
 
 	public void setTipo(TipoSesion tipo) {
 		this.tipo = tipo;
+	}
+
+	public int getCupos() {
+		return cupos;
+	}
+
+	public void setCupos(int cupos) {
+		this.cupos = cupos;
 	}
 }
