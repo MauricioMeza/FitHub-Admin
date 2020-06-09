@@ -31,7 +31,6 @@ public class Sesion {
 		super();
 		this.id = id;
 		this.fecha_hora = fecha_hora;
-		this.final_clase = final_clase;
 		this.tipo = tipo;
 		this.instructor = instructor;
 		this.cupos = cupos;

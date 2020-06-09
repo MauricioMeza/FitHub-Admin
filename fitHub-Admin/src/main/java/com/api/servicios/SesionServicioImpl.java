@@ -8,6 +8,7 @@ import com.api.modelos.Usuario;
 import com.api.repositorios.InstructorRepositorio;
 import com.api.repositorios.SesionRepositorio;
 
+import com.api.repositorios.TipoSesionRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -20,18 +21,19 @@ public class SesionServicioImpl implements SesionServicio {
     SesionRepositorio repositorio;
     @Autowired
     InstructorRepositorio repositorioIns;
+	@Autowired
+	TipoSesionRepositorio repositorioTses;
 
     @Override
     public Sesion addSesion(SesionDTO sesionDTO) {
         Sesion nuevaSesion = new Sesion();
 
         Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
+		TipoSesion tipo = repositorioTses.findByNombre(sesionDTO.getTipoSesion());
         nuevaSesion.setInstructor(instructor);
-        nuevaSesion.setTipo(sesionDTO.getTipoSesion());
+        nuevaSesion.setTipo(tipo);
         nuevaSesion.setFecha_hora(sesionDTO.getFecha());
-
-		TipoSesion tipoSesion = sesionDTO.getTipoSesion();
-		nuevaSesion.setCupos(tipoSesion.getCupos());
+		nuevaSesion.setCupos(tipo.getCupos());
 
         return repositorio.save(nuevaSesion); 
     }
@@ -41,8 +43,9 @@ public class SesionServicioImpl implements SesionServicio {
 		Sesion nuevaSesion = new Sesion();
 
 		Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
+		TipoSesion tipo = repositorioTses.findByNombre(sesionDTO.getTipoSesion());
 		nuevaSesion.setInstructor(instructor);
-		nuevaSesion.setTipo(sesionDTO.getTipoSesion());
+		nuevaSesion.setTipo(tipo);
 		nuevaSesion.setFecha_hora(sesionDTO.getFecha());
 		nuevaSesion.setId(sesionDTO.getId());
 

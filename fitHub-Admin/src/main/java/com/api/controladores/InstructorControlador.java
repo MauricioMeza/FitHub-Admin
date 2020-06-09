@@ -98,14 +98,15 @@ public class InstructorControlador {
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
 	public List<SesionDTO> BuscarSesiones( ) {
-		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
+		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
-			sesionData.setTipoSesion(ses.getTipo());
+			sesionData.setTipo(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
 			sesionData.setId(ses.getId());
+			sesionData.setCupos(ses.getCupos());
 			List<String> nombres = new ArrayList<>();
 			for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
 				nombres.add(ses.getAsistentes().get(i).getNombre());
@@ -154,6 +155,17 @@ public class InstructorControlador {
 			tipoSesionFormat.add(tipoSesionData);
 		}
 		return tipoSesionFormat;
+	}
+
+	@ResponseBody
+	@GetMapping("/buscarTiposSesionesNombres")
+	public List<String> BuscarTipoSesionesNombres( ) {
+		List<TipoSesion> tipoSesiones = servicioTipoSesion.findAllTipos();
+		ArrayList<String> tipoSesionNombres = new ArrayList<>();
+		for (TipoSesion tSes: tipoSesiones) {
+			tipoSesionNombres.add(tSes.getNombre());
+		}
+		return tipoSesionNombres;
 	}
 
 }

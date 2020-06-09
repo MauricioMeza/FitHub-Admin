@@ -21,6 +21,7 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
 
         nuevoTipoSesion.setNombre(tipoSesionDTO.getNombre());
         nuevoTipoSesion.setCupos(tipoSesionDTO.getCupos());
+        nuevoTipoSesion.setDuracion(tipoSesionDTO.getDuracion());
 
         return repositorio.save(nuevoTipoSesion);
     }
@@ -44,8 +45,10 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
     public void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO) {
         TipoSesion nuevoTipoSesion = new TipoSesion();
 
+        nuevoTipoSesion.setId(tipoSesionDTO.getId());
         nuevoTipoSesion.setNombre(tipoSesionDTO.getNombre());
         nuevoTipoSesion.setCupos(tipoSesionDTO.getCupos());
+        nuevoTipoSesion.setDuracion(tipoSesionDTO.getDuracion());
 
         repositorio.save(nuevoTipoSesion);
     }

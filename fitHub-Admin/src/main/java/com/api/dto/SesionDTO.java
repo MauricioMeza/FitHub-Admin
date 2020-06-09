@@ -14,17 +14,17 @@ import com.api.modelos.Usuario;
 public class SesionDTO {
 	@Future(message = "La fecha debe ser en el futuro")
     private Date fecha;
-	private Date fecha_final;
 
 	@NotEmpty(message = "Tipo de clase vacio")
-	private TipoSesion tipoSesion;
+	private String tipoSesion;
 
     @NotEmpty(message = "Instructor vacio")
     private String instructor;
-    
-    private List<String> nombresAsistentes;
 
     private String id;
+    private List<String> nombresAsistentes;
+    private int cupos;
+	private TipoSesion tipo;
     
     
 	public List<String> getNombresAsistentes() {
@@ -35,25 +35,25 @@ public class SesionDTO {
 	}
 	public Date getFecha() { return fecha; }
 	public void setFecha(Date fecha_hora) { this.fecha = fecha_hora; }
-	
-	public Date getFecha_final() {
-		return fecha_final;
-	}
-	public void setFecha_final(Date fecha_final) {
-		this.fecha_final = fecha_final;
-	}
+
 	public String getInstructor() { return instructor; }
 	public void setInstructor(String instructor) { this.instructor = instructor; }
 
 	public String getId() { return id; }
 	public void setId(String id) { this.id = id; }
 
-	public TipoSesion getTipoSesion() {
+	public String getTipoSesion() {
 		return tipoSesion;
 	}
-
-	public void setTipoSesion(TipoSesion tipoSesion) {
+	public void setTipoSesion(String tipoSesion) {
 		this.tipoSesion = tipoSesion;
 	}
+
+	public TipoSesion getTipo() { return tipo; }
+	public void setTipo(TipoSesion tipo) { this.tipo = tipo; }
+
+	public int getCupos() { return cupos; }
+
+	public void setCupos(int cupos) { this.cupos = cupos; }
 }
 

@@ -63,9 +63,10 @@ class ClassUser extends React.Component{
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
-          "tipo" : " " + c.sesion + " ",
+          "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
-          "id": c.id
+          "id": c.id,
+          "cupos": c.cupos
         }
       })
       this.setState({
@@ -126,9 +127,12 @@ class ClassUser extends React.Component{
   content(props) {
     this.render()
     return (
-      <div>
-        {props.Instructor}
-      </div>
+      <div className="e-subject-wrap">
+          {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
+          {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
+          {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
+          {(props.Reserved) ? <div className="res">Ya has reservado esta clase</div> : <div className="res">Todavia no has reservado esta clase</div>}
+        </div>
     );
   }
 

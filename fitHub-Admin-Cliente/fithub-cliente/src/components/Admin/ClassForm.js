@@ -102,9 +102,21 @@ class ClassForm extends React.Component{
     .catch(error => {
       console.log(error)
     })
-    this.setState({
-      clases :ClaseService.getClasesNombres(), 
+    
+    ClaseService.getClasesNombres()
+    .then(response =>{
+      var clasNomList = []
+      response.data.forEach( clas => {
+        clasNomList.push(clas.nombre) 
+      })
+      this.setState({
+        clases : clasNomList, 
+      })
     })
+    .catch(error => {
+      console.log(error)
+    })
+    
     this.reloadClases()
   }
 
@@ -132,9 +144,10 @@ class ClassForm extends React.Component{
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
-          "tipo" : " " + c.sesion + " ",
+          "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
-          "id": c.id
+          "id": c.id,
+          "cupos": c.cupos
         }
       })
       this.setState({
@@ -149,6 +162,7 @@ class ClassForm extends React.Component{
 
   onFormSubmit(e) {
     e.preventDefault();
+    console.log(this.state.type)
     ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
     .then(response => {
       console.log(response)
@@ -205,6 +219,8 @@ class ClassForm extends React.Component{
         <div className="e-event-content e-template">
         <div className="e-subject-wrap">
           {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
+          {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
+          {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
         </div>
       </div>}
 </div>);
@@ -233,9 +249,6 @@ class ClassForm extends React.Component{
       </td></tr>
       <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
         <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
-      </td></tr>
-      <tr><td className="e-textlabel">Final</td><td colSpan={4}>
-        <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="EndTime" data-name="EndTime" value={new Date(props.EndTime || props.EndTime)} className="e-field"></DateTimePickerComponent>
       </td></tr>
       <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
         <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>

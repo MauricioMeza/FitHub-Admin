@@ -12,10 +12,11 @@ public class TipoSesion {
     private String id;
     private String nombre;
     private int cupos;
+    private int duracion;
 
     public TipoSesion(){};
 
-    public TipoSesion(String nombre, int cupos) {
+    public TipoSesion(String nombre, int cupos, int duracion) {
         super();
         this.nombre = nombre;
         this.cupos = cupos;
@@ -24,7 +25,6 @@ public class TipoSesion {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -32,7 +32,6 @@ public class TipoSesion {
     public String getNombre() {
         return nombre;
     }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -40,10 +39,12 @@ public class TipoSesion {
     public int getCupos() {
         return cupos;
     }
-
     public void setCupos(int cupos) {
         this.cupos = cupos;
     }
+
+    public int getDuracion() { return duracion; }
+    public void setDuracion(int duracion) { this.duracion = duracion; }
 
     @Override
     public String toString() {
