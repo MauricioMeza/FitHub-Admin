@@ -14,7 +14,8 @@ public class Sesion {
 	@Id
 	private String id;
 	private Date fecha_hora;
-	private String tipo;
+	@DBRef
+	private TipoSesion tipo;
 	@DBRef
 	private Instructor instructor;
 	@DBRef
@@ -23,19 +24,19 @@ public class Sesion {
 
 	public Sesion(){
 		this.asistentes = new ArrayList<Usuario>();
-		this.cupos = 10;
 	};
 
-	public Sesion(String id, Date fecha_hora, String tipo, Instructor instructor, List<Usuario> asistentes, int cupos) {
+	public Sesion(String id, Date fecha_hora, TipoSesion tipo, Instructor instructor, int cupos, List<Usuario> asistentes) {
 		super();
 		this.id = id;
 		this.fecha_hora = fecha_hora;
 		this.tipo = tipo;
 		this.instructor = instructor;
-		this.asistentes = asistentes;
 		this.cupos = cupos;
+		this.asistentes = asistentes;
 	}
-	
+
+
 	public List<Usuario> quitarAsistente(Usuario usuario){
 		List<Usuario> asistentes = this.asistentes;
 		List<Usuario> asistentes_actualizado = new ArrayList<>();
@@ -44,14 +45,6 @@ public class Sesion {
 				asistentes_actualizado.add(asistentes.get(i));
 		}
 		return asistentes_actualizado;
-	}
-	
-	public int getCupos() {
-		return cupos;
-	}
-
-	public void setCupos(int cupos) {
-		this.cupos = cupos;
 	}
 
 	public Date getFecha_hora() {
@@ -75,14 +68,27 @@ public class Sesion {
 		this.asistentes = asistentes;
 	}
 
-	public String getTipo() { return tipo; }
-	public void setTipo(String tipo) { this.tipo = tipo; }
-
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public TipoSesion getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoSesion tipo) {
+		this.tipo = tipo;
+	}
+
+	public int getCupos() {
+		return cupos;
+	}
+
+	public void setCupos(int cupos) {
+		this.cupos = cupos;
 	}
 }
