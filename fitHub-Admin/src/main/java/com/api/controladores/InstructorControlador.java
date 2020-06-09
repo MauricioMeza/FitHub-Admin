@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.api.dto.SesionDTO;
+import com.api.dto.TipoSesionDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoSesion;
 import com.api.modelos.Usuario;
 import com.api.servicios.InstructorServicio;
 import com.api.servicios.SesionServicio;
+import com.api.servicios.TipoSesionServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -29,6 +32,9 @@ public class InstructorControlador {
 
 	@Autowired
 	private SesionServicio servicioSes;
+
+	@Autowired
+	private TipoSesionServicio servicioTipoSesion;
 
 	// ----------- Controladores Instructor ----------------
 
@@ -97,7 +103,7 @@ public class InstructorControlador {
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
-			sesionData.setSesion(ses.getTipo());
+			sesionData.setTipoSesion(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
 			sesionData.setId(ses.getId());
 			List<String> nombres = new ArrayList<>();
@@ -110,9 +116,44 @@ public class InstructorControlador {
 		return sesionFormat;
 	}
 
-	
+	// ---------------- Controladores TipoSesion -----------------------
 
-	
-	
-	
+	@PostMapping("/agregarTipoSesion")
+	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion añadida";
+	}
+
+	@DeleteMapping("/eliminarTipoSesion")
+	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String nombre) {
+		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByNombre(nombre);
+		if (tipoSesion != null) {
+			servicioTipoSesion.deleteTipoSesion(tipoSesion);
+			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
+		}
+	}
+
+	@PutMapping("/actualizarTipoSesion")
+	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion Actualizado";
+	}
+
+	@ResponseBody
+	@GetMapping("/buscarTodosTiposSesiones")
+	public List<TipoSesionDTO> BuscarTipoSesiones( ) {
+		List<TipoSesion> tipoSesiones = servicioTipoSesion.findAllTipos();
+		ArrayList<TipoSesionDTO> tipoSesionFormat = new ArrayList<>();
+		for (TipoSesion tSes: tipoSesiones) {
+			TipoSesionDTO tipoSesionData = new TipoSesionDTO();
+			tipoSesionData.setNombre(tSes.getNombre());
+			tipoSesionData.setCupos(tSes.getCupos());
+			tipoSesionData.setId(tSes.getId());
+			tipoSesionFormat.add(tipoSesionData);
+		}
+		return tipoSesionFormat;
+	}
+
 }
