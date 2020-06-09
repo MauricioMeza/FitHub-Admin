@@ -13,6 +13,7 @@ import com.api.modelos.Usuario;
 public class SesionDTO {
 	@Future(message = "La fecha debe ser en el futuro")
     private Date fecha;
+	private Date fecha_final;
 
 	@NotEmpty(message = "Tipo de clase vacio")
 	private String sesion;
@@ -33,7 +34,13 @@ public class SesionDTO {
 	}
 	public Date getFecha() { return fecha; }
 	public void setFecha(Date fecha_hora) { this.fecha = fecha_hora; }
-
+	
+	public Date getFecha_final() {
+		return fecha_final;
+	}
+	public void setFecha_final(Date fecha_final) {
+		this.fecha_final = fecha_final;
+	}
 	public String getInstructor() { return instructor; }
 	public void setInstructor(String instructor) { this.instructor = instructor; }
 

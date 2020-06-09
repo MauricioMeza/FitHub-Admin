@@ -14,6 +14,7 @@ public class Sesion {
 	@Id
 	private String id;
 	private Date fecha_hora;
+	private Date final_clase;
 	private String tipo;
 	@DBRef
 	private Instructor instructor;
@@ -26,10 +27,11 @@ public class Sesion {
 		this.cupos = 10;
 	};
 
-	public Sesion(String id, Date fecha_hora, String tipo, Instructor instructor, List<Usuario> asistentes, int cupos) {
+	public Sesion(String id, Date fecha_hora, Date final_clase, String tipo, Instructor instructor, List<Usuario> asistentes, int cupos) {
 		super();
 		this.id = id;
 		this.fecha_hora = fecha_hora;
+		this.final_clase = final_clase;
 		this.tipo = tipo;
 		this.instructor = instructor;
 		this.asistentes = asistentes;
