@@ -5,14 +5,19 @@ import java.util.Date;
 import java.util.List;
 
 import com.api.dto.SesionDTO;
+import com.api.dto.TipoPlanDTO;
+import com.api.servicios.PlanServicio;
 import com.api.servicios.SesionServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.modelos.Plan;
 import com.api.modelos.Sesion;
 import com.api.modelos.Usuario;
 
@@ -25,6 +30,9 @@ public class UsuarioControlador {
 	
 	@Autowired
 	private SesionServicio servicioSesion;
+	
+	@Autowired
+	private PlanServicio servicioPlan;
 
 
 	@GetMapping("/encontrarTodosLosUsuarios")
@@ -43,7 +51,6 @@ public class UsuarioControlador {
 		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		Date fecha_actual = new Date();
-		//List<Sesion> sesionesReservadas = usuario.getSesionesReservadas();
 		
 		if(sesion.getFecha_hora().before(fecha_actual))
 			return "La sesión ya pasó";
@@ -56,16 +63,18 @@ public class UsuarioControlador {
 				return "La sesión no tiene cupos suficientes para realizar la inscripción";
 			}
 			else{	
-		
-				//sesionesReservadas.add(sesion);
-				//usuario.setSesionesReservadas(sesionesReservadas);
-				//servicio.addUser(usuario);
 			
 				int cupos = sesion.getCupos() - 1;
 				sesion.setCupos(cupos);
 				List<Usuario> asistentes = sesion.getAsistentes();   
 				asistentes.add(usuario);
 				sesion.setAsistentes(asistentes); 
+				Plan plan = usuario.getPlan();
+				List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
+				sesionesReservadas.add(sesion);
+				plan.setSesionesReservadas(sesionesReservadas);
+				usuario.setPlan(plan);
+				servicio.addUser(usuario);
 				servicioSesion.cambiarSesion(sesion);
 			}
 		}
@@ -74,10 +83,11 @@ public class UsuarioControlador {
 	
 	
 	@GetMapping("/verSesionesReservadas/{email}")
-	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String id){
-		Usuario usuario = servicio.getUserByCorreo(id);
+	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String correo){
+		Usuario usuario = servicio.getUserByCorreo(correo);
 		List <Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
 		List <SesionDTO> sesionesInscritas = new ArrayList<>();
+		Date fechaActual = new Date();
 		for(Sesion ses: sesiones) {
 			if (servicioSesion.usuarioInscrito(ses, usuario)){
 				SesionDTO sesionSend = new SesionDTO();
@@ -87,7 +97,11 @@ public class UsuarioControlador {
 				sesionSend.setFecha(ses.getFecha_hora());
 				sesionSend.setCupos(ses.getCupos());
 				sesionesInscritas.add(sesionSend);
+				if(sesiones.get(i).getFecha_hora().before(fechaActual)) {
+					usuario.getPlan().SesionReservada_Asistida(sesiones.get(i).getId());
+				}
 			}
+		
 		}
 		return sesionesInscritas;
 	}
@@ -97,6 +111,16 @@ public class UsuarioControlador {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		return servicioSesion.cancelarCupo(sesion, usuario);
+	}
+	
+	@GetMapping("/reservarPlan/{id}/{idPlan}")
+	public String reservarPlan(@PathVariable("id") String idUsuario,@PathVariable("idPlan") String idPlan) {
+		Plan plan = servicioPlan.getPlanById(idPlan);
+		Usuario usuario = servicio.getUserByCedula(idUsuario);
+		usuario.setPlan(plan);
+		servicio.addUser(usuario);
+		
+		return "Plan reservado con éxito " + usuario.getPlan();
 	}
 	
 }
