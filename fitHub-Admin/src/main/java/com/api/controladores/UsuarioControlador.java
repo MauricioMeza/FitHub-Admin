@@ -96,9 +96,9 @@ public class UsuarioControlador {
 				sesionSend.setTipo(ses.getTipo());
 				sesionSend.setFecha(ses.getFecha_hora());
 				sesionSend.setCupos(ses.getCupos());
-				sesionesInscritas.add(sesionSend);
-				if(sesiones.get(i).getFecha_hora().before(fechaActual)) {
-					usuario.getPlan().SesionReservada_Asistida(sesiones.get(i).getId());
+				sesionesInscritas.add(sesionSend); 
+				if(ses.getFecha_hora().before(fechaActual)) { 
+					usuario.getPlan().SesionReservada_Asistida(ses.getId());
 				}
 			}
 		
