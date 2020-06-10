@@ -7,14 +7,16 @@ import java.util.List;
 import com.api.dto.TipoPlanDTO;
 import com.api.dto.PlanDTO;
 import com.api.dto.SesionDTO;
+import com.api.dto.TipoSesionDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoSesion;
 import com.api.modelos.Usuario;
 import com.api.servicios.InstructorServicio;
 import com.api.servicios.PlanServicio;
 import com.api.servicios.SesionServicio;
 import com.api.servicios.TipoPlanServicio;
-
+import com.api.servicios.TipoSesionServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -44,6 +46,9 @@ public class InstructorControlador {
 	
 	@Autowired
 	private PlanServicio servicioPlan;
+
+	@Autowired
+	private TipoSesionServicio servicioTipoSesion;
 
 	// ----------- Controladores Instructor ----------------
 
@@ -107,14 +112,15 @@ public class InstructorControlador {
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
 	public List<SesionDTO> BuscarSesiones( ) {
-		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
+		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
-			sesionData.setSesion(ses.getTipo());
+			sesionData.setTipo(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
 			sesionData.setId(ses.getId());
+			sesionData.setCupos(ses.getCupos());
 			List<String> nombres = new ArrayList<>();
 			for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
 				nombres.add(ses.getAsistentes().get(i).getNombre());
@@ -124,6 +130,8 @@ public class InstructorControlador {
 		}
 		return sesionFormat;
 	}
+  
+	// ---------------- Controladores TipoPlan -----------------------
 
 	@PostMapping("/crearTipoPlan")
 	public String crearTipoPlan(@RequestBody TipoPlanDTO tipoPlanDTO) {
@@ -148,7 +156,56 @@ public class InstructorControlador {
 		servicioPlan.addPlan(plan);
 		return "Plan añadido con éxito";
 	}
-	
-	
-	
+
+	// ---------------- Controladores TipoSesion -----------------------
+
+	@PostMapping("/agregarTipoSesion")
+	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion añadida";
+	}
+
+	@DeleteMapping("/eliminarTipoSesion")
+	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String nombre) {
+		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByNombre(nombre);
+		if (tipoSesion != null) {
+			servicioTipoSesion.deleteTipoSesion(tipoSesion);
+			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
+		}
+	}
+
+	@PutMapping("/actualizarTipoSesion")
+	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion Actualizado";
+	}
+
+	@ResponseBody
+	@GetMapping("/buscarTodosTiposSesiones")
+	public List<TipoSesionDTO> BuscarTipoSesiones( ) {
+		List<TipoSesion> tipoSesiones = servicioTipoSesion.findAllTipos();
+		ArrayList<TipoSesionDTO> tipoSesionFormat = new ArrayList<>();
+		for (TipoSesion tSes: tipoSesiones) {
+			TipoSesionDTO tipoSesionData = new TipoSesionDTO();
+			tipoSesionData.setNombre(tSes.getNombre());
+			tipoSesionData.setCupos(tSes.getCupos());
+			tipoSesionData.setId(tSes.getId());
+			tipoSesionFormat.add(tipoSesionData);
+		}
+		return tipoSesionFormat;
+	}
+
+	@ResponseBody
+	@GetMapping("/buscarTiposSesionesNombres")
+	public List<String> BuscarTipoSesionesNombres( ) {
+		List<TipoSesion> tipoSesiones = servicioTipoSesion.findAllTipos();
+		ArrayList<String> tipoSesionNombres = new ArrayList<>();
+		for (TipoSesion tSes: tipoSesiones) {
+			tipoSesionNombres.add(tSes.getNombre());
+		}
+		return tipoSesionNombres;
+	}
+  
 }

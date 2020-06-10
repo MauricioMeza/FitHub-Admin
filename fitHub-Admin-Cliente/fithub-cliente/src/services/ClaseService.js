@@ -16,9 +16,10 @@ class ClaseService {
   addClase(fecha, clase, instructor) {
     const sesion = JSON.stringify({
         fecha: fecha,
-        sesion: clase,
+        tipoSesion: clase,
         instructor: instructor,
     })
+    console.log(sesion)
 
       return Axios.post( API_URL_Admin + "agregarSesion", sesion, 
       {headers:{"Content-Type" : "application/json",
@@ -48,8 +49,7 @@ class ClaseService {
     return Axios.get(API_URL_Admin + "instructoresNombres" , {headers:{"Authorization": token}})
   }
   getClasesNombres(){
-    //return Axios.get( API_URL +"encontrarTodasLasClases")
-    return ["Clase de boxeo", "Clase de spinning", "Clase de cardio", "Clase de yoga"]
+    return Axios.get( API_URL_Admin +"buscarTodosTiposSesiones" , {headers:{"Authorization": token}})
   }
 
   deleteSesion(claseId){

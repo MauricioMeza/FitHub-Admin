@@ -58,16 +58,18 @@ const styles = theme => ({
   },
 });
 
-L10n.load({'en-US': {
-    'schedule': {
-        'saveButton': 'Guardar',
-        'cancelButton': 'Cerrar',
-        'deleteButton': 'Eliminar',
-    },
-  }
+L10n.load({'es-ES': {
+  'schedule': {
+      'saveButton': 'Guardar',
+      'cancelButton': 'Cerrar',
+      'deleteButton': 'Eliminar',
+      'addTitle': 'Evento',
+  },
+}
 });
 
 class ClassForm extends React.Component{
+
   constructor (props) {
     super(props)
     this.data = extend([], null, null, true);
@@ -78,6 +80,7 @@ class ClassForm extends React.Component{
       clasesBD : [],
       clasesHorario : [],
       startDate: new Date(),
+      endDate: new Date(),
       type: "",
       instructor: "",
     };
@@ -99,9 +102,21 @@ class ClassForm extends React.Component{
     .catch(error => {
       console.log(error)
     })
-    this.setState({
-      clases :ClaseService.getClasesNombres(), 
+    
+    ClaseService.getClasesNombres()
+    .then(response =>{
+      var clasNomList = []
+      response.data.forEach( clas => {
+        clasNomList.push(clas.nombre) 
+      })
+      this.setState({
+        clases : clasNomList, 
+      })
     })
+    .catch(error => {
+      console.log(error)
+    })
+    
     this.reloadClases()
   }
 
@@ -129,9 +144,10 @@ class ClassForm extends React.Component{
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
-          "tipo" : " " + c.sesion + " ",
+          "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
-          "id": c.id
+          "id": c.id,
+          "cupos": c.cupos
         }
       })
       this.setState({
@@ -146,6 +162,7 @@ class ClassForm extends React.Component{
 
   onFormSubmit(e) {
     e.preventDefault();
+    console.log(this.state.type)
     ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
     .then(response => {
       console.log(response)
@@ -171,7 +188,7 @@ class ClassForm extends React.Component{
         })
       }
     }else{
-      args.cancel = true
+      args.cancel = false
     }
   }
 
@@ -186,15 +203,42 @@ class ClassForm extends React.Component{
     }
   }
     
+  content(props) {
+    return (<div>
+  {props.elementType === 'cell' ?
+        <div className="e-cell-content e-template">
+        <form className="e-schedule-form">
+          <div>
+            <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
+          </div>
+          <div>
+            <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
+          </div>
+        </form>
+      </div> :
+        <div className="e-event-content e-template">
+        <div className="e-subject-wrap">
+          {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
+          {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
+          {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
+        </div>
+      </div>}
+</div>);
+}
 
-
-  footer(props){
-    this.render()
-    return (
-      <div>
-        {props.Description}
+  footer(props) {
+    return (<div>
+      {props.elementType === 'cell' ?
+        <div className="e-cell-footer">
+        <button className="e-event-details" title="Mas">Más</button>
+        <button className="e-event-create" title="Agregar">Agregar</button>
       </div>
-    );
+        :
+            <div className="e-event-footer">
+        <button className="e-event-edit" title="Editar">Editar</button>
+        <button className="e-event-delete" title="Eliminar">Eliminar</button>
+      </div>}
+    </div>);
   }
 
   editorWindowTemplate(props) {
@@ -203,10 +247,9 @@ class ClassForm extends React.Component{
       <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
         <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
       </td></tr>
-      <tr><td className="e-textlabel">Fecha</td><td colSpan={4}>
+      <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
         <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
       </td></tr>
-     
       <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
         <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
       </td></tr>
@@ -215,6 +258,7 @@ class ClassForm extends React.Component{
   }
 
   render() {
+    
     const {classes} = this.props;
     const {instructores, clases, clasesBD, clasesHorario} = this.state;
 
@@ -327,10 +371,10 @@ class ClassForm extends React.Component{
             </Typography>
             <br></br>
             
-            <ScheduleComponent ref={t => this.scheduleObj = t} quickInfoTemplates={{footer: this.footer.bind(this)}} 
+            <ScheduleComponent ref={t => this.scheduleObj = t} actionBegin={this.onActionBegin.bind(this)}
             eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}}  startHour='05:00' endHour='22:00'
-            currentView='Week' popupOpen={this.onPopupOpen.bind(this)} editorTemplate={this.editorWindowTemplate.bind(this)}
-            actionBegin={this.onActionBegin.bind(this)} > 
+            currentView='Week' editorTemplate={this.editorWindowTemplate.bind(this)}
+            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} popupOpen={this.onPopupOpen.bind(this)}> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

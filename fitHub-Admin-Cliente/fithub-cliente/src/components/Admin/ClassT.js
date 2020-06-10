@@ -74,7 +74,7 @@ class ClassT extends Component{
                 <CalendarIcon />
               </ListItemIcon>
               <ListItemText className = {classes.infoText}
-                primary= {clas.fecha + "-"+ clas.hora + clas.tipo}
+                primary= {clas.fecha + "-"+ clas.hora + " | " + clas.tipo.nombre + " | " + clas.cupos + "/" + clas.tipo.cupos }
                 secondary = {clas.instructor}
               />
               <ListItemSecondaryAction>

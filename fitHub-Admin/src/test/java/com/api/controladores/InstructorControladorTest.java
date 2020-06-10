@@ -3,6 +3,7 @@ package com.api.controladores;
 import com.api.dto.SesionDTO;
 import com.api.modelos.Instructor;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoSesion;
 import com.api.modelos.Usuario;
 import com.api.repositorios.SesionRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
@@ -70,7 +71,7 @@ class InstructorControladorTest {
 
         Date date = new Date(2020, 05, 17);
 
-        Sesion mockSesion = new Sesion("id", date, "Clase de cardio", instructor, usuarioList, 20);
+        Sesion mockSesion = new Sesion("id", date, new TipoSesion(), instructor, 20, usuarioList);
 
         String sesion = "{\"fecha\":\"2020-05-17\",\"sesion\":\"Clase de cardio\",\"instructor\":\"admin\"}";
 

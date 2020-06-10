@@ -88,13 +88,14 @@ public class UsuarioControlador {
 		List <Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
 		List <SesionDTO> sesionesInscritas = new ArrayList<>();
 		Date fechaActual = new Date();
-		for(int i = 0; i < sesiones.size(); i++) {
-			if (servicioSesion.usuarioInscrito(sesiones.get(i), usuario)){
+		for(Sesion ses: sesiones) {
+			if (servicioSesion.usuarioInscrito(ses, usuario)){
 				SesionDTO sesionSend = new SesionDTO();
-				sesionSend.setId(sesiones.get(i).getId());
-				sesionSend.setInstructor(sesiones.get(i).getInstructor().getNombre());
-				sesionSend.setSesion(sesiones.get(i).getTipo());
-				sesionSend.setFecha(sesiones.get(i).getFecha_hora());
+				sesionSend.setId(ses.getId());
+				sesionSend.setInstructor(ses.getInstructor().getNombre());
+				sesionSend.setTipo(ses.getTipo());
+				sesionSend.setFecha(ses.getFecha_hora());
+				sesionSend.setCupos(ses.getCupos());
 				sesionesInscritas.add(sesionSend);
 				if(sesiones.get(i).getFecha_hora().before(fechaActual)) {
 					usuario.getPlan().SesionReservada_Asistida(sesiones.get(i).getId());
@@ -121,7 +122,5 @@ public class UsuarioControlador {
 		
 		return "Plan reservado con éxito " + usuario.getPlan();
 	}
-	
-	
 	
 }

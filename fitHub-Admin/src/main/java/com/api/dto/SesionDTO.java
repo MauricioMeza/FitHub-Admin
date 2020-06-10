@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.api.modelos.Instructor;
+import com.api.modelos.TipoSesion;
 import com.api.modelos.Usuario;
 
 public class SesionDTO {
@@ -15,14 +16,15 @@ public class SesionDTO {
     private Date fecha;
 
 	@NotEmpty(message = "Tipo de clase vacio")
-	private String sesion;
+	private String tipoSesion;
 
     @NotEmpty(message = "Instructor vacio")
     private String instructor;
-    
-    private List<String> nombresAsistentes;
 
     private String id;
+    private List<String> nombresAsistentes;
+    private int cupos;
+	private TipoSesion tipo;
     
     
 	public List<String> getNombresAsistentes() {
@@ -37,10 +39,21 @@ public class SesionDTO {
 	public String getInstructor() { return instructor; }
 	public void setInstructor(String instructor) { this.instructor = instructor; }
 
-	public String getSesion() { return sesion; }
-	public void setSesion(String sesion) { this.sesion = sesion; }
-
 	public String getId() { return id; }
 	public void setId(String id) { this.id = id; }
+
+	public String getTipoSesion() {
+		return tipoSesion;
+	}
+	public void setTipoSesion(String tipoSesion) {
+		this.tipoSesion = tipoSesion;
+	}
+
+	public TipoSesion getTipo() { return tipo; }
+	public void setTipo(TipoSesion tipo) { this.tipo = tipo; }
+
+	public int getCupos() { return cupos; }
+
+	public void setCupos(int cupos) { this.cupos = cupos; }
 }
 
