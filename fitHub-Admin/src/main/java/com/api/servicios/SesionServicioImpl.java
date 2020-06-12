@@ -41,9 +41,11 @@ public class SesionServicioImpl implements SesionServicio {
 	@Override
 	public Sesion cambiarSesion(SesionDTO sesionDTO) {
 		Sesion nuevaSesion = new Sesion();
-
+		Sesion viejaSesion = repositorio.findById(sesionDTO.getId());
+		int inscritos = viejaSesion.getTipo().getCupos() - viejaSesion.getCupos();
 		Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
 		TipoSesion tipo = repositorioTses.findByNombre(sesionDTO.getTipoSesion());
+		nuevaSesion.setCupos(tipo.getCupos() - inscritos);
 		nuevaSesion.setInstructor(instructor);
 		nuevaSesion.setTipo(tipo);
 		nuevaSesion.setFecha_hora(sesionDTO.getFecha());

@@ -205,12 +205,35 @@ class ClassForm extends React.Component{
 
   onActionBegin(args) {
     if(args.requestType === "eventChange"){  
-    ClaseService.updateClase(args.data)
-      .then(response => {
-        console.log(response)
-        this.reloadClases()
-      })
-    console.log(args)
+      args.cancel = true
+      ClaseService.updateClase(args.data)
+        .then(response => {
+          console.log(response)
+          this.reloadClases()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            alert(error.response.data.errors[0].defaultMessage) 
+          }
+          console.log(error.response.data)
+        })
+      console.log(args)
+    }else if(args.requestType === "eventCreate"){
+      args.cancel = true
+      let clase = args.data[0];
+      console.log(clase)
+      ClaseService.addClase(clase.StartTime, clase.Subject, clase.Instructor)
+        .then(response => {
+          console.log(response)
+          this.reloadClases()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            alert(error.response.data.errors[0].defaultMessage) 
+          }
+          console.log(error.response.data)
+        })
+      console.log(args)
     }
   }
 
@@ -240,7 +263,6 @@ class ClassForm extends React.Component{
   footer(props) {
     if (props.elementType === 'cell') {
       return(<div className="e-cell-footer">
-          <button className="e-event-details" title="Mas">Más</button>
           <button className="e-event-create" title="Agregar">Agregar</button>
         </div>
       );
@@ -251,12 +273,6 @@ class ClassForm extends React.Component{
         </div>
       );
     }
-  }
-
-  save(props) {
-    console.log(props)
-    ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
-    this.reloadClases()
   }
 
   editorWindowTemplate(props){
@@ -394,8 +410,7 @@ class ClassForm extends React.Component{
               <ScheduleComponent ref={t => this.scheduleObj = t} currentView='Week' actionBegin={this.onActionBegin.bind(this)}
             eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00' endHour='22:00'
             editorTemplate={this.editorWindowTemplate.bind(this)} popupOpen={this.onPopupOpen.bind(this)}
-            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} locale='es-CO'
-            onClick={this.save.bind(this)}> 
+            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} locale='es-CO'> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

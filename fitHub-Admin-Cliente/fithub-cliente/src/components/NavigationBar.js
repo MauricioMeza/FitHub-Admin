@@ -80,8 +80,11 @@ class NavigationBar extends React.Component {
                                 <Link to={"/ClassForm"} className="navbar-brand">
                                     <Button>Clases</Button>
                                 </Link>
-                                <Link to={"/"} className="navbar-brand">
-                                    <Button>Usuarios</Button>
+                                <Link to={"/PlanForm"} className="navbar-brand">
+                                    <Button>Modificar Planes</Button>
+                                </Link>
+                                <Link to={"/ClassTypeForm"} className="navbar-brand">
+                                    <Button>Modificar Clases</Button>
                                 </Link>
                             </Nav>
                             <Nav>

@@ -31,8 +31,8 @@ class ClaseService {
     const sesionDTO = JSON.stringify({
       id: sesion.Id,
       fecha: sesion.StartTime,
-      sesion: sesion.Subject,
-      instructor: sesion.Instructor
+      tipoSesion: sesion.Subject,
+      instructor: sesion.Instructor,
     })
     
     return Axios.put(API_URL_Admin + "actualizarSesion", sesionDTO,
