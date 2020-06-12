@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from 'react-datepicker';
-//import addDays from 'date-fns/addDays'
  
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -17,17 +16,15 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import ClaseService from "../../services/ClaseService";
 import Classes from "./Classes";
-//import Class from "./ClassT";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
-import {extend, L10n, setCulture} from '@syncfusion/ej2-base';
+import {extend, L10n, loadCldr} from '@syncfusion/ej2-base';
 import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
 import {DateTimePickerComponent} from "@syncfusion/ej2-react-calendars";
-import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
-
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 import ClassData from "./ClassData";
 
 const styles = theme => ({
@@ -58,15 +55,28 @@ const styles = theme => ({
   },
 });
 
-L10n.load({'es-ES': {
+L10n.load({'es-CO': {
   'schedule': {
+      "today": "Hoy",
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes",
       'saveButton': 'Guardar',
       'cancelButton': 'Cerrar',
       'deleteButton': 'Eliminar',
-      'addTitle': 'Evento',
-  },
-}
+      'newEvent': 'Evento',
+    },
+  }
 });
+
+loadCldr(
+  require('cldr-data/supplemental/numberingSystems.json'),
+  require('cldr-data/main/es-CO/ca-gregorian.json'),
+  require('cldr-data/main/es-CO/numbers.json'),
+  require('cldr-data/main/es-CO/timeZoneNames.json')
+);
+
+
 
 class ClassForm extends React.Component{
 
@@ -140,14 +150,15 @@ class ClassForm extends React.Component{
         var fecha = new Date(c.fecha)
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
         var horaMin = fecha.getMinutes()
-        if(horaMin == 0) horaMin = "00"
+        if(horaMin === 0) horaMin = "00"
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
           "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
           "id": c.id,
-          "cupos": c.cupos
+          "cupos": c.cupos,
+          "duracion": c.duracion
         }
       })
       this.setState({
@@ -169,7 +180,7 @@ class ClassForm extends React.Component{
       this.reloadClases()
     })
     .catch(error => {
-      if(error.response.status == 400){
+      if(error.response.status === 400){
         alert(error.response.data.errors[0].defaultMessage) 
       }
       console.log(error.response.data)
@@ -193,7 +204,7 @@ class ClassForm extends React.Component{
   }
 
   onActionBegin(args) {
-    if(args.requestType == "eventChange"){  
+    if(args.requestType === "eventChange"){  
     ClaseService.updateClase(args.data)
       .then(response => {
         console.log(response)
@@ -202,11 +213,10 @@ class ClassForm extends React.Component{
     console.log(args)
     }
   }
-    
+
   content(props) {
-    return (<div>
-  {props.elementType === 'cell' ?
-        <div className="e-cell-content e-template">
+    if (props.elementType === 'cell') {
+      return(<div className="e-cell-content e-template">
         <form className="e-schedule-form">
           <div>
             <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
@@ -215,46 +225,56 @@ class ClassForm extends React.Component{
             <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
           </div>
         </form>
-      </div> :
-        <div className="e-event-content e-template">
+      </div>)
+    } else {
+      return(<div className="e-event-content e-template">
         <div className="e-subject-wrap">
           {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
           {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
           {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
         </div>
-      </div>}
-</div>);
-}
-
-  footer(props) {
-    return (<div>
-      {props.elementType === 'cell' ?
-        <div className="e-cell-footer">
-        <button className="e-event-details" title="Mas">Más</button>
-        <button className="e-event-create" title="Agregar">Agregar</button>
-      </div>
-        :
-            <div className="e-event-footer">
-        <button className="e-event-edit" title="Editar">Editar</button>
-        <button className="e-event-delete" title="Eliminar">Eliminar</button>
-      </div>}
-    </div>);
+      </div>)
+    }
   }
 
-  editorWindowTemplate(props) {
-    return (
-      props !== undefined ? <table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
-      <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
-        <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
-      </td></tr>
-      <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
-        <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
-      </td></tr>
-      <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
-        <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
-      </td></tr>
-      </tbody></table> : <div></div>
-    )
+  footer(props) {
+    if (props.elementType === 'cell') {
+      return(<div className="e-cell-footer">
+          <button className="e-event-details" title="Mas">Más</button>
+          <button className="e-event-create" title="Agregar">Agregar</button>
+        </div>
+      );
+    } else {
+      return(<div className="e-event-footer">
+          <button className="e-event-edit" title="Editar">Editar</button>
+          <button className="e-event-delete" title="Eliminar">Eliminar</button>
+        </div>
+      );
+    }
+  }
+
+  save(props) {
+    console.log(props)
+    ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
+    this.reloadClases()
+  }
+
+  editorWindowTemplate(props){
+      if(props !== undefined) {
+        return(<table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
+          <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
+            <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
+          </td></tr>
+          <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
+            <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
+          </td></tr>
+          <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
+            <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
+          </td></tr>
+        </tbody></table>)
+      } else {
+        return(<div></div>)
+      }
   }
 
   render() {
@@ -371,17 +391,19 @@ class ClassForm extends React.Component{
             </Typography>
             <br></br>
             
-            <ScheduleComponent ref={t => this.scheduleObj = t} actionBegin={this.onActionBegin.bind(this)}
-            eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}}  startHour='05:00' endHour='22:00'
-            currentView='Week' editorTemplate={this.editorWindowTemplate.bind(this)}
-            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} popupOpen={this.onPopupOpen.bind(this)}> 
+              <ScheduleComponent ref={t => this.scheduleObj = t} currentView='Week' actionBegin={this.onActionBegin.bind(this)}
+            eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00' endHour='22:00'
+            editorTemplate={this.editorWindowTemplate.bind(this)} popupOpen={this.onPopupOpen.bind(this)}
+            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} locale='es-CO'
+            onClick={this.save.bind(this)}> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>
                 <ViewDirective option='Month'/>
               </ViewsDirective>
               <Inject services = {[Day, Week, Month]}/>
-            </ScheduleComponent>
+              </ScheduleComponent>
+            
           </Grid>
         </Container>
 

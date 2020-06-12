@@ -1,5 +1,5 @@
 class classData {
-    getClassData = (clasData: [{id: string, tipo: {id: string, nombre: string, cupos: number, duracion: number }, instructor: string, fecha: Date, cupos: number }]) => {
+    getClassData = (clasData: [{id: string, tipo: {id: string, nombre: string, cupos: number, duracion: any }, instructor: string, fecha: Date, cupos: number }]) => {
         var dataSource: {}[] =[];
         clasData.forEach(clas => {
             let fechaClase = new Date(clas.fecha)
