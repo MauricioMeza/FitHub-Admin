@@ -10,10 +10,7 @@ import com.api.servicios.SesionServicio;
 import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Plan;
 import com.api.modelos.Sesion;
@@ -36,15 +33,14 @@ public class UsuarioControlador {
 	@Autowired
 	private TipoPlanServicio servicioTipoPlan;
 
-
 	@GetMapping("/encontrarTodosLosUsuarios")
 	public List<Usuario> getUsuarios(){
 		return servicio.getAllUsers();
 	}
-	
-	@GetMapping("/encontrarUsuario/{id}")
-	public Usuario getUsuario(@PathVariable String id){
-		return servicio.getUserByCedula(id);
+
+	@GetMapping("/{correo}")
+	public Usuario getInfoUsuario(@PathVariable String correo){
+		return servicio.getUserByCorreo(correo);
 	}
 	
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
@@ -116,9 +112,13 @@ public class UsuarioControlador {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		Usuario usuario = servicio.getUserByCorreo(idUsuario);
 		Date fecha_actual = new Date();
-		if(sesion.getFecha_hora().before(fecha_actual))
-			return "No puede cancelar la sesión debido a que ya comenzó";
-		
+		long fechaActualMili = fecha_actual.getTime();
+		long fechaLimiteCancelarMili = sesion.getFecha_hora().getTime() - 3600 * 2000;
+		if(sesion.getFecha_hora().before(fecha_actual)) {
+			return "No puede cancelar, la sesión ya comenzó";
+		}else if(fechaActualMili > fechaLimiteCancelarMili){
+			return "No puede cancelar, la sesión esta a punto de comenzar";
+		}
 		
 		return servicioSesion.cancelarCupo(sesion, usuario);
 	}

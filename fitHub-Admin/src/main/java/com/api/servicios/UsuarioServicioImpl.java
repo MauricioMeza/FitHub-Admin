@@ -3,6 +3,9 @@ package com.api.servicios;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
+import com.api.seguridad.JwtProperties;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -26,6 +29,11 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     @Override
     public Usuario getUserByCedula(String cedula){
         return repositorio.findByCedula(cedula);
+    }
+
+    @Override
+    public Usuario getUserByNombre(String nombre){
+        return  repositorio.findByNombre(nombre);
     }
 
     @Override
@@ -58,5 +66,14 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
         addUser(user);
     };
+
+    @Override
+    public Claims infoJWT(String jwt){
+        Claims info = Jwts.parser().setSigningKey(JwtProperties.SECRET)
+                .parseClaimsJws(jwt)
+                .getBody();
+
+        return info;
+    }
 
 }
