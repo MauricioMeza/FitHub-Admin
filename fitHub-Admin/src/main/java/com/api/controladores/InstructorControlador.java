@@ -1,33 +1,22 @@
 package com.api.controladores;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.api.dto.TipoPlanDTO;
-import com.api.dto.PlanDTO;
 import com.api.dto.SesionDTO;
 import com.api.dto.TipoSesionDTO;
-import com.api.dto.UsuarioDTO;
 import com.api.modelos.Sesion;
 import com.api.modelos.TipoSesion;
-import com.api.modelos.Usuario;
 import com.api.servicios.InstructorServicio;
-import com.api.servicios.PlanServicio;
 import com.api.servicios.SesionServicio;
 import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.TipoSesionServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Instructor;
-import com.api.modelos.Plan;
-import com.api.modelos.TipoPlan;
-
-import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 
@@ -44,8 +33,6 @@ public class InstructorControlador {
 	@Autowired
 	private TipoPlanServicio servicioTipoPlan;
 	
-	@Autowired
-	private PlanServicio servicioPlan;
 
 	@Autowired
 	private TipoSesionServicio servicioTipoSesion;
@@ -125,8 +112,33 @@ public class InstructorControlador {
 			for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
 				nombres.add(ses.getAsistentes().get(i).getNombre());
 			}
+			
 			sesionData.setNombresAsistentes(nombres);
 			sesionFormat.add(sesionData);
+		}
+		return sesionFormat;
+	}
+	
+	@ResponseBody
+	@GetMapping("/buscarTodasSesionesConAsistentes")
+	public List<SesionDTO> BuscarSesionesConAsistentes( ) {
+		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
+		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
+		for (Sesion ses: sesiones) {
+			if(ses.getAsistentes().size()>0) {
+				SesionDTO sesionData = new SesionDTO();
+				sesionData.setFecha(ses.getFecha_hora());
+				sesionData.setTipo(ses.getTipo());
+				sesionData.setInstructor(ses.getInstructor().getNombre());
+				sesionData.setId(ses.getId());
+				sesionData.setCupos(ses.getCupos());
+				List<String> nombres = new ArrayList<>();
+				for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
+					nombres.add(ses.getAsistentes().get(i).getNombre());
+				}
+				sesionData.setNombresAsistentes(nombres);
+				sesionFormat.add(sesionData);
+			}
 		}
 		return sesionFormat;
 	}
@@ -139,24 +151,6 @@ public class InstructorControlador {
 		return "Tipo de Plan añadido con Nombre: "+ tipoPlanDTO.getNombre();
 	}
 	
-	
-	@GetMapping("/crearPlan/{idTipoPlan}")
-	public String crearPlan(@PathVariable String idTipoPlan) {
-		Plan plan = new Plan();
-		Date fecha = new Date();
-		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanById(idTipoPlan);
-		
-		plan.setClasesDisponibles(tipoPlan.getCantSesiones());
-		plan.setFechaInicio(new Date());
-		plan.setFechaFin(plan.SumarDias(fecha, tipoPlan.getCantDias()));
-		plan.setSesionesAsistidas(new ArrayList<>());
-		plan.setSesionesReservadas(new ArrayList<>());
-		plan.setTipoPlan(tipoPlan);
-		
-		servicioPlan.addPlan(plan);
-		return "Plan añadido con éxito";
-	}
-
 	// ---------------- Controladores TipoSesion -----------------------
 
 	@PostMapping("/agregarTipoSesion")

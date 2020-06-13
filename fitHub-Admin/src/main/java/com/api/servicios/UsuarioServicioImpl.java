@@ -39,6 +39,12 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         return repositorio.save(usuario);
     }
+    
+    @Override 
+    public Usuario updateUser(Usuario user) {
+        Usuario usuario = user;
+        return repositorio.save(usuario);
+    }
 
     @Override
     public void addUsuario(UsuarioDTO usuarioDTO){

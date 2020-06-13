@@ -14,5 +14,6 @@ public interface UsuarioServicio {
     List<Usuario> getAllUsers();
     Usuario addUser(Usuario user);
     void addUsuario(UsuarioDTO usuarioDTO);
+    public Usuario updateUser(Usuario user);
 
 }
