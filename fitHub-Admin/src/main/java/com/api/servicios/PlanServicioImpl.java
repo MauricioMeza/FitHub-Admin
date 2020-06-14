@@ -90,10 +90,13 @@ public class PlanServicioImpl implements PlanServicio {
 		Plan plan = usuario.getPlan();
 		plan.setSesionesAsistidas(sesionesAsistidas);
 		plan.setSesionesReservadas(sesionesReservadas);
+		if(plan.getFechaFin().before(fecha_actual) || plan.getClasesDisponibles() <= 0)
+			plan.setActivo(false);
 		usuario.setPlan(plan);
 		usuarioRepositorio.save(usuario);
 		planRepositorio.save(plan);
 		}
+		
 		
 	}
 	@Override
