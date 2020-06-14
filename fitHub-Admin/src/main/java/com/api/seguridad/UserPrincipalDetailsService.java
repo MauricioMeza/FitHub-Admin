@@ -2,8 +2,12 @@ package com.api.seguridad;
 
 import com.api.modelos.Usuario;
 import com.api.modelos.Instructor;
+import com.api.modelos.Plan;
 import com.api.repositorios.InstructorRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
+
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,10 +39,15 @@ public class UserPrincipalDetailsService implements UserDetailsService {
         }
         else {
         	Usuario user = repositorio.findByCorreo(s);
-        	
+     
         	if(user == null){
                 throw new UsernameNotFoundException("No existe usuario con el correo");
             }
+        	Plan plan = user.getPlan();
+        	Date fecha_actual = new Date();
+        	if(plan.getFechaFin().before(fecha_actual) || plan.getClasesDisponibles() <= 0) {
+    			plan.setActivo(false);
+    		}
         	
         	userPrincipal = new UserPrincipal(user);
         }
