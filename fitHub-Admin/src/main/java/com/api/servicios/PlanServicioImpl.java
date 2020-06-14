@@ -52,6 +52,7 @@ public class PlanServicioImpl implements PlanServicio {
 		plan.setSesionesAsistidas(new ArrayList<>());
 		plan.setSesionesReservadas(new ArrayList<>());
 		plan.setTipoPlan(tipoPlan);
+		plan.setActivo(true);
 
 		repositorio.save(plan);
 		usuario.setPlan(plan);
@@ -95,5 +96,19 @@ public class PlanServicioImpl implements PlanServicio {
 		}
 		
 	}
-	
+	@Override
+	public void cancelarPlan(String idPlan) {
+		Plan plan = repositorio.findById(idPlan);
+		plan.setActivo(false);
+	}
+	public List<Plan> getAllActivePlans() {
+		List<Plan> planes  = repositorio.findAll(); 
+		List<Plan> planesActivos  = new ArrayList<>();
+		for(Plan plan: planes) {
+			if(plan.isActivo())
+				planesActivos.add(plan);
+		}
+		
+		return planesActivos;
+	}
 }

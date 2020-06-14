@@ -134,4 +134,9 @@ public class UsuarioControlador {
 		return "Plan reservado con éxito " + usuario.getPlan();
 	}
 	
+	@GetMapping("/cancelarPlan/{idPlan}")
+	public String cancelarPlan(@PathVariable("idPlan") String idPlan){
+		servicioPlan.cancelarPlan(idPlan);
+		return "Plan con id:" + idPlan + " cancelado";
+	}
 }

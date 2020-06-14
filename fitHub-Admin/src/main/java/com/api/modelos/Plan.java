@@ -22,8 +22,26 @@ public class Plan {
 	private List<Sesion> sesionesAsistidas;
 	@DBRef
 	private TipoPlan tipoPlan;
+	private boolean activo;
 	
 	
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
 	public Date SumarDias(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha);

@@ -19,5 +19,6 @@ public interface PlanServicio {
     Plan addPlan(Plan plan);
     List<Usuario> usuariosInscritos(String idPlan);
     void actuaizarListasSesiones(String idUsuario);
+    void cancelarPlan(String idPlan);
 
 }

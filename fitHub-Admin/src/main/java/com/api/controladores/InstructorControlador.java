@@ -7,6 +7,7 @@ import com.api.dto.TipoPlanDTO;
 import com.api.dto.SesionDTO;
 import com.api.dto.TipoSesionDTO;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoPlan;
 import com.api.modelos.TipoSesion;
 import com.api.modelos.Usuario;
 import com.api.servicios.*;
@@ -149,6 +150,22 @@ public class InstructorControlador {
 	public String crearTipoPlan(@RequestBody TipoPlanDTO tipoPlanDTO) {
 		servicioTipoPlan.addTipoPlan(tipoPlanDTO);
 		return "Tipo de Plan añadido con Nombre: "+ tipoPlanDTO.getNombre();
+	}
+	@DeleteMapping("/eliminarTipoPlan")
+	public ResponseEntity<String> eliminarTipoPlan(@RequestBody String nombre) {
+		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanByNombre(nombre);
+		if (tipoPlan != null) {
+			servicioTipoPlan.deleteTipoPlan(tipoPlan);
+			return ResponseEntity.ok().body("Tipo de Plan eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún tipo de plan con este nombre");
+		}
+	}
+
+	@PutMapping("/actualizarTipoPlan")
+	public String actualizarTipoPlan(@Valid @RequestBody TipoPlanDTO tipoPlanDTO) {
+		servicioTipoPlan.cambiarTipoPlan(tipoPlanDTO);
+		return "Tipo de Plan Actualizado";
 	}
 
 	// ---------------- Controladores TipoSesion -----------------------
