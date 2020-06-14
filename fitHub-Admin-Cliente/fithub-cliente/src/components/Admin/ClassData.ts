@@ -16,7 +16,8 @@ class classData {
                 Instructor: clas.instructor,
                 IsReadOnly: present,
                 Cupos: clas.cupos + "/" + clas.tipo.cupos,
-                Duracion: clas.tipo.duracion + " min"
+                Duracion: clas.tipo.duracion + " min",
+                Cupo: clas.cupos
             } 
             dataSource.push(clasDataS);
         });

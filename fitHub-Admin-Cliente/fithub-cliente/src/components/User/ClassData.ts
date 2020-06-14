@@ -24,12 +24,12 @@ class classData {
                 Subject: clas.tipo.nombre,
                 EndTime: new Date(fechaClase.getTime() + clas.tipo.duracion * 60000),
                 StartTime: fechaClase,
-                IsAllDay: false,
                 Instructor: clas.instructor,
                 IsReadonly: present,
                 Reserved: reserved,
                 Cupos: clas.cupos + "/" + clas.tipo.cupos,
-                Duracion: clas.tipo.duracion + " min"
+                Duracion: clas.tipo.duracion + " min",
+                Cupo: clas.cupos
             } 
             dataSource.push(clasDataS);
         });

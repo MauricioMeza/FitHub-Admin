@@ -37,7 +37,6 @@ public class InstructorControlador {
 
 
 	// ----------- Controladores Instructor ----------------
-
 	@GetMapping("/encontrarInstructor/{id}")
 	public Instructor getInstructor(@PathVariable String id){
 		return servicioInstructor.getInstructorByCedula(id);
@@ -68,15 +67,12 @@ public class InstructorControlador {
 
 
 	// ---------------- Controladores Usuario ----------------------
-
 	@GetMapping("/encontrarTodosLosUsuarios")
 	public List<Usuario> getUsuarios(){
 		return servicioUsuario.getAllUsers();
 	}
 
-
 	// ---------------- Controladores Sesion -----------------------
-
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
 	public List<SesionDTO> BuscarSesiones( ) {
@@ -96,30 +92,6 @@ public class InstructorControlador {
 
 			sesionData.setNombresAsistentes(nombres);
 			sesionFormat.add(sesionData);
-		}
-		return sesionFormat;
-	}
-
-	@ResponseBody
-	@GetMapping("/buscarTodasSesionesConAsistentes")
-	public List<SesionDTO> BuscarSesionesConAsistentes( ) {
-		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
-		List<Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
-		for (Sesion ses: sesiones) {
-			if(ses.getAsistentes().size()>0) {
-				SesionDTO sesionData = new SesionDTO();
-				sesionData.setFecha(ses.getFecha_hora());
-				sesionData.setTipo(ses.getTipo());
-				sesionData.setInstructor(ses.getInstructor().getNombre());
-				sesionData.setId(ses.getId());
-				sesionData.setCupos(ses.getCupos());
-				List<String> nombres = new ArrayList<>();
-				for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
-					nombres.add(ses.getAsistentes().get(i).getNombre());
-				}
-				sesionData.setNombresAsistentes(nombres);
-				sesionFormat.add(sesionData);
-			}
 		}
 		return sesionFormat;
 	}
@@ -147,17 +119,62 @@ public class InstructorControlador {
 		return "Sesion Actualizada";
 	}
 
+	@ResponseBody
+	@GetMapping("/buscarTodasSesionesConAsistentes")
+	public List<SesionDTO> BuscarSesionesConAsistentes( ) {
+		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
+		List<Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
+		for (Sesion ses: sesiones) {
+			if(ses.getAsistentes().size()>0) {
+				SesionDTO sesionData = new SesionDTO();
+				sesionData.setFecha(ses.getFecha_hora());
+				sesionData.setTipo(ses.getTipo());
+				sesionData.setInstructor(ses.getInstructor().getNombre());
+				sesionData.setId(ses.getId());
+				sesionData.setCupos(ses.getCupos());
+				List<String> nombres = new ArrayList<>();
+				for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
+					nombres.add(ses.getAsistentes().get(i).getNombre());
+				}
+				sesionData.setNombresAsistentes(nombres);
+				sesionFormat.add(sesionData);
+			}
+		}
+		return sesionFormat;
+	}
 
 	// ---------------- Controladores TipoPlan -----------------------
 
-	@PostMapping("/agregarTipoPlan")
+	@PostMapping("/crearTipoPlan")
 	public String crearTipoPlan(@RequestBody TipoPlanDTO tipoPlanDTO) {
 		servicioTipoPlan.addTipoPlan(tipoPlanDTO);
 		return "Tipo de Plan añadido con Nombre: "+ tipoPlanDTO.getNombre();
 	}
 
-
 	// ---------------- Controladores TipoSesion -----------------------
+
+	@PostMapping("/agregarTipoSesion")
+	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion añadida";
+	}
+
+	@DeleteMapping("/eliminarTipoSesion")
+	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String nombre) {
+		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByNombre(nombre);
+		if (tipoSesion != null) {
+			servicioTipoSesion.deleteTipoSesion(tipoSesion);
+			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
+		}
+	}
+
+	@PutMapping("/actualizarTipoSesion")
+	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion Actualizado";
+	}
 
 	@ResponseBody
 	@GetMapping("/buscarTodosTiposSesiones")
@@ -184,29 +201,5 @@ public class InstructorControlador {
 		}
 		return tipoSesionNombres;
 	}
-
-	@PostMapping("/agregarTipoSesion")
-	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
-		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
-		return "Tipo de Sesion añadida";
-	}
-
-	@DeleteMapping("/eliminarTipoSesion")
-	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String id) {
-		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionById(id);
-		if (tipoSesion != null) {
-			servicioTipoSesion.deleteTipoSesion(tipoSesion);
-			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
-		} else {
-			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
-		}
-	}
-
-	@PutMapping("/actualizarTipoSesion")
-	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
-		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
-		return "Tipo de Sesion Actualizado";
-	}
-
   
 }

@@ -188,7 +188,6 @@ class ClassForm extends React.Component{
   }
 
   onPopupOpen(args) {
-    console.log(args)
     if(args.data.Id){
       if(args.type == "DeleteAlert"){
         args.cancel = true
@@ -409,7 +408,8 @@ class ClassForm extends React.Component{
             <ScheduleComponent ref={t => this.scheduleObj = t} currentView='Week' actionBegin={this.onActionBegin.bind(this)}
             eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00' endHour='22:00'
             editorTemplate={this.editorWindowTemplate.bind(this)} popupOpen={this.onPopupOpen.bind(this)}
-            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} locale='es-CO'> <ViewsDirective>
+            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} /*locale='es-CO'*/> 
+              <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>
                 <ViewDirective option='Month'/>

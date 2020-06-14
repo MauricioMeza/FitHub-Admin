@@ -28,11 +28,12 @@ class ClaseService {
   }
 
   updateClase(sesion){
+    console.log(sesion)
     const sesionDTO = JSON.stringify({
       id: sesion.Id,
       fecha: sesion.StartTime,
-      sesion: sesion.Subject,
       instructor: sesion.Instructor,
+      cupos: sesion.Cupo,
       tipoSesion: sesion.Subject,
     })
     
