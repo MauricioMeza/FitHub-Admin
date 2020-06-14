@@ -13,9 +13,8 @@ import ClaseService from "../../services/ClaseService";
 import Classes from "../Admin/Classes";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
-import { extend } from '@syncfusion/ej2-base';
+import {extend, L10n, loadCldr} from '@syncfusion/ej2-base';
 import ClassData from "./ClassData";
-
 
 const styles = theme => ({
   paper: {
@@ -32,8 +31,28 @@ const styles = theme => ({
   },
 });
 
-class ClassUser extends React.Component{
+L10n.load({'es-CO': {
+  'schedule': {
+      "today": "Hoy",
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes",
+      'saveButton': 'Guardar',
+      'cancelButton': 'Cerrar',
+      'deleteButton': 'Eliminar',
+      'newEvent': 'Evento',
+    },
+  }
+});
 
+loadCldr(
+  require('cldr-data/supplemental/numberingSystems.json'),
+  require('cldr-data/main/es-CO/ca-gregorian.json'),
+  require('cldr-data/main/es-CO/numbers.json'),
+  require('cldr-data/main/es-CO/timeZoneNames.json')
+);
+
+class ClassUser extends React.Component{
   constructor (props) {
     super(props)
     this.data = extend([], null, null, true);
@@ -172,7 +191,7 @@ class ClassUser extends React.Component{
             <br></br>
             <ScheduleComponent eventSettings={{dataSource: ClassData.getClassData(clasesHorario, clasesList)}}
              eventRendered={this.onEventRendered.bind(this)} popupOpen={this.onPopupOpen.bind(this)} currentView='Week'
-             startHour='05:00' endHour='22:00' quickInfoTemplates={{content: this.content.bind(this)}}>
+             startHour='05:00' endHour='22:00' quickInfoTemplates={{content: this.content.bind(this)}} locale='es-CO'>
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

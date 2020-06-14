@@ -5,7 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import {Row, Col, Alert} from "react-bootstrap";
 import {BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Container} from '@material-ui/core';
-
+import ClassTypeForm from "./components/Admin/ClassTypeForm";
+import PlanForm from "./components/Admin/PlanForm";
 
 
 //importar componentes
@@ -55,6 +56,8 @@ class App extends Component{
               <Route exact path="/registro"  component={SignUp} />
               <Route exact path="/login"  component={Login} />
               <Route exact path="/ClassForm"  component={ClassForm} />
+              <Route exact path="/PlanForm"  component={PlanForm} />
+              <Route exact path="/ClassTypeForm"  component={ClassTypeForm} />
               <Route exact path="/ClassUser"  component={ClassUser} />
             </Switch>
           </Col>

@@ -32,7 +32,8 @@ class ClaseService {
       id: sesion.Id,
       fecha: sesion.StartTime,
       sesion: sesion.Subject,
-      instructor: sesion.Instructor
+      instructor: sesion.Instructor,
+      tipoSesion: sesion.Subject,
     })
     
     return Axios.put(API_URL_Admin + "actualizarSesion", sesionDTO,
