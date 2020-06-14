@@ -8,10 +8,8 @@ import com.api.dto.SesionDTO;
 import com.api.dto.TipoSesionDTO;
 import com.api.modelos.Sesion;
 import com.api.modelos.TipoSesion;
-import com.api.servicios.InstructorServicio;
-import com.api.servicios.SesionServicio;
-import com.api.servicios.TipoPlanServicio;
-import com.api.servicios.TipoSesionServicio;
+import com.api.modelos.Usuario;
+import com.api.servicios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,40 +23,35 @@ import javax.validation.Valid;
 public class InstructorControlador {
 	
 	@Autowired
-	private InstructorServicio servicioIns;
-
+	private InstructorServicio servicioInstructor;
 	@Autowired
-	private SesionServicio servicioSes;
-	
+	private SesionServicio servicioSesion;
 	@Autowired
 	private TipoPlanServicio servicioTipoPlan;
-	
-
 	@Autowired
 	private TipoSesionServicio servicioTipoSesion;
+	@Autowired
+	private UsuarioServicio servicioUsuario;
+
+
+
 
 	// ----------- Controladores Instructor ----------------
 
-	@GetMapping("/validarInstructor")
-	public String validacionInstructor(){
-		return "Valido";
+	@GetMapping("/encontrarInstructor/{id}")
+	public Instructor getInstructor(@PathVariable String id){
+		return servicioInstructor.getInstructorByCedula(id);
 	}
 
-	@PostMapping("/agregarInstructor")
-	public String GuardarInstructor(@RequestBody Instructor instructor) {
-		servicioIns.addInstructor(instructor);
-		return "Instructor añadido con id: "+ instructor.getCedula();
-	}
-	
 	@GetMapping("/encontrarTodosLosInstructores")
 	public List<Instructor> getInstructores(){
-		return servicioIns.getAllInstructors();
+		return servicioInstructor.getAllInstructors();
 	}
 
 	@ResponseBody
 	@GetMapping("/instructoresNombres")
 	public List<String> getInstructoresNombres(){
-		List<Instructor> instructores = servicioIns.getAllInstructors();
+		List<Instructor> instructores = servicioInstructor.getAllInstructors();
 		ArrayList<String> insNombres = new ArrayList<>();
 		for (Instructor ins: instructores) {
 			insNombres.add(ins.getNombre());
@@ -66,41 +59,29 @@ public class InstructorControlador {
 		return insNombres;
 	}
 
-	@GetMapping("/encontrarInstructor/{id}")
-	public Instructor getInstructor(@PathVariable String id){
-		return servicioIns.getInstructorByCedula(id);
+	@PostMapping("/agregarInstructor")
+	public String GuardarInstructor(@RequestBody Instructor instructor) {
+		servicioInstructor.addInstructor(instructor);
+		return "Instructor añadido con id: "+ instructor.getCedula();
 	}
+
+
+
+	// ---------------- Controladores Usuario ----------------------
+
+	@GetMapping("/encontrarTodosLosUsuarios")
+	public List<Usuario> getUsuarios(){
+		return servicioUsuario.getAllUsers();
+	}
+
 
 	// ---------------- Controladores Sesion -----------------------
-
-	@PostMapping("/agregarSesion")
-	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
-		servicioSes.addSesion(sesion);
-		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
-	}
-
-	@DeleteMapping("/eliminarSesion")
-	public ResponseEntity<String> eliminarSesion(@RequestBody String id) {
-		Sesion sesion = servicioSes.getSesionById(id);
-		if (sesion != null) {
-			servicioSes.deleteSesion(sesion);
-			return ResponseEntity.ok().body("Sesion eliminada");
-		} else {
-			return ResponseEntity.badRequest().body("No existe ninguna sesion con este id");
-		}
-	}
-
-	@PutMapping("/actualizarSesion")
-	public String actualizarSesion(@Valid @RequestBody SesionDTO sesion) {
-		servicioSes.cambiarSesion(sesion);
-		return "Sesion Actualizada";
-	}
 
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
 	public List<SesionDTO> BuscarSesiones( ) {
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
-		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
+		List<Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
@@ -112,18 +93,18 @@ public class InstructorControlador {
 			for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
 				nombres.add(ses.getAsistentes().get(i).getNombre());
 			}
-			
+
 			sesionData.setNombresAsistentes(nombres);
 			sesionFormat.add(sesionData);
 		}
 		return sesionFormat;
 	}
-	
+
 	@ResponseBody
 	@GetMapping("/buscarTodasSesionesConAsistentes")
 	public List<SesionDTO> BuscarSesionesConAsistentes( ) {
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
-		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
+		List<Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
 		for (Sesion ses: sesiones) {
 			if(ses.getAsistentes().size()>0) {
 				SesionDTO sesionData = new SesionDTO();
@@ -142,39 +123,41 @@ public class InstructorControlador {
 		}
 		return sesionFormat;
 	}
-  
+
+	@PostMapping("/agregarSesion")
+	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
+		servicioSesion.addSesion(sesion);
+		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
+	}
+
+	@DeleteMapping("/eliminarSesion")
+	public ResponseEntity<String> eliminarSesion(@RequestBody String id) {
+		Sesion sesion = servicioSesion.getSesionById(id);
+		if (sesion != null) {
+			servicioSesion.deleteSesion(sesion);
+			return ResponseEntity.ok().body("Sesion eliminada");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ninguna sesion con este id");
+		}
+	}
+
+	@PutMapping("/actualizarSesion")
+	public String actualizarSesion(@Valid @RequestBody SesionDTO sesion) {
+		servicioSesion.cambiarSesion(sesion);
+		return "Sesion Actualizada";
+	}
+
+
 	// ---------------- Controladores TipoPlan -----------------------
 
-	@PostMapping("/crearTipoPlan")
+	@PostMapping("/agregarTipoPlan")
 	public String crearTipoPlan(@RequestBody TipoPlanDTO tipoPlanDTO) {
 		servicioTipoPlan.addTipoPlan(tipoPlanDTO);
 		return "Tipo de Plan añadido con Nombre: "+ tipoPlanDTO.getNombre();
 	}
-	
+
+
 	// ---------------- Controladores TipoSesion -----------------------
-
-	@PostMapping("/agregarTipoSesion")
-	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
-		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
-		return "Tipo de Sesion añadida";
-	}
-
-	@DeleteMapping("/eliminarTipoSesion")
-	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String nombre) {
-		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByNombre(nombre);
-		if (tipoSesion != null) {
-			servicioTipoSesion.deleteTipoSesion(tipoSesion);
-			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
-		} else {
-			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
-		}
-	}
-
-	@PutMapping("/actualizarTipoSesion")
-	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
-		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
-		return "Tipo de Sesion Actualizado";
-	}
 
 	@ResponseBody
 	@GetMapping("/buscarTodosTiposSesiones")
@@ -201,5 +184,29 @@ public class InstructorControlador {
 		}
 		return tipoSesionNombres;
 	}
+
+	@PostMapping("/agregarTipoSesion")
+	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion añadida";
+	}
+
+	@DeleteMapping("/eliminarTipoSesion")
+	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String id) {
+		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionById(id);
+		if (tipoSesion != null) {
+			servicioTipoSesion.deleteTipoSesion(tipoSesion);
+			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
+		}
+	}
+
+	@PutMapping("/actualizarTipoSesion")
+	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
+		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
+		return "Tipo de Sesion Actualizado";
+	}
+
   
 }

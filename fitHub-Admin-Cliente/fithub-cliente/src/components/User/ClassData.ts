@@ -15,6 +15,10 @@ class classData {
                 reserved = true;
             }
             let fechaClase = new Date(clas.fecha) 
+            var present = false
+            if (fechaClase < new Date()){
+                present = true;
+            }
             var clasDataS = {
                 Id: clas.id,
                 Subject: clas.tipo.nombre,
@@ -22,6 +26,7 @@ class classData {
                 StartTime: fechaClase,
                 IsAllDay: false,
                 Instructor: clas.instructor,
+                IsReadonly: present,
                 Reserved: reserved,
                 Cupos: clas.cupos + "/" + clas.tipo.cupos,
                 Duracion: clas.tipo.duracion + " min"

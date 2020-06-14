@@ -1,7 +1,9 @@
 package com.api.servicios;
 
 import com.api.dto.UsuarioDTO;
+import com.api.modelos.TipoPlan;
 import com.api.modelos.Usuario;
+import com.api.repositorios.TipoPlanRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
 import com.api.seguridad.JwtProperties;
 import io.jsonwebtoken.Claims;
@@ -17,7 +19,10 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
     @Autowired
     UsuarioRepositorio repositorio;
-
+    @Autowired
+    TipoPlanServicio servicioTipoPlan;
+    @Autowired
+    PlanServicio servicioPlan;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -57,14 +62,17 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     @Override
     public void addUsuario(UsuarioDTO usuarioDTO){
         Usuario user = new Usuario();
+
         user.setNombre(usuarioDTO.getNombre());
         user.setContrasena(usuarioDTO.getContrasena());
         user.setCorreo(usuarioDTO.getCorreo());
         user.setCedula(usuarioDTO.getCedula());
         user.setRole("USER");
-        user.setPlan(usuarioDTO.getPlan());
-
         addUser(user);
+
+        TipoPlan planPrueba = servicioTipoPlan.getTipoPlanByNombre("Plan de Prueba");
+        servicioPlan.addNewPlan(planPrueba, user);
+        this.updateUser(user);
     };
 
     @Override

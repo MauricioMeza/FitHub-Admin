@@ -22,31 +22,29 @@ import com.api.modelos.Usuario;
 public class UsuarioControlador {
 	
 	@Autowired
-	private UsuarioServicio servicio;
-	
+	private UsuarioServicio servicioUsuario;
 	@Autowired
 	private SesionServicio servicioSesion;
-	
 	@Autowired
 	private PlanServicio servicioPlan;
-	
 	@Autowired
 	private TipoPlanServicio servicioTipoPlan;
 
-	@GetMapping("/encontrarTodosLosUsuarios")
-	public List<Usuario> getUsuarios(){
-		return servicio.getAllUsers();
-	}
+
+	// -------------- Controladores Usuario --------------------------
 
 	@GetMapping("/{correo}")
 	public Usuario getInfoUsuario(@PathVariable String correo){
-		return servicio.getUserByCorreo(correo);
+		return servicioUsuario.getUserByCorreo(correo);
 	}
-	
+
+
+	// -------------- Controladores Sesion --------------------------
+
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
 	public String reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
 
-		Usuario usuario = servicio.getUserByCorreo(idUsuario);
+		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		Date fecha_actual = new Date();
 		
@@ -61,14 +59,15 @@ public class UsuarioControlador {
 				return "La sesión no tiene cupos suficientes para realizar la inscripción";
 			}
 			else{	
-				if(usuario.getPlan() == null)
+				if(usuario.getPlan() == null) {
 					return "El usuario no tiene ningún plan inscrito";
-				
+				}
 				int cupos = sesion.getCupos() - 1;
 				sesion.setCupos(cupos);
 				List<Usuario> asistentes = sesion.getAsistentes();   
 				asistentes.add(usuario);
-				sesion.setAsistentes(asistentes); 
+				sesion.setAsistentes(asistentes);
+
 				Plan plan = usuario.getPlan();
 				if(plan.getClasesDisponibles()<=0)
 					return "El plan del Usuario no cuenta con clases disponibles";
@@ -78,17 +77,16 @@ public class UsuarioControlador {
 				plan.setClasesDisponibles(plan.getClasesDisponibles()-1);
 				usuario.setPlan(plan);
 				servicioPlan.addPlan(plan);
-				servicio.updateUser(usuario);
+				servicioUsuario.updateUser(usuario);
 				servicioSesion.cambiarSesion(sesion);
 			}
 		}
 		return "El usuario ha reservado un cupo con éxito";
 	}
-	
-	
+
 	@GetMapping("/verSesionesReservadas/{email}")
 	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String correo){
-		Usuario usuario = servicio.getUserByCorreo(correo);
+		Usuario usuario = servicioUsuario.getUserByCorreo(correo);
 		List <Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
 		List <SesionDTO> sesionesInscritas = new ArrayList<>();
 		for(Sesion ses: sesiones) {
@@ -110,7 +108,7 @@ public class UsuarioControlador {
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")
 	public String cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
-		Usuario usuario = servicio.getUserByCorreo(idUsuario);
+		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
 		Date fecha_actual = new Date();
 		long fechaActualMili = fecha_actual.getTime();
 		long fechaLimiteCancelarMili = sesion.getFecha_hora().getTime() - 3600 * 2000;
@@ -122,24 +120,16 @@ public class UsuarioControlador {
 		
 		return servicioSesion.cancelarCupo(sesion, usuario);
 	}
-	
+
+	// -------------- Controladores Plan --------------------------
+
 	@GetMapping("/reservarPlan/{id}/{idTipoPlan}")
 	public String reservarPlan(@PathVariable("id") String idUsuario,@PathVariable("idTipoPlan") String idTipoPlan) {
 		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanById(idTipoPlan);
-		Plan plan = new Plan();
-		Date fecha = new Date();
+		Usuario usuario = servicioUsuario.getUserByCedula(idUsuario);
 		
-		plan.setClasesDisponibles(tipoPlan.getCantSesiones());
-		plan.setFechaInicio(new Date());
-		plan.setFechaFin(plan.SumarDias(fecha, tipoPlan.getCantDias()));
-		plan.setSesionesAsistidas(new ArrayList<>());
-		plan.setSesionesReservadas(new ArrayList<>());
-		plan.setTipoPlan(tipoPlan);
-		
-		servicioPlan.addPlan(plan);
-		Usuario usuario = servicio.getUserByCedula(idUsuario);
-		usuario.setPlan(plan); 
-		servicio.updateUser(usuario);
+		usuario = servicioPlan.addNewPlan(tipoPlan, usuario);
+		servicioUsuario.updateUser(usuario);
 		
 		return "Plan reservado con éxito " + usuario.getPlan();
 	}

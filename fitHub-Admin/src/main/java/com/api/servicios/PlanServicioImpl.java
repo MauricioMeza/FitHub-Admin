@@ -2,6 +2,7 @@ package com.api.servicios;
 
 import com.api.modelos.Plan;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoPlan;
 import com.api.modelos.Usuario;
 import com.api.repositorios.PlanRepositorio;
 import com.api.repositorios.SesionRepositorio;
@@ -41,8 +42,26 @@ public class PlanServicioImpl implements PlanServicio {
 		return planes;
 	}
 	@Override
-	public Plan addPlan(Plan plan) {
+	public Usuario addNewPlan(TipoPlan tipoPlan, Usuario usuario){
+		Plan plan = new Plan();
+		Date fecha = new Date();
+
+		plan.setClasesDisponibles(tipoPlan.getCantSesiones());
+		plan.setFechaInicio(new Date());
+		plan.setFechaFin(plan.SumarDias(fecha, tipoPlan.getCantDias()));
+		plan.setSesionesAsistidas(new ArrayList<>());
+		plan.setSesionesReservadas(new ArrayList<>());
+		plan.setTipoPlan(tipoPlan);
+
 		repositorio.save(plan);
+		usuario.setPlan(plan);
+
+		return usuario;
+	}
+	@Override
+	public Plan addPlan(Plan plan){
+		repositorio.save(plan);
+
 		return plan;
 	}
 	@Override
