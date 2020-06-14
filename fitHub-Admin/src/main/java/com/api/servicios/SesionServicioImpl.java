@@ -31,17 +31,24 @@ public class SesionServicioImpl implements SesionServicio {
     @Override
     public Sesion addSesion(SesionDTO sesionDTO) {
         Sesion nuevaSesion = new Sesion();
+        long fechaSesionDTOComienzaMillis = sesionDTO.getFecha().getTime();
+        long fechaSesionDTOTerminaMillis = sesionDTO.getFecha().getTime() + sesionDTO.getTipo().getDuracion() * 60 * 1000;
 
         Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
 		TipoSesion tipo = repositorioTses.findByNombre(sesionDTO.getTipoSesion());
 		List<Sesion> sesiones = repositorio.findAll();
 
 		for(Sesion sesion : sesiones){
-			long fechaSesionTermina = sesion.getFecha_hora().getTime() + sesion.getTipo().getDuracion() * 60 * 1000;
+			long fechaSesionComienzaMillis = sesion.getFecha_hora().getTime();
+			long fechaSesionTerminaMillis = sesion.getFecha_hora().getTime() + sesion.getTipo().getDuracion() * 60 * 1000;
 			if(sesion.getInstructor().equals(instructor)){
 				if(sesion.getFecha_hora().equals(sesionDTO.getFecha())){
 					return null;
-				}else if(sesion.getFecha_hora().after(sesionDTO.getFecha()) && sesion.getFecha_hora().getTime() < fechaSesionTermina){
+				}else if(sesionDTO.getFecha().after(sesion.getFecha_hora()) && fechaSesionDTOComienzaMillis < fechaSesionTerminaMillis){
+					return null;
+				}else if(fechaSesionDTOTerminaMillis > fechaSesionComienzaMillis && fechaSesionDTOTerminaMillis < fechaSesionTerminaMillis){
+					return null;
+				}else if(fechaSesionDTOComienzaMillis < fechaSesionComienzaMillis && fechaSesionDTOTerminaMillis > fechaSesionTerminaMillis){
 					return null;
 				}
 			}
