@@ -34,6 +34,18 @@ public class SesionServicioImpl implements SesionServicio {
 
         Instructor instructor = repositorioIns.findByNombre(sesionDTO.getInstructor());
 		TipoSesion tipo = repositorioTses.findByNombre(sesionDTO.getTipoSesion());
+		List<Sesion> sesiones = repositorio.findAll();
+
+		for(Sesion sesion : sesiones){
+			long fechaSesionTermina = sesion.getFecha_hora().getTime() + sesion.getTipo().getDuracion() * 60 * 1000;
+			if(sesion.getInstructor().equals(instructor)){
+				if(sesion.getFecha_hora().equals(sesionDTO.getFecha())){
+					return null;
+				}else if(sesion.getFecha_hora().after(sesionDTO.getFecha()) && sesion.getFecha_hora().getTime() < fechaSesionTermina){
+					return null;
+				}
+			}
+		}
         nuevaSesion.setInstructor(instructor);
         nuevaSesion.setTipo(tipo);
         nuevaSesion.setFecha_hora(sesionDTO.getFecha());
