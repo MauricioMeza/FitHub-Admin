@@ -75,19 +75,32 @@ public class PlanServicioImpl implements PlanServicio {
 		Usuario usuario = usuarioRepositorio.findByCedula(idUsuario);
 		List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
 		List<Sesion> sesionesAsistidas = usuario.getPlan().getSesionesAsistidas();
+		List<Sesion> sesionesReservadasNueva = usuario.getPlan().getSesionesReservadas();
+		Sesion sesion = new Sesion();
+		boolean borrar = false;
+		int tamano = sesionesReservadas.size();
 		Date fecha_actual = new Date();
-		for(Sesion sesion: sesionesReservadas) {
-			Date fechaFinSesion = usuario.getPlan().SumarMinutos(sesion.getFecha_hora(), sesion.getTipo().getDuracion());
-			if(fechaFinSesion.before(fecha_actual)) {
+		if(tamano > 0) {
+			for(int i = 0; i < tamano; i ++) {
+				Date fechaInicioSesion = sesionesReservadas.get(i).getFecha_hora();
+				if(fechaInicioSesion.before(fecha_actual)) {
+					sesion = sesionesReservadas.get(i);
+					borrar = true;
+				}
+			}
+			if(borrar) {
+				sesionesReservadasNueva.remove(sesion);
 				sesionesAsistidas.add(sesion);
-				sesionesReservadas.remove(sesion);
 			}
 		}
-
+		
 		Plan plan = usuario.getPlan();
 		plan.setSesionesAsistidas(sesionesAsistidas);
-		plan.setSesionesReservadas(sesionesReservadas);
+		plan.setSesionesReservadas(sesionesReservadasNueva);
+		if(plan.getSesionesAsistidas().size() == plan.getTipoPlan().getCantSesiones() || plan.getFechaInicio().before(fecha_actual))
+			plan.setActivo(false);
 		usuario.setPlan(plan);
+		
 		usuarioRepositorio.save(usuario);
 		planRepositorio.save(plan);
 	}
