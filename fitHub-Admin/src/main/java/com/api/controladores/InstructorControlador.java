@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.api.dto.TipoPlanDTO;
+import com.api.dto.PlanDTO;
 import com.api.dto.SesionDTO;
 import com.api.dto.TipoSesionDTO;
 import com.api.modelos.Sesion;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Instructor;
+import com.api.modelos.Plan;
 
 import javax.validation.Valid;
 
@@ -33,6 +35,8 @@ public class InstructorControlador {
 	private TipoSesionServicio servicioTipoSesion;
 	@Autowired
 	private UsuarioServicio servicioUsuario;
+	@Autowired
+	private PlanServicio servicioPlan;
 
 
 
@@ -218,5 +222,41 @@ public class InstructorControlador {
 		}
 		return tipoSesionNombres;
 	}
-  
+	
+	//---------------------- Controladores Plan -----------------
+	
+	@PostMapping("/crearPlan")
+	public String crearPlan(@RequestBody PlanDTO planDTO) {
+		servicioPlan.addPlan(planDTO);
+		return "Plan añadido con id: "+ planDTO.getId();
+	}
+	@DeleteMapping("/eliminarPlan")
+	public ResponseEntity<String> eliminarPlan(@RequestBody String idPlan) {
+		Plan Plan = servicioPlan.getPlanById(idPlan);
+		if (Plan != null) {
+			servicioPlan.deletePlan(Plan);
+			return ResponseEntity.ok().body("Plan eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún plan con este id");
+		}
+	}
+
+	@PutMapping("/actualizarPlan")
+	public String actualizarPlan(@Valid @RequestBody PlanDTO PlanDTO) {
+		servicioPlan.cambiarPlan(PlanDTO);
+		return "Plan Actualizado";
+	}
+	
+	@GetMapping("/BuscarPlanes")
+	public List<Plan> BuscarPlanes(){
+		List<Plan> planes = servicioPlan.getAllPlans();
+		return planes;
+	}
+	
+	@GetMapping("/BuscarPlanesActivos")
+	public List<Plan> BuscarPlanesActivos(){
+		List<Plan> planes = servicioPlan.getAllActivePlans();
+		return planes;
+	}
+	
 }

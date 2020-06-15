@@ -1,5 +1,6 @@
 package com.api.servicios;
 
+import com.api.dto.PlanDTO;
 import com.api.modelos.Plan;
 import com.api.modelos.Sesion;
 import com.api.modelos.TipoPlan;
@@ -60,17 +61,11 @@ public class PlanServicioImpl implements PlanServicio {
 		return usuario;
 	}
 	@Override
-	public Plan addPlan(Plan plan){
-		repositorio.save(plan);
-
-		return plan;
-	}
-	@Override
 	public List<Usuario> usuariosInscritos(String idPlan) {
 		List<Usuario> usuarios = usuarioRepositorio.findAll();
 		List<Usuario> usuariosIns = new ArrayList<>();
 		for (Usuario usuario: usuarios) {
-			if(usuario.getPlan().getIdPlan() == idPlan)
+			if(usuario.getPlan().getId() == idPlan)
 				usuariosIns.add(usuario);
 		}
 		return usuariosIns;
@@ -102,6 +97,7 @@ public class PlanServicioImpl implements PlanServicio {
 		Plan plan = repositorio.findById(idPlan);
 		plan.setActivo(false);
 	}
+	@Override
 	public List<Plan> getAllActivePlans() {
 		List<Plan> planes  = repositorio.findAll(); 
 		List<Plan> planesActivos  = new ArrayList<>();
@@ -111,5 +107,43 @@ public class PlanServicioImpl implements PlanServicio {
 		}
 		
 		return planesActivos;
+	}
+	@Override
+	public Plan addPlan(PlanDTO planDTO) {
+		Plan plan = new Plan();
+		plan.setActivo(true);
+		plan.setClasesDisponibles(planDTO.getClasesDisponibles());
+		plan.setFechaFin(planDTO.getFechaFin());
+		plan.setFechaInicio(planDTO.getFechaInicio());
+		plan.setId(planDTO.getId());
+		plan.setSesionesAsistidas(planDTO.getSesionesAsistidas());
+		plan.setSesionesReservadas(planDTO.getSesionesReservadas());
+		TipoPlan  tipoPlan = repositorioTipoPlan.findTipoPlanByNombre(planDTO.getTipoPlan());
+		plan.setTipoPlan(tipoPlan);
+		repositorio.save(plan);
+		return plan;
+	}
+	@Override
+	public Plan addPlan(Plan plan) {
+		repositorio.save(plan);
+		return null;
+	}
+	@Override
+	public void cambiarPlan(PlanDTO planDTO) {
+		Plan plan = new Plan();
+		plan.setActivo(true);
+		plan.setClasesDisponibles(planDTO.getClasesDisponibles());
+		plan.setFechaFin(planDTO.getFechaFin());
+		plan.setFechaInicio(planDTO.getFechaInicio());
+		plan.setId(planDTO.getId());
+		plan.setSesionesAsistidas(planDTO.getSesionesAsistidas());
+		plan.setSesionesReservadas(planDTO.getSesionesReservadas());
+		TipoPlan  tipoPlan = repositorioTipoPlan.findTipoPlanByNombre(planDTO.getTipoPlan());
+		plan.setTipoPlan(tipoPlan);
+		repositorio.save(plan);
+	}
+	@Override
+	public void deletePlan(Plan plan) {
+		repositorio.delete(plan);
 	}
 }

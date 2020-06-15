@@ -70,12 +70,6 @@ public class Plan {
 	public void setSesionesReservadas(List<Sesion> sesionesReservadas) {
 		this.sesionesReservadas = sesionesReservadas;
 	}
-	public String getIdPlan() {
-		return id;
-	}
-	public void setIdPlan(String string) {
-		this.id = string;
-	}
 	public Date getFechaInicio() {
 		return fechaInicio;
 	}

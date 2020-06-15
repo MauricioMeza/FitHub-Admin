@@ -139,4 +139,18 @@ public class UsuarioControlador {
 		servicioPlan.cancelarPlan(idPlan);
 		return "Plan con id:" + idPlan + " cancelado";
 	}
+	
+	@GetMapping("/BuscarPlanes")
+	public List<Plan> BuscarPlanes(){
+		List<Plan> planes = servicioPlan.getAllPlans();
+		return planes;
+	}
+	
+	@GetMapping("/BuscarPlanesActivos")
+	public List<Plan> BuscarPlanesActivos(){
+		List<Plan> planes = servicioPlan.getAllActivePlans();
+		return planes;
+	}
+	
+	
 }
