@@ -1,6 +1,13 @@
 import Axios from "axios";
+import AuthService from "./AuthService";
+
+var token = ""
+if(AuthService.getCurrentUser() != null){
+  token = AuthService.getCurrentUser().Authorization
+}
 
 const API_URL = "http://localhost:8080/"
+const API_URL_User = "http://localhost:8080/User/"
 
 class InfoService {
   
@@ -66,6 +73,11 @@ class InfoService {
       
       return planListFront
       
+    }
+
+    getUserInfo(){
+      let user = AuthService.getCurrentUser()
+      return Axios.get(API_URL_User + "getInfoUsuario/" + user.Mail, {headers:{"Authorization": token}})
     }
 
 }export default new InfoService();

@@ -59,14 +59,14 @@ export default function MainFeaturedPost(props) {
           </div>
           <div className={classes.mainFeaturedPostContent}>
             <Link to={"/registro"} className="navbar-brand">
-              <Button variant="contained" color="light">Registrate</Button>
+              <Button variant="contained" color="default">Registrate</Button>
             </Link>
             <Typography variant="h6" color="inherit" paragraph>
               {post.title2}
             </Typography>
 
             <Link to={"/login"} className="navbar-brand">
-              <Button variant="contained" color="light">Inicia Sesion</Button>
+              <Button variant="contained" color="default">Inicia Sesion</Button>
             </Link>
             <Typography variant="h6" color="inherit" paragraph>
               {post.title3}

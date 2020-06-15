@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.api.dto.PlanDTO;
 import com.api.dto.SesionDTO;
+import com.api.dto.UsuarioDTO;
 import com.api.servicios.PlanServicio;
 import com.api.servicios.SesionServicio;
 import com.api.servicios.TipoPlanServicio;
@@ -33,9 +35,28 @@ public class UsuarioControlador {
 
 	// -------------- Controladores Usuario --------------------------
 
-	@GetMapping("/{correo}")
-	public Usuario getInfoUsuario(@PathVariable String correo){
-		return servicioUsuario.getUserByCorreo(correo);
+	@GetMapping("getInfoUsuario/{correo}")
+	public UsuarioDTO getInfoUsuario(@PathVariable String correo){
+		Usuario user = servicioUsuario.getUserByCorreo(correo);
+		Plan plan = user.getPlan();
+		UsuarioDTO userSend = new UsuarioDTO();
+		PlanDTO planSend = new PlanDTO();
+
+		planSend.setId(plan.getId());
+		planSend.setClasesDisponibles(plan.getClasesDisponibles());
+		planSend.setFechaInicio(plan.getFechaInicio());
+		planSend.setFechaFin(plan.getFechaFin());
+		planSend.setTipo(plan.getTipoPlan());
+		planSend.setSesionAsistida(plan.getSesionesAsistidas().size());
+		planSend.setSesionReservada(plan.getSesionesReservadas().size());
+
+		userSend.setNombre(user.getNombre());
+		userSend.setCorreo(user.getCorreo());
+		userSend.setCedula(user.getCedula());
+		userSend.setRole(user.getRole());
+		userSend.setPlanDTO(planSend);
+
+		return userSend;
 	}
 
 

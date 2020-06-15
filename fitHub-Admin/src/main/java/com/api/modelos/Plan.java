@@ -16,9 +16,9 @@ public class Plan {
 	private Date fechaInicio;
 	private Date fechaFin;
 	private int clasesDisponibles;
-	@DBRef
+	@DBRef(lazy = true)
 	private List<Sesion> sesionesReservadas;
-	@DBRef
+	@DBRef(lazy = true)
 	private List<Sesion> sesionesAsistidas;
 	@DBRef
 	private TipoPlan tipoPlan;

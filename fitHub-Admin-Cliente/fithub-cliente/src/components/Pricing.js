@@ -54,7 +54,7 @@ class Pricing extends Component{
     const {tier, classes} = this.props;
 
     return (
-      <Grid item key={tier.title} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
+      <Grid item key={tier.id} xs={12} sm={tier.title === 'Enterprise' ? 12 : 6} md={4}>
         <Card>
           <CardHeader
             title={tier.title}
@@ -96,7 +96,7 @@ class Pricing extends Component{
 
 Pricing.propTypes = {
   classes: PropTypes.object.isRequired,
-  tier: PropTypes.object.isRequired
+  tier: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(Pricing);

@@ -85,7 +85,7 @@ class Welcome extends React.Component{
       const { classes } = this.props;
       const {planes, instructores} = this.state
       return(
-          <Container maxWidth="xl">
+          <Container maxwidth="xl">
 
               <MainFeaturedPost post={mainFeaturedPost} />
 
@@ -117,10 +117,10 @@ class Welcome extends React.Component{
               </Container>
               <Divider variant="middle" />
 
-              <Container maxWidth="md" component="main">
-              <Grid container maxWidth="md" spacing={5} alignItems="flex-start" justify="center">
-                {planes.map((plan) => (
-                  <Pricing key={plan.id} tier={plan}/>
+              <Container maxwidth="md" component="main">
+              <Grid container maxwidth="md" spacing={5} alignItems="flex-start" justify="center">
+                {planes.map((plan, i) => (
+                  <Pricing tier={plan} key={i} />
                 ))}
               </Grid>
               </Container>
@@ -135,7 +135,7 @@ class Welcome extends React.Component{
               </Typography >
               <Divider variant="middle" />
 
-              <Container maxWidth="md" component="main">
+              <Container maxwidth="md" component="main">
                 <Carousel>
                   <div>
                     <img src='https://source.unsplash.com/3RnkZpDqsEI' />
