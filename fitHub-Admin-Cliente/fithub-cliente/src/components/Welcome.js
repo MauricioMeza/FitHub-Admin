@@ -2,11 +2,16 @@ import React from "react";
 
 import AuthService from "../services/AuthService";
 import PlanService from "../services/PlanService";
+import ClaseService from "../services/ClaseService";
+
 import InfoService from "../services/InfoService";
+
+import ClassData from "./ClassData";
 
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
+import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -19,7 +24,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MainFeaturedPost from './MainFeaturedPost';
 import FeaturedPost from "./FeaturedPost";
 import Pricing from "./Pricing";
-import FooterPage from "./FooterPage";
+
 
 const useStyles = theme => ({
     root: {
@@ -61,7 +66,7 @@ const mainFeaturedPost = {
 class Welcome extends React.Component{
   constructor(props){
       super(props)
-      this.state = {planes: [], instructores: [], }
+      this.state = {planes: [], instructores: [], clases:[]}
   }
 
   componentDidMount(){
@@ -87,16 +92,39 @@ class Welcome extends React.Component{
           planes: planListFront
         })
       })
+
+      ClaseService.getClases()
+      .then(response => {
+        this.setState({
+          clases : response.data 
+        })
+      })
       
       this.setState({
           instructores: InfoService.getInstructoresList()
       }) 
-  }      
+  }   
+  
+  onPopupOpen(args) {
+    if(args.type != "QuickInfo"){
+      args.cancel = true
+    }
+  }
+  content(props) {
+    this.render()
+    return (
+      <div className="e-subject-wrap">
+           {(props.Instructor !== undefined) ? <div className="subject">{"Instructor: " + props.Instructor}</div> : ""}
+           {(props.Duracion !== undefined) ? <div className="duracion">{"Duracion: " + props.Duracion}</div> : ""}
+           {(props.Cupos !== undefined) ? <div className="cupos">{"Cupos: " + props.Cupos}</div> : ""}
+        </div>
+    );
+  }
     
 
   render(){
       const { classes } = this.props;
-      const {planes, instructores} = this.state
+      const {planes, instructores, clases} = this.state
       return(
           <Container maxwidth="xl">
 
@@ -163,7 +191,30 @@ class Welcome extends React.Component{
                     <p className="legend">Body Combat</p>
                   </div>
                 </Carousel>
-              </Container>                  
+              </Container>
+
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
+              <Typography variant="h4" align="center" gutterBottom>
+              {"Nuestro Horario de Sesiones"}
+              </Typography >
+              <Divider variant="middle" />
+
+              <Container maxwidth="md" component="main">
+              <ScheduleComponent eventSettings={{dataSource: ClassData.getClassData(clases)}}
+                popupOpen={this.onPopupOpen.bind(this)} currentView='Week'
+                startHour='05:00' endHour='22:00' quickInfoTemplates={{content: this.content.bind(this)}} locale='es-CO'>
+                <ViewsDirective>
+                  <ViewDirective option='Day'/>
+                  <ViewDirective option='Week'/>
+                  <ViewDirective option='Month'/>
+                </ViewsDirective>
+                <Inject services = {[Day, Week, Month]}/>
+              </ScheduleComponent>
+              </Container>
+
         </Container>
       )
   }
