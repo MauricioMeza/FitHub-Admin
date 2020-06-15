@@ -20,6 +20,7 @@ public class TipoSesion {
         super();
         this.nombre = nombre;
         this.cupos = cupos;
+        this.duracion = duracion;
     }
 
     public String getId() {
@@ -46,27 +47,30 @@ public class TipoSesion {
     public int getDuracion() { return duracion; }
     public void setDuracion(int duracion) { this.duracion = duracion; }
 
+
     @Override
     public String toString() {
         return "TipoSesion{" +
                 "id='" + id + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", cupos=" + cupos +
+                ", duracion=" + duracion +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof TipoSesion)) return false;
         TipoSesion that = (TipoSesion) o;
         return cupos == that.cupos &&
+                duracion == that.duracion &&
                 id.equals(that.id) &&
                 nombre.equals(that.nombre);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, cupos);
+        return Objects.hash(id, nombre, cupos, duracion);
     }
 }

@@ -1,10 +1,12 @@
 package com.api.dto;
 
+import org.springframework.data.annotation.Id;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class TipoSesionDTO {
-
+    @Id
     private String id;
 
     @NotEmpty(message = "Nombre de tipo vacio")

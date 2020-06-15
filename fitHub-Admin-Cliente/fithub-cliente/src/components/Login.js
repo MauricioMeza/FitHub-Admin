@@ -42,11 +42,6 @@ const styles = theme => ({
     this.changeLogin = this.changeLogin.bind(this)
   }
 
-  componentDidMount(){
-    Axios.get("http://localhost:8080/login")
-      .then(response => console.log(response.data))
-  }
-
   submitLogin(event){
     event.preventDefault()
     AuthService.login(this.state.correo, this.state.contrasena)
@@ -61,8 +56,10 @@ const styles = theme => ({
     })   
     .catch(error => {
       console.log(error)
-      if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
-        alert("Usuario o contraseña No Validas")
+      if(error.response){
+        if(error.response.status == 401 && error.response.data.message == "Unauthorized"){
+          alert("Usuario o contraseña No Validas")
+        }
       }
     })
   }

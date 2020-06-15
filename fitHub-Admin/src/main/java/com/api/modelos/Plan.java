@@ -22,21 +22,38 @@ public class Plan {
 	private List<Sesion> sesionesAsistidas;
 	@DBRef
 	private TipoPlan tipoPlan;
+	private boolean activo;
 	
-	public void SesionReservada_Asistida(String idSesion) {
-		List<Sesion> sesionesReservadas = this.sesionesReservadas;
-		List<Sesion> sesionesAsistidas = this.sesionesAsistidas;
-		for(int i = 0; i < sesionesReservadas.size(); i++)
-			if(sesionesReservadas.get(i).getId() == idSesion){
-				sesionesReservadas.remove(i);
-				sesionesAsistidas.add(sesionesReservadas.get(i));
-		}
+	
+	
+	public String getId() {
+		return id;
 	}
-	
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
 	public Date SumarDias(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha);
 		calendar.add(Calendar.DAY_OF_YEAR, dias);
+		return calendar.getTime();
+		
+	}
+	
+	public Date SumarMinutos(Date fecha, int minutos) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.MINUTE, minutos);
 		return calendar.getTime();
 		
 	}
@@ -52,12 +69,6 @@ public class Plan {
 	}
 	public void setSesionesReservadas(List<Sesion> sesionesReservadas) {
 		this.sesionesReservadas = sesionesReservadas;
-	}
-	public String getIdPlan() {
-		return id;
-	}
-	public void setIdPlan(String string) {
-		this.id = string;
 	}
 	public Date getFechaInicio() {
 		return fechaInicio;

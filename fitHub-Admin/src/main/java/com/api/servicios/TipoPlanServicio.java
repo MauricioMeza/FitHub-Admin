@@ -2,6 +2,7 @@ package com.api.servicios;
 
 import com.api.dto.TipoPlanDTO;
 import com.api.modelos.TipoPlan;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -13,5 +14,7 @@ public interface TipoPlanServicio {
 	TipoPlan getTipoPlanByNombre(String nombre);
     List<TipoPlan> getAllTypePlans();
     TipoPlan addTipoPlan(TipoPlanDTO tipoPlanDTO);
+    void deleteTipoPlan(TipoPlan tipoPlan);
+    void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO);
 
 }

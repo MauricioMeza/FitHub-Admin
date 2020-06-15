@@ -23,12 +23,33 @@ import Classes from "./Classes";
 //import Class from "./ClassT";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
-import {extend, L10n, setCulture} from '@syncfusion/ej2-base';
+import {extend, L10n, loadCldr} from '@syncfusion/ej2-base';
 import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
 import {DateTimePickerComponent} from "@syncfusion/ej2-react-calendars";
 import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
 
 import ClassData from "./ClassData";
+
+L10n.load({'es-CO': {
+  'schedule': {
+      "today": "Hoy",
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes",
+      'saveButton': 'Guardar',
+      'cancelButton': 'Cerrar',
+      'deleteButton': 'Eliminar',
+      'newEvent': 'Evento',
+    },
+  }
+});
+
+loadCldr(
+  require('cldr-data/supplemental/numberingSystems.json'),
+  require('cldr-data/main/es-CO/ca-gregorian.json'),
+  require('cldr-data/main/es-CO/numbers.json'),
+  require('cldr-data/main/es-CO/timeZoneNames.json')
+);
 
 const styles = theme => ({
   paper: {
@@ -58,16 +79,6 @@ const styles = theme => ({
   },
 });
 
-L10n.load({'es-ES': {
-  'schedule': {
-      'saveButton': 'Guardar',
-      'cancelButton': 'Cerrar',
-      'deleteButton': 'Eliminar',
-      'addTitle': 'Evento',
-  },
-}
-});
-
 class ClassForm extends React.Component{
 
   constructor (props) {
@@ -88,8 +99,7 @@ class ClassForm extends React.Component{
     this.handleChange = this.handleChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.reloadClases = this.reloadClases.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);    
-    
+    this.onFormSubmit = this.onFormSubmit.bind(this);     
   }
 
   componentDidMount(){
@@ -147,7 +157,8 @@ class ClassForm extends React.Component{
           "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
           "id": c.id,
-          "cupos": c.cupos
+          "cupos": c.cupos,
+          "duracion": c.duracion
         }
       })
       this.setState({
@@ -177,7 +188,6 @@ class ClassForm extends React.Component{
   }
 
   onPopupOpen(args) {
-    console.log(args)
     if(args.data.Id){
       if(args.type == "DeleteAlert"){
         args.cancel = true
@@ -193,20 +203,42 @@ class ClassForm extends React.Component{
   }
 
   onActionBegin(args) {
-    if(args.requestType == "eventChange"){  
-    ClaseService.updateClase(args.data)
-      .then(response => {
-        console.log(response)
-        this.reloadClases()
-      })
-    console.log(args)
+    if(args.requestType === "eventChange"){  
+      args.cancel = true
+      ClaseService.updateClase(args.data)
+        .then(response => {
+          console.log(response)
+          this.reloadClases()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            alert(error.response.data.errors[0].defaultMessage) 
+          }
+          console.log(error.response.data)
+        })
+      console.log(args)
+    }else if(args.requestType === "eventCreate"){
+      args.cancel = true
+      let clase = args.data[0];
+      console.log(clase)
+      ClaseService.addClase(clase.StartTime, clase.Subject, clase.Instructor)
+        .then(response => {
+          console.log(response)
+          this.reloadClases()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            alert(error.response.data.errors[0].defaultMessage) 
+          }
+          console.log(error.response.data)
+        })
+      console.log(args)
     }
   }
     
   content(props) {
-    return (<div>
-  {props.elementType === 'cell' ?
-        <div className="e-cell-content e-template">
+    if (props.elementType === 'cell') {
+      return(<div className="e-cell-content e-template">
         <form className="e-schedule-form">
           <div>
             <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
@@ -214,51 +246,53 @@ class ClassForm extends React.Component{
           <div>
             <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
           </div>
-        </form>
-      </div> :
-        <div className="e-event-content e-template">
-        <div className="e-subject-wrap">
+        </form>  
+      </div>)
+    } else {
+      return(<div className="e-event-content e-template">
+      <div className="e-subject-wrap">
           {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
           {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
           {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
-        </div>
-      </div>}
-</div>);
-}
+      </div>
+    </div>)
+    }
+  }
 
   footer(props) {
-    return (<div>
-      {props.elementType === 'cell' ?
-        <div className="e-cell-footer">
-        <button className="e-event-details" title="Mas">Más</button>
-        <button className="e-event-create" title="Agregar">Agregar</button>
-      </div>
-        :
-            <div className="e-event-footer">
-        <button className="e-event-edit" title="Editar">Editar</button>
-        <button className="e-event-delete" title="Eliminar">Eliminar</button>
-      </div>}
-    </div>);
+    if (props.elementType === 'cell') {
+      return(<div className="e-cell-footer">
+          <button className="e-event-create" title="Agregar">Agregar</button>
+        </div>
+      );
+    } else {
+      return(<div className="e-event-footer">
+          <button className="e-event-edit" title="Editar">Editar</button>
+          <button className="e-event-delete" title="Eliminar">Eliminar</button>
+        </div>
+      );
+    }
   }
 
-  editorWindowTemplate(props) {
-    return (
-      props !== undefined ? <table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
-      <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
-        <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
-      </td></tr>
-      <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
-        <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
-      </td></tr>
-      <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
-        <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
-      </td></tr>
-      </tbody></table> : <div></div>
-    )
+  editorWindowTemplate(props){
+    if(props !== undefined) {
+      return(<table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
+        <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
+          <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
+        </td></tr>
+        <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
+          <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
+        </td></tr>
+        <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
+          <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
+        </td></tr>
+      </tbody></table>)
+    } else {
+      return(<div></div>)
+    }
   }
 
-  render() {
-    
+  render() {  
     const {classes} = this.props;
     const {instructores, clases, clasesBD, clasesHorario} = this.state;
 
@@ -371,10 +405,10 @@ class ClassForm extends React.Component{
             </Typography>
             <br></br>
             
-            <ScheduleComponent ref={t => this.scheduleObj = t} actionBegin={this.onActionBegin.bind(this)}
-            eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}}  startHour='05:00' endHour='22:00'
-            currentView='Week' editorTemplate={this.editorWindowTemplate.bind(this)}
-            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} popupOpen={this.onPopupOpen.bind(this)}> 
+            <ScheduleComponent ref={t => this.scheduleObj = t} currentView='Week' actionBegin={this.onActionBegin.bind(this)}
+            eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00' endHour='22:00'
+            editorTemplate={this.editorWindowTemplate.bind(this)} popupOpen={this.onPopupOpen.bind(this)}
+            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} locale='es-CO'> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

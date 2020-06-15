@@ -29,12 +29,7 @@ public class IndexControlador {
     @Autowired
     SesionServicio servicioSes;
 
-    //Registro
-    @GetMapping("/register")
-    public String registroUsuario(WebRequest request, Model model){
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        return "registro";
-    }
+    // ------------------- Registro de Usuario --------------------------
 
     @PostMapping("/register")
     public ResponseEntity<String> registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
@@ -52,13 +47,8 @@ public class IndexControlador {
         }
     }
 
-    //Login
-    @GetMapping("/login")
-    public String loginUsuario(WebRequest request, Model model) {
-    	LoginDTO loginDTO = new LoginDTO();
-        model.addAttribute("usuarioLogin", loginDTO);
-        return "login";
-    }
+    // ------------------- Lista de Sesiones para el Scheduler --------------------------
+
     
     @GetMapping("/listaSesiones")
     public List<SesionDTO> BuscarSesiones( ) {

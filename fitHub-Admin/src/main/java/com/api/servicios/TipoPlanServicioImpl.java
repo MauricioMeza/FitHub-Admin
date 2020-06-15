@@ -1,11 +1,18 @@
 package com.api.servicios;
 
 import com.api.dto.TipoPlanDTO;
+import com.api.dto.TipoSesionDTO;
+import com.api.modelos.Sesion;
 import com.api.modelos.TipoPlan;
+import com.api.modelos.TipoSesion;
 import com.api.repositorios.TipoPlanRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 import java.util.List;
+
+import javax.validation.constraints.NotEmpty;
 
 @Component
 public class TipoPlanServicioImpl implements TipoPlanServicio {
@@ -40,5 +47,21 @@ public class TipoPlanServicioImpl implements TipoPlanServicio {
 		repositorio.findTipoPlanByNombre(nombre);
 		return null;
 	}
-	
+
+	@Override
+    public void deleteTipoPlan(TipoPlan tipoPlan) {
+        repositorio.delete(tipoPlan);
+    }
+
+    @Override
+    public void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO) {
+        TipoPlan nuevoTipoPlan = new TipoPlan();
+
+        nuevoTipoPlan.setId(tipoPlanDTO.getId());
+        nuevoTipoPlan.setNombre(tipoPlanDTO.getNombre());
+        nuevoTipoPlan.setCantDias(tipoPlanDTO.getCantDias());
+        nuevoTipoPlan.setPrecio(tipoPlanDTO.getPrecio());
+        nuevoTipoPlan.setCantSesiones(tipoPlanDTO.getCantSesiones());
+        repositorio.save(nuevoTipoPlan);
+    }
 }

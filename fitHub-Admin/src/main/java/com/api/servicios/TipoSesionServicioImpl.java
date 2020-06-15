@@ -37,6 +37,11 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
     }
 
     @Override
+    public TipoSesion getTipoSesionById(String id) {
+        return repositorio.findById(id);
+    }
+
+    @Override
     public void deleteTipoSesion(TipoSesion tipoSesion) {
         repositorio.delete(tipoSesion);
     }
