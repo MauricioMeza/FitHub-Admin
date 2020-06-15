@@ -8,13 +8,13 @@ import {Container} from '@material-ui/core';
 import ClassTypeForm from "./components/Admin/ClassTypeForm";
 import PlanForm from "./components/Admin/PlanForm";
 
-
 //importar componentes
 
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
-import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
+import NavigationBar from "./components/NavigationBar";
+import FooterPage from "./components/FooterPage";
 
 
 import WelcomeAdmin from "./components/Admin/WelcomeAdmin";
@@ -23,6 +23,7 @@ import classes from "./sample/classes.json";
 
 import WelcomeUser from "./components/User/WelcomeUser";
 import ClassUser from "./components/User/ClassUser";
+import PlanUser from "./components/User/PlanUser";
 
 class App extends Component{
 
@@ -59,10 +60,12 @@ class App extends Component{
               <Route exact path="/PlanForm"  component={PlanForm} />
               <Route exact path="/ClassTypeForm"  component={ClassTypeForm} />
               <Route exact path="/ClassUser"  component={ClassUser} />
+              <Route exact path="/PlanUser" component={PlanUser} />
             </Switch>
           </Col>
         </Row>
       </Container>
+      <FooterPage/>
     </Router>
     )
   }

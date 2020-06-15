@@ -13,18 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Axios from 'axios';
 import AuthService from '../services/AuthService';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" to="/">
-        FITHUB Admin
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const styles = theme => ({
   paper: {
@@ -169,9 +157,6 @@ class SignUp extends React.Component{
             </Grid>
           </form>
         </div>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
       </Container>
     );
   }
