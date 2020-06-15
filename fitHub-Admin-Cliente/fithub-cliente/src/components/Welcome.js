@@ -1,6 +1,8 @@
 import React from "react";
 
 import AuthService from "../services/AuthService";
+import InfoService from "../services/InfoService";
+
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
@@ -43,161 +45,125 @@ function Copyright() {
 }
 
 const mainFeaturedPost = {
-    title: 'Registrate y entrena con nosotros',
+    title: 'Bienvenido a Fithub',
     description:
-      "Comprometete con tu cuerpo y escoge el plan que mas se acomode a tus necesidades.",
+      "Somos el gimnasio numero 1 para que entrenes en las últimas tendencias del Fitness mundial",
+    title2: 'Registrate y obten una clase de prueba Gratis',
+    title3: 'Si ya eres miembro Inicia Sesion y reserva tus clases',
+    
     image: 'https://source.unsplash.com/FodEsaNZs48',
     imgText: 'main image description',
     linkText: 'Ver planes',
 };
 
-const featuredPosts = [
-{
-    title: 'Javier',
-    date: "Boxing",
-    description:
-    'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/7kEpUPB8vNk',
-    imageText: 'Ver horarios',
-},
-{
-    title: 'Camila',
-    date: 'Yoga',
-    description:
-    'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/rZmCg1_QOYQ',
-    imageText: 'Ver horarios',
-},
-{
-    title: "Erika",
-    date: 'Taewbox',
-    description:
-        'This is a wider card with supporting text below as a natural lead-in to additional content.',
-    image: 'https://source.unsplash.com/YA-9Ut5B03M',
-    imageText: 'Ver horarios',
-    },
-];
-
-const tiers = [
-    {
-      title: 'Inicial',
-      price: '15.000',
-      description: ['10 Clases incluidas', '2 Sesiones con entrenador', 'Lockers', 'Acceso a zona de estiramiento'],
-      buttonText: 'Comprar Plan Inicial',
-      buttonVariant: 'outlined',
-    },
-    {
-      title: 'Pro',
-      subheader: 'Most popular',
-      price: '50.000',
-      description: [
-        '30 clases de su preferencia',
-        'Asesoramiento personalizado',
-        'Acceso a zonas humedas',
-        'Zona VIP',
-      ],
-      buttonText: 'Comprar Plan Pro',
-      buttonVariant: 'contained',
-    },
-    {
-      title: 'Plan Fit',
-      price: '30.000',
-      description: [
-        '15 Clases grupales',
-        'Entrenamiento semipersonalzado',
-        'Acceso a zona de fuerza y cardio ',
-        'Lockers',
-      ],
-      buttonText: 'Comprar Plan Fit',
-      buttonVariant: 'outlined',
-    },
-  ];
-
 class Welcome extends React.Component{
-    constructor(props){
-        super(props)
-    }
+  constructor(props){
+      super(props)
+      this.state = {planes: [], instructores: [], }
+  }
 
-    componentDidMount(){
-        const userRole = AuthService.getCurrentUserRole()
+  componentDidMount(){
+      const userRole = AuthService.getCurrentUserRole()
+      if(userRole == "USER"){
+          this.props.history.push('/welcomeUser')
+      }else if(userRole == "ADMIN"){
+          this.props.history.push('/welcomeAdmin')
+      }
 
-        if(userRole == "USER"){
-            this.props.history.push('/welcomeUser')
-        }else if(userRole == "ADMIN"){
-            this.props.history.push('/welcomeAdmin')
-        }
-    }      
+      this.setState({
+        planes: InfoService.getPlanesList()
+      })
+    
+      this.setState({
+          instructores: InfoService.getInstructoresList()
+      }) 
+  }      
     
 
-    render(){
-        const { classes } = this.props;
-        return(
-            <Container maxWidth="xl">
+  render(){
+      const { classes } = this.props;
+      const {planes, instructores} = this.state
+      return(
+          <Container maxWidth="xl">
 
-                <MainFeaturedPost post={mainFeaturedPost} />
-                <Typography variant="h4" align="center" gutterBottom>
-                {"Conoce a nuestros entrenadores"}
-                </Typography>
-                
-                <Divider variant="middle" />
-                
-                <Container maxWidth="lg">
-                <Grid container spacing={4}>
-                {featuredPosts.map((post) => (
-                <FeaturedPost key={post.title} post={post} />
+              <MainFeaturedPost post={mainFeaturedPost} />
+
+              <br></br>
+              <br></br>
+              <br></br>
+
+              <Typography variant="h4" align="center" gutterBottom>
+              {"Conoce a nuestros entrenadores"}
+              </Typography>
+              
+              <Divider variant="middle" />
+              
+              <Container maxWidth="lg">
+              <Grid container spacing={4}>
+              {instructores.map((ins) => (
+              <FeaturedPost key={ins.title} post={ins} />
+              ))}
+              </Grid>
+              
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
+
+              <Typography variant="h4" align="center" gutterBottom>
+              {"Descubre nuestros planes"}
+              </Typography >
+              </Container>
+              <Divider variant="middle" />
+
+              <Container maxWidth="md" component="main">
+              <Grid container maxWidth="md" spacing={5} alignItems="flex-start" justify="center">
+                {planes.map((plan) => (
+                  <Pricing key={plan.id} tier={plan}/>
                 ))}
-                </Grid>
-                <br></br>
-                <Typography variant="h4" align="center" gutterBottom>
-                {"Descubre nuestros planes"}
-                </Typography >
-                </Container>
-                <Divider variant="middle" />
+              </Grid>
+              </Container>
+              
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
 
-                <Container maxWidth="md" component="main">
-                <Grid container maxWidth="md" spacing={5} alignItems="flex-end">
-                  {tiers.map((tier) => (
-                    <Pricing key={tier.title} tier={tier}/>
-                  ))}
-                </Grid>
-                </Container>
-                
-                <br></br>
-                <Typography variant="h4" align="center" gutterBottom>
-                {"Conoce nuestras clases"}
-                </Typography >
-                <Divider variant="middle" />
+              <Typography variant="h4" align="center" gutterBottom>
+              {"Conoce nuestras clases"}
+              </Typography >
+              <Divider variant="middle" />
 
-                <Container maxWidth="md" component="main">
-                  <Carousel>
-                    <div>
-                      <img src='https://source.unsplash.com/3RnkZpDqsEI' />
-                      <p className="legend">Streching</p>
-                    </div>
-                    <div>
-                      <img src='https://source.unsplash.com/gJtDg6WfMlQ' />
-                      <p className="legend">Yoga</p>
-                    </div>
-                    <div>
-                      <img src='https://source.unsplash.com/y0SMHt74yqc' />
-                      <p className="legend">Body Combat</p>
-                    </div>
-                  </Carousel>
-                </Container>
+              <Container maxWidth="md" component="main">
+                <Carousel>
+                  <div>
+                    <img src='https://source.unsplash.com/3RnkZpDqsEI' />
+                    <p className="legend">Streching</p>
+                  </div>
+                  <div>
+                    <img src='https://source.unsplash.com/gJtDg6WfMlQ' />
+                    <p className="legend">Yoga</p>
+                  </div>
+                  <div>
+                    <img src='https://source.unsplash.com/y0SMHt74yqc' />
+                    <p className="legend">Body Combat</p>
+                  </div>
+                </Carousel>
+              </Container>
 
-                <br></br>
-                <footer className={classes.footer}>
-                  <Container maxWidth="xl">
-                    <Typography variant="body1" align="center">
-                      Poner cosas en el footer :v 
-                      </Typography>
-                    <Copyright />
-                  </Container>
-                </footer>
-                
-          </Container>
-        )
-    }
+              <br></br>
+              <footer className={classes.footer}>
+                <Container maxWidth="xl">
+                  <Typography variant="body1" align="center">
+                    Poner cosas en el footer :v 
+                    </Typography>
+                  <Copyright />
+                </Container>
+              </footer>
+              
+        </Container>
+      )
+  }
 }
 
 export default withStyles(useStyles)(Welcome);

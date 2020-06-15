@@ -4,11 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
+import {Link} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   mainFeaturedPost: {
+    width: "100%",
+    heigth: "100%",
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
@@ -48,13 +50,27 @@ export default function MainFeaturedPost(props) {
       <Grid container>
         <Grid item md={6} >
           <div className={classes.mainFeaturedPostContent}>
-            <Typography component="h1" variant="h3" color="inherit" gutterBottom>
+            <Typography component="h2" variant="h2" color="inherit" gutterBottom>
               {post.title}
             </Typography>
-            <Typography variant="h5" color="inherit" paragraph>
+            <Typography variant="h4" color="inherit" paragraph>
               {post.description}
             </Typography>
-            <Button variant="contained" color="light">Registrate</Button>
+          </div>
+          <div className={classes.mainFeaturedPostContent}>
+            <Link to={"/registro"} className="navbar-brand">
+              <Button variant="contained" color="light">Registrate</Button>
+            </Link>
+            <Typography variant="h6" color="inherit" paragraph>
+              {post.title2}
+            </Typography>
+
+            <Link to={"/login"} className="navbar-brand">
+              <Button variant="contained" color="light">Inicia Sesion</Button>
+            </Link>
+            <Typography variant="h6" color="inherit" paragraph>
+              {post.title3}
+            </Typography>
           </div>
         </Grid>
       </Grid>
