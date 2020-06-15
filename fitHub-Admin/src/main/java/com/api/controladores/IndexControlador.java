@@ -2,9 +2,12 @@ package com.api.controladores;
 
 import com.api.dto.LoginDTO;
 import com.api.dto.SesionDTO;
+import com.api.dto.TipoPlanDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoPlan;
 import com.api.servicios.SesionServicio;
+import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +28,11 @@ public class IndexControlador {
 
     @Autowired
     UsuarioServicio usuarioServicio;
-    
     @Autowired
     SesionServicio servicioSes;
+    @Autowired
+    TipoPlanServicio tipoPlanServicio;
+
 
     // ------------------- Registro de Usuario --------------------------
 
@@ -65,5 +70,14 @@ public class IndexControlador {
 		}
 		return sesionFormat;
     }
-    
+
+    // ------------------- Lista de Planes para el Pricing --------------------------
+    @ResponseBody
+    @GetMapping("/listaTipoPlanes")
+    public List<TipoPlan> BuscarTipoPlanes( ) {
+        List<TipoPlan> planes = tipoPlanServicio.getAllTypePlans();
+        planes.removeIf(tipoPlan -> ((tipoPlan.getNombre().contains("Prueba"))));
+        return planes;
+    }
+
 }

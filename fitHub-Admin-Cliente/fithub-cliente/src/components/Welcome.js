@@ -1,6 +1,7 @@
 import React from "react";
 
 import AuthService from "../services/AuthService";
+import PlanService from "../services/PlanService";
 import InfoService from "../services/InfoService";
 
 
@@ -71,10 +72,22 @@ class Welcome extends React.Component{
           this.props.history.push('/welcomeAdmin')
       }
 
-      this.setState({
-        planes: InfoService.getPlanesList()
+      PlanService.getPlanesList()
+      .then(response => {
+        const PlanListBack = response.data;
+        var planListFront = [];
+
+        PlanListBack.map((plan) => {
+          let descripcion = [plan.cantSesiones + " Clases Incluidas", plan.cantDias + " Dias de Duracion"]
+          let planFront = {id: plan.id, title: plan.nombre, price: plan.precio, description: descripcion, buttonText: "Adquirir " + plan.nombre}
+          planListFront.push(planFront)
+        })
+
+        this.setState({
+          planes: planListFront
+        })
       })
-    
+      
       this.setState({
           instructores: InfoService.getInstructoresList()
       }) 

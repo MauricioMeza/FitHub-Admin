@@ -43,36 +43,7 @@ class InfoService {
     }
 
     getPlanesList(){
-      var planListFront = [];
-      //return Axios.get( API_URL +"buscarTodosTiposSesiones").then(response => { meter todo lo de abajo aca })
-      let PlanListBack = [
-        {"id": "5ee5b8eccbaa9235ea1bdcbd",
-        "nombre":"Plan Gold",
-        "cantDias":30,
-        "cantSesiones":20,
-        "precio":100000},
-
-        {"id": "5ee5b8fccbaa9235ea1bdcbe",
-        "nombre":"Plan Silver",
-        "cantDias":30,
-        "cantSesiones":15,
-        "precio":80000},
-
-        {"id": "5ee5b8fccbadfasd5ea1bdcbe",
-        "nombre":"Plan Lite",
-        "cantDias":15,
-        "cantSesiones":10,
-        "precio":40000},
-      ];
-
-      PlanListBack.map((plan) => {
-        let descripcion = [plan.cantSesiones + " Clases Incluidas", plan.cantDias + " Dias de Duracion"]
-        let planFront = {title: plan.nombre, price: plan.precio, description: descripcion, buttonText: "Adquirir " + plan.nombre}
-        planListFront.push(planFront)
-      })
-      
-      return planListFront
-      
+      return Axios.get( API_URL +"listaTipoPlanes")  
     }
 
     getUserInfo(){

@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from "prop-types";
 import AuthService from '../services/AuthService';
 import { render } from '@testing-library/react';
+import PlanService from '../services/PlanService';
 
 
 
@@ -41,12 +42,15 @@ class Pricing extends Component{
     this.reservarPlan = this.reservarPlan.bind(this)
   }
 
-  reservarPlan(id){
-    let user =AuthService.getCurrentUser()
+  reservarPlan(e, id){
+    e.preventDefault();
+    let user = AuthService.getCurrentUser()
     if(user == null){
       alert("Ingrese para poder adquirir un plan")
-    }else{
-      //TODO: Script adquirir plan
+    }else if(user.Rol == "USER"){
+      PlanService.reservarPlan(id)
+      this.props.reloadInfo();
+      window.location.reload();
     }
   }
 
@@ -82,7 +86,7 @@ class Pricing extends Component{
             </ul>
           </CardContent>
           <CardActions>
-            <Button fullWidth variant={tier.buttonVariant} color="primary" onClick={(e) => {this.reservarPlan(tier.id)}}>
+            <Button fullWidth variant={tier.buttonVariant} color="primary" onClick={(e) => {this.reservarPlan(e, tier.id)}}>
               {tier.buttonText}
             </Button>
           </CardActions>
@@ -97,6 +101,7 @@ class Pricing extends Component{
 Pricing.propTypes = {
   classes: PropTypes.object.isRequired,
   tier: PropTypes.object.isRequired,
+  reloadInfo: PropTypes.func
 };
 
 export default withStyles(styles)(Pricing);

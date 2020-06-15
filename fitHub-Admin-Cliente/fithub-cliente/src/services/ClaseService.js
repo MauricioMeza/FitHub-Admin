@@ -75,6 +75,7 @@ class ClaseService {
     return Axios.get(API_URL_User + "cancelarCupo/" + user.Mail + "/" + ClaseId , {headers:{"Authorization": token}})
   }
 
+  // Acciones Todos ----------------------------
   getClases(){
     return Axios.get(API_URL + "listaSesiones")
   }

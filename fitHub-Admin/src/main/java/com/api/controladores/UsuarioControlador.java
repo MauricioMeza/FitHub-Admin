@@ -47,6 +47,7 @@ public class UsuarioControlador {
 		planSend.setFechaInicio(plan.getFechaInicio());
 		planSend.setFechaFin(plan.getFechaFin());
 		planSend.setTipo(plan.getTipoPlan());
+		planSend.setActivo(plan.isActivo());
 		planSend.setSesionAsistida(plan.getSesionesAsistidas().size());
 		planSend.setSesionReservada(plan.getSesionesReservadas().size());
 
@@ -120,8 +121,9 @@ public class UsuarioControlador {
 				sesionSend.setCupos(ses.getCupos());
 				sesionesInscritas.add(sesionSend); 
 			}
-			servicioPlan.actuaizarListasSesiones(usuario.getCedula());		
 		}
+
+		servicioPlan.actuaizarListasSesiones(usuario.getCedula());
 		
 		return sesionesInscritas;
 	}
@@ -147,7 +149,7 @@ public class UsuarioControlador {
 	@GetMapping("/reservarPlan/{id}/{idTipoPlan}")
 	public String reservarPlan(@PathVariable("id") String idUsuario,@PathVariable("idTipoPlan") String idTipoPlan) {
 		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanById(idTipoPlan);
-		Usuario usuario = servicioUsuario.getUserByCedula(idUsuario);
+		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
 		
 		usuario = servicioPlan.addNewPlan(tipoPlan, usuario);
 		servicioUsuario.updateUser(usuario);

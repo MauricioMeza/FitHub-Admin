@@ -147,9 +147,9 @@ class ClassUser extends React.Component{
     this.render()
     return (
       <div className="e-subject-wrap">
-          {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
-          {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
-          {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
+           {(props.Instructor !== undefined) ? <div className="subject">{"Instructor: " + props.Instructor}</div> : ""}
+           {(props.Duracion !== undefined) ? <div className="duracion">{"Duracion: " + props.Duracion}</div> : ""}
+           {(props.Cupos !== undefined) ? <div className="cupos">{"Cupos: " + props.Cupos}</div> : ""}
           {(props.Reserved) ? <div className="res">Ya has reservado esta clase</div> : <div className="res">Todavia no has reservado esta clase</div>}
         </div>
     );

@@ -28,6 +28,10 @@ public class PlanDTO {
 
 	private List<Sesion> sesionesReservadas;
 	private List<Sesion> sesionesAsistidas;
+	private  boolean activo;
+
+	public boolean isActivo() { return activo; }
+	public void setActivo(boolean activo) { this.activo = activo; }
 
 	private int sesionReservada;
 	private int sesionAsistida;
