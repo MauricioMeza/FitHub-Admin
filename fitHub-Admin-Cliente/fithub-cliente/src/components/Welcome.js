@@ -150,12 +150,7 @@ class Welcome extends React.Component{
                     <p className="legend">Body Combat</p>
                   </div>
                 </Carousel>
-              </Container>
-
-              <br></br>
-              <FooterPage/>
-              
-              
+              </Container>                  
         </Container>
       )
   }

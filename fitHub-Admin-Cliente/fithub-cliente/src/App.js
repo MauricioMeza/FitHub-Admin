@@ -10,8 +10,9 @@ import {Container} from '@material-ui/core';
 
 import SignUp from "./components/SignUp";
 import Login from "./components/Login";
-import NavigationBar from "./components/NavigationBar";
 import Welcome from "./components/Welcome";
+import NavigationBar from "./components/NavigationBar";
+import FooterPage from "./components/FooterPage";
 
 
 import WelcomeAdmin from "./components/Admin/WelcomeAdmin";
@@ -60,6 +61,7 @@ class App extends Component{
           </Col>
         </Row>
       </Container>
+      <FooterPage/>
     </Router>
     )
   }

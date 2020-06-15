@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import { MDBCol, MDBContainer, MDBRow, MDBFooter } from "mdbreact";
 
 
@@ -80,7 +81,7 @@ const FooterPage = () => {
       <div className="footer-copyright text-center py-3">
         <MDBContainer fluid>
           &copy; {new Date().getFullYear()} Copyright:{" "}
-          <a href="https://www.FitHub.com"> FITHUB Admin </a>
+          <Link to={"/"}> FITHUB Admin </Link>
         </MDBContainer>
       </div>
     </MDBFooter>
