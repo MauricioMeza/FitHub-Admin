@@ -13,9 +13,8 @@ import ClaseService from "../../services/ClaseService";
 import Classes from "../Admin/Classes";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
-import { extend } from '@syncfusion/ej2-base';
+import {extend, L10n, loadCldr} from '@syncfusion/ej2-base';
 import ClassData from "./ClassData";
-
 
 const styles = theme => ({
   paper: {
@@ -32,14 +31,35 @@ const styles = theme => ({
   },
 });
 
-class ClassUser extends React.Component{
+L10n.load({'es-CO': {
+  'schedule': {
+      "today": "Hoy",
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes",
+      'saveButton': 'Guardar',
+      'cancelButton': 'Cerrar',
+      'deleteButton': 'Eliminar',
+      'newEvent': 'Evento',
+    },
+  }
+});
 
+loadCldr(
+  require('cldr-data/supplemental/numberingSystems.json'),
+  require('cldr-data/main/es-CO/ca-gregorian.json'),
+  require('cldr-data/main/es-CO/numbers.json'),
+  require('cldr-data/main/es-CO/timeZoneNames.json')
+);
+
+class ClassUser extends React.Component{
   constructor (props) {
     super(props)
     this.data = extend([], null, null, true);
 
     this.state = {
       clasesBD : [],
+      clasesList : [],
       clasesHorario : [],
       selectedClass: ""
     };
@@ -54,7 +74,6 @@ class ClassUser extends React.Component{
   reloadClases(){
     ClaseService.getClasesUser()
     .then(response => {
-      console.log(response)
       var clas = response.data.map((c, i) => {
         var fecha = new Date(c.fecha)
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
@@ -63,13 +82,15 @@ class ClassUser extends React.Component{
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
-          "tipo" : " " + c.sesion + " ",
+          "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
-          "id": c.id
+          "id": c.id,
+          "cupos": c.cupos
         }
       })
       this.setState({
-        clasesBD : clas 
+        clasesBD : clas, 
+        clasesList : response.data 
       })
     })
     .catch(error => {
@@ -85,49 +106,56 @@ class ClassUser extends React.Component{
   }
 
   onPopupOpen(args) {
-    console.log(args)
     if(args.data.Id){
       if(args.type == "DeleteAlert"){
         args.cancel = true
         ClaseService.cancelClase(args.data.Id)
-        .then(response => {
+          .then(response => {
           if(response.data == "El usuario ha cancelado su cupo en la sesion"){
             console.log(response)
-            this.reloadClases();  
+            this.reloadClases();
           }else{
             alert(response.data)
           }
         })
+      }else if(args.type == "Editor"){
+          args.cancel = true
+          ClaseService.reserveClase(args.data.Id)
+            .then(response => {
+            if(response.data == "El usuario ha reservado un cupo con éxito"){
+              console.log(response)
+              this.reloadClases();
+            }else{
+              alert(response.data)
+            }
+          })
+      }else{
+        args.cancel = false
       }
-      if(args.type == "Editor"){
-        args.cancel = true
-        ClaseService.reserveClase(args.data.Id)
-        .then(response => {
-          if(response.data == "El usuario ha reservado un cupo con éxito"){
-            console.log(response)
-            this.reloadClases();  
-          }else{
-            alert(response.data)
-          }  
-        })
-      }
-    }else{
-      args.cancel = true
     }
   }
 
-  footer(props) {
+  onEventRendered(args) {
+    if(args.data.Reserved){
+      args.element.style.backgroundColor = "DarkGoldenRod";
+    }
+  }
+
+  content(props) {
     this.render()
     return (
-      <div>
-        {props.Description}
-      </div>
+      <div className="e-subject-wrap">
+           {(props.Instructor !== undefined) ? <div className="subject">{"Instructor: " + props.Instructor}</div> : ""}
+           {(props.Duracion !== undefined) ? <div className="duracion">{"Duracion: " + props.Duracion}</div> : ""}
+           {(props.Cupos !== undefined) ? <div className="cupos">{"Cupos: " + props.Cupos}</div> : ""}
+          {(props.Reserved) ? <div className="res">Ya has reservado esta clase</div> : <div className="res">Todavia no has reservado esta clase</div>}
+        </div>
     );
   }
 
   render() {
     const {classes} = this.props;
-    const {clasesBD, clasesHorario} = this.state;
+    const {clasesBD, clasesHorario, clasesList} = this.state;
 
 
     return(
@@ -159,8 +187,9 @@ class ClassUser extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
-            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}>
+            <ScheduleComponent eventSettings={{dataSource: ClassData.getClassData(clasesHorario, clasesList)}}
+             eventRendered={this.onEventRendered.bind(this)} popupOpen={this.onPopupOpen.bind(this)} currentView='Week'
+             startHour='05:00' endHour='22:00' quickInfoTemplates={{content: this.content.bind(this)}} locale='es-CO'>
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

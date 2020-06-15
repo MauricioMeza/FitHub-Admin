@@ -13,7 +13,6 @@ public class InstructorServicioImpl implements InstructorServicio {
 
     @Autowired
     InstructorRepositorio repositorio;
-    
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -21,7 +20,6 @@ public class InstructorServicioImpl implements InstructorServicio {
 	public Instructor getInstructorByCorreo(String correo) {
 		return repositorio.findByCorreo(correo);
 	}
-
 	@Override
 	public Instructor getInstructorByCedula(String cedula) { return repositorio.findByCedula(cedula); }
 

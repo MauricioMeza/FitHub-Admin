@@ -23,8 +23,33 @@ import Classes from "./Classes";
 //import Class from "./ClassT";
 
 import {Inject, ScheduleComponent, Day, Week, Month, ViewsDirective, ViewDirective} from "@syncfusion/ej2-react-schedule";
-import { extend } from '@syncfusion/ej2-base';
+import {extend, L10n, loadCldr} from '@syncfusion/ej2-base';
+import {DropDownListComponent} from "@syncfusion/ej2-react-dropdowns";
+import {DateTimePickerComponent} from "@syncfusion/ej2-react-calendars";
+import { ButtonComponent } from '@syncfusion/ej2-react-buttons';
+
 import ClassData from "./ClassData";
+
+L10n.load({'es-CO': {
+  'schedule': {
+      "today": "Hoy",
+      "day": "Día",
+      "week": "Semana",
+      "month": "Mes",
+      'saveButton': 'Guardar',
+      'cancelButton': 'Cerrar',
+      'deleteButton': 'Eliminar',
+      'newEvent': 'Evento',
+    },
+  }
+});
+
+loadCldr(
+  require('cldr-data/supplemental/numberingSystems.json'),
+  require('cldr-data/main/es-CO/ca-gregorian.json'),
+  require('cldr-data/main/es-CO/numbers.json'),
+  require('cldr-data/main/es-CO/timeZoneNames.json')
+);
 
 const styles = theme => ({
   paper: {
@@ -66,6 +91,7 @@ class ClassForm extends React.Component{
       clasesBD : [],
       clasesHorario : [],
       startDate: new Date(),
+      endDate: new Date(),
       type: "",
       instructor: "",
     };
@@ -73,8 +99,7 @@ class ClassForm extends React.Component{
     this.handleChange = this.handleChange.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
     this.reloadClases = this.reloadClases.bind(this);
-    this.onFormSubmit = this.onFormSubmit.bind(this);    
-    
+    this.onFormSubmit = this.onFormSubmit.bind(this);     
   }
 
   componentDidMount(){
@@ -87,13 +112,22 @@ class ClassForm extends React.Component{
     .catch(error => {
       console.log(error)
     })
-
-    this.setState({
-      clases :ClaseService.getClasesNombres(), 
-    })
-
-    this.reloadClases()
     
+    ClaseService.getClasesNombres()
+    .then(response =>{
+      var clasNomList = []
+      response.data.forEach( clas => {
+        clasNomList.push(clas.nombre) 
+      })
+      this.setState({
+        clases : clasNomList, 
+      })
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    
+    this.reloadClases()
   }
 
   handleChange(event) {
@@ -120,9 +154,11 @@ class ClassForm extends React.Component{
         return {
           "fecha" : " " + months[fecha.getMonth()] + fecha.getDate() + " ",
           "hora" : " " + fecha.getHours() + ":" + horaMin + " ",
-          "tipo" : " " + c.sesion + " ",
+          "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
-          "id": c.id
+          "id": c.id,
+          "cupos": c.cupos,
+          "duracion": c.duracion
         }
       })
       this.setState({
@@ -137,6 +173,7 @@ class ClassForm extends React.Component{
 
   onFormSubmit(e) {
     e.preventDefault();
+    console.log(this.state.type)
     ClaseService.addClase(this.state.startDate, this.state.type, this.state.instructor)
     .then(response => {
       console.log(response)
@@ -151,7 +188,6 @@ class ClassForm extends React.Component{
   }
 
   onPopupOpen(args) {
-    console.log(args)
     if(args.data.Id){
       if(args.type == "DeleteAlert"){
         args.cancel = true
@@ -161,25 +197,102 @@ class ClassForm extends React.Component{
           this.reloadClases();  
         })
       }
-      if(args.type == "Editor"){
-        args.cancel = true
-        alert("Esta funcionalidad todavia no esta implementada")
-      }
     }else{
+      args.cancel = false
+    }
+  }
+
+  onActionBegin(args) {
+    if(args.requestType === "eventChange"){  
       args.cancel = true
+      ClaseService.updateClase(args.data)
+        .then(response => {
+          console.log(response)
+          this.reloadClases()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            alert(error.response.data.errors[0].defaultMessage) 
+          }
+          console.log(error.response.data)
+        })
+      console.log(args)
+    }else if(args.requestType === "eventCreate"){
+      args.cancel = true
+      let clase = args.data[0];
+      console.log(clase)
+      ClaseService.addClase(clase.StartTime, clase.Subject, clase.Instructor)
+        .then(response => {
+          console.log(response)
+          this.reloadClases()
+        })
+        .catch(error => {
+          if(error.response.status === 400){
+            alert(error.response.data.errors[0].defaultMessage) 
+          }
+          console.log(error.response.data)
+        })
+      console.log(args)
+    }
+  }
+    
+  content(props) {
+    if (props.elementType === 'cell') {
+      return(<div className="e-cell-content e-template">
+        <form className="e-schedule-form">
+          <div>
+            <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
+          </div>
+          <div>
+            <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
+          </div>
+        </form>  
+      </div>)
+    } else {
+      return(<div className="e-event-content e-template">
+      <div className="e-subject-wrap">
+          {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
+          {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
+          {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
+      </div>
+    </div>)
     }
   }
 
   footer(props) {
-    this.render()
-    return (
-      <div>
-        {props.Description}
-      </div>
-    );
+    if (props.elementType === 'cell') {
+      return(<div className="e-cell-footer">
+          <button className="e-event-create" title="Agregar">Agregar</button>
+        </div>
+      );
+    } else {
+      return(<div className="e-event-footer">
+          <button className="e-event-edit" title="Editar">Editar</button>
+          <button className="e-event-delete" title="Eliminar">Eliminar</button>
+        </div>
+      );
+    }
   }
 
-  render() {
+  editorWindowTemplate(props){
+    if(props !== undefined) {
+      return(<table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>
+        <tr><td className="e-textlabel">Clase</td><td colSpan={4}>
+          <DropDownListComponent id="Subject" placeholder='Clase' data-name="Subject" className="e-field" style={{ width: '100%' }} dataSource={this.state.clases} value={props.Subject|| null}></DropDownListComponent>
+        </td></tr>
+        <tr><td className="e-textlabel">Inicio</td><td colSpan={4}>
+          <DateTimePickerComponent format='dd/MM/yy hh:mm a' id="StartTime" data-name="StartTime" value={new Date(props.startTime || props.StartTime)} className="e-field"></DateTimePickerComponent>
+        </td></tr>
+        <tr><td className="e-textlabel">Instructor</td><td colSpan={4}>
+          <DropDownListComponent id="Instructor" placeholder='Elija un profesor' data-name="Instructor" className="e-field" style={{ width: '100%' }} dataSource={this.state.instructores} value={props.Instructor || null}></DropDownListComponent>
+        </td></tr>
+      </tbody></table>)
+    } else {
+      return(<div></div>)
+    }
+  }
+
+  render() {  
     const {classes} = this.props;
     const {instructores, clases, clasesBD, clasesHorario} = this.state;
 
@@ -291,8 +404,11 @@ class ClassForm extends React.Component{
                 Horario de Clases
             </Typography>
             <br></br>
-            <ScheduleComponent currentView='Week' eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00'  
-            endHour='22:00' popupOpen={this.onPopupOpen.bind(this)} quickInfoTemplates={{footer: this.footer.bind(this)}}> 
+            
+            <ScheduleComponent ref={t => this.scheduleObj = t} currentView='Week' actionBegin={this.onActionBegin.bind(this)}
+            eventSettings={{dataSource: ClassData.getClassData(clasesHorario)}} startHour='05:00' endHour='22:00'
+            editorTemplate={this.editorWindowTemplate.bind(this)} popupOpen={this.onPopupOpen.bind(this)}
+            quickInfoTemplates={{content: this.content.bind(this), footer: this.footer.bind(this)}} locale='es-CO'> 
               <ViewsDirective>
                 <ViewDirective option='Day'/>
                 <ViewDirective option='Week'/>

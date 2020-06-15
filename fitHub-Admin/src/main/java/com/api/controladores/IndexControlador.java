@@ -2,9 +2,12 @@ package com.api.controladores;
 
 import com.api.dto.LoginDTO;
 import com.api.dto.SesionDTO;
+import com.api.dto.TipoPlanDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Sesion;
+import com.api.modelos.TipoPlan;
 import com.api.servicios.SesionServicio;
+import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +28,13 @@ public class IndexControlador {
 
     @Autowired
     UsuarioServicio usuarioServicio;
-    
     @Autowired
     SesionServicio servicioSes;
+    @Autowired
+    TipoPlanServicio tipoPlanServicio;
 
-    //Registro
-    @GetMapping("/register")
-    public String registroUsuario(WebRequest request, Model model){
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        return "registro";
-    }
+
+    // ------------------- Registro de Usuario --------------------------
 
     @PostMapping("/register")
     public ResponseEntity<String> registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
@@ -52,13 +52,8 @@ public class IndexControlador {
         }
     }
 
-    //Login
-    @GetMapping("/login")
-    public String loginUsuario(WebRequest request, Model model) {
-    	LoginDTO loginDTO = new LoginDTO();
-        model.addAttribute("usuarioLogin", loginDTO);
-        return "login";
-    }
+    // ------------------- Lista de Sesiones para el Scheduler --------------------------
+
     
     @GetMapping("/listaSesiones")
     public List<SesionDTO> BuscarSesiones( ) {
@@ -67,12 +62,22 @@ public class IndexControlador {
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
-			sesionData.setSesion(ses.getTipo());
+			sesionData.setTipo(ses.getTipo());
 			sesionData.setInstructor(ses.getInstructor().getNombre());
 			sesionData.setId(ses.getId());
+            sesionData.setCupos(ses.getCupos());
 			sesionFormat.add(sesionData);
 		}
 		return sesionFormat;
     }
-    
+
+    // ------------------- Lista de Planes para el Pricing --------------------------
+    @ResponseBody
+    @GetMapping("/listaTipoPlanes")
+    public List<TipoPlan> BuscarTipoPlanes( ) {
+        List<TipoPlan> planes = tipoPlanServicio.getAllTypePlans();
+        planes.removeIf(tipoPlan -> ((tipoPlan.getNombre().contains("Prueba"))));
+        return planes;
+    }
+
 }

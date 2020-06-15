@@ -1,5 +1,6 @@
 package com.api.controladores;
 
+import com.api.modelos.Plan;
 import com.api.modelos.Usuario;
 import com.api.repositorios.UsuarioRepositorio;
 import com.api.seguridad.UserPrincipalDetailsService;
@@ -43,11 +44,13 @@ public class IndexControladorTest {
     @Test
     public void registroUsuario() throws Exception {
 
+    	Plan plan = new Plan();
         Usuario mockUsuario = new Usuario("usuarioTest",
                 "usuariotest@micorreo.com",
                 "12345655",
                 "112233",
-                "USER");
+                "USER",
+                plan);
 
         String usuario = "{\"cedula\":\"12345655\",\"nombre\":\"usuarioTest\",\"correo\":\"usuariotest@micorreo.com\",\"contrasena\":\"112233\",\"contrasenaRep\":\"112233\"}";
 

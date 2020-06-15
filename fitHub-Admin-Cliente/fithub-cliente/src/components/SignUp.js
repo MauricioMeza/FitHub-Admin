@@ -13,18 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Axios from 'axios';
 import AuthService from '../services/AuthService';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" to="/">
-        FITHUB Admin
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const styles = theme => ({
   paper: {
@@ -50,15 +38,6 @@ class SignUp extends React.Component{
     this.changeUsuario = this.changeUsuario.bind(this)
   }
 
-  componentDidMount(){
-    Axios.get("http://localhost:8080/register")
-      .then(response => {
-        console.log(response.data)})
-      .catch(error => {
-        console.log(error.response)
-      })
-  }
-
   submitUsuario(event){
     event.preventDefault()
     AuthService.register(this.state.cedula, this.state.nombre, this.state.correo, this.state.contrasena, this.state.contrasenaRep)
@@ -68,16 +47,7 @@ class SignUp extends React.Component{
     })
     .catch(error => {
       console.log(error.response)
-      switch (error.response.data) {
-        case "Ya existe esa cédula en BD":
-          alert(error.response.data)
-          break
-        case "Ya existe ese correo en BD":
-          alert(error.response.data)
-          break
-        default:
-          alert(error.response.data)
-      }
+      alert(error.response.data)
     })
   }
 
@@ -187,9 +157,6 @@ class SignUp extends React.Component{
             </Grid>
           </form>
         </div>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
       </Container>
     );
   }
