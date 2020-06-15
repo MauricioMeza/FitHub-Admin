@@ -82,15 +82,14 @@ public class PlanServicioImpl implements PlanServicio {
 				sesionesAsistidas.add(sesion);
 				sesionesReservadas.remove(sesion);
 			}
+		}
+
 		Plan plan = usuario.getPlan();
 		plan.setSesionesAsistidas(sesionesAsistidas);
 		plan.setSesionesReservadas(sesionesReservadas);
 		usuario.setPlan(plan);
 		usuarioRepositorio.save(usuario);
 		planRepositorio.save(plan);
-		}
-		
-		
 	}
 	@Override
 	public void cancelarPlan(String idPlan) {

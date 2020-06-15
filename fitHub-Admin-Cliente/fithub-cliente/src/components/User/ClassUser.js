@@ -106,8 +106,33 @@ class ClassUser extends React.Component{
   }
 
   onPopupOpen(args) {
-    console.log(args)
-    args.cancel = true
+    if(args.data.Id){
+      if(args.type == "DeleteAlert"){
+        args.cancel = true
+        ClaseService.cancelClase(args.data.Id)
+          .then(response => {
+          if(response.data == "El usuario ha cancelado su cupo en la sesion"){
+            console.log(response)
+            this.reloadClases();
+          }else{
+            alert(response.data)
+          }
+        })
+      }else if(args.type == "Editor"){
+          args.cancel = true
+          ClaseService.reserveClase(args.data.Id)
+            .then(response => {
+            if(response.data == "El usuario ha reservado un cupo con éxito"){
+              console.log(response)
+              this.reloadClases();
+            }else{
+              alert(response.data)
+            }
+          })
+      }else{
+        args.cancel = false
+      }
+    }
   }
 
   onEventRendered(args) {
