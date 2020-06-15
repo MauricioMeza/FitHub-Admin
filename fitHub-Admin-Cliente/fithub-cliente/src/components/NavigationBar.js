@@ -55,7 +55,7 @@ class NavigationBar extends React.Component {
                                 <Link to={"ClassUser"} className="navbar-brand">
                                     <Button>Mis Clases</Button>
                                 </Link>
-                                <Link to={"/"} className="navbar-brand">
+                                <Link to={"/PlanUser"} className="navbar-brand">
                                     <Button>Mis Planes</Button>
                                 </Link>
                             </Nav>
@@ -98,10 +98,17 @@ class NavigationBar extends React.Component {
                         <Link to={"/"} className="navbar-brand">
                             FITHUB
                         </Link>
-                        <Nav className="mr-auto p-2">
-                        <Link to={"/registro"} className="nav-link"> Registrarse</Link>
-                        <Link to={"/login"} className="nav-link"> Ingresar</Link>
-                        </Nav>
+                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        <Navbar.Collapse id="basic-navbar-nav">
+                            <Nav className="mr-auto p-2">
+                            <Link to={"/registro"} className="nav-link">  
+                                <Button>Registrarse</Button>
+                            </Link>
+                            <Link to={"/login"} className="nav-link">  
+                                <Button>Ingresar</Button>
+                            </Link>
+                            </Nav>
+                        </Navbar.Collapse>
                     </Navbar>
                 )  
         }                   
