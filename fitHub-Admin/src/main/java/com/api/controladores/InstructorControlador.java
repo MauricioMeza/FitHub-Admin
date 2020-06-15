@@ -247,13 +247,13 @@ public class InstructorControlador {
 		return "Plan Actualizado";
 	}
 	
-	@GetMapping("/BuscarPlanes")
+	@GetMapping("/buscarPlanes")
 	public List<Plan> BuscarPlanes(){
 		List<Plan> planes = servicioPlan.getAllPlans();
 		return planes;
 	}
 	
-	@GetMapping("/BuscarPlanesActivos")
+	@GetMapping("/buscarPlanesActivos")
 	public List<Plan> BuscarPlanesActivos(){
 		List<Plan> planes = servicioPlan.getAllActivePlans();
 		return planes;
