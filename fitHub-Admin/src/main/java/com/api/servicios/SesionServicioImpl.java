@@ -14,6 +14,8 @@ import com.api.repositorios.TipoSesionRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -37,13 +39,16 @@ public class SesionServicioImpl implements SesionServicio {
 
         long fechaSesionDTOComienzaMillis = sesionDTO.getFecha().getTime();
         long fechaSesionDTOTerminaMillis = sesionDTO.getFecha().getTime() + sesionDTO.getTipo().getDuracion() * 60 * 1000;
-
+        Date fechaInicioSesionDTO = sesionDTO.getFecha();
+        Date fechaFinSesionDTO = new Date(fechaSesionDTOTerminaMillis);
 
 		List<Sesion> sesiones = repositorio.findAll();
 
 		for(Sesion sesion : sesiones){
 			long fechaSesionComienzaMillis = sesion.getFecha_hora().getTime();
 			long fechaSesionTerminaMillis = sesion.getFecha_hora().getTime() + sesion.getTipo().getDuracion() * 60 * 1000;
+			Date fechaInicioSesion = new Date(fechaSesionComienzaMillis);
+			Date fechaFinSesion = new Date(fechaSesionTerminaMillis);
 			if(sesion.getInstructor().equals(instructor)){
 				if(sesion.getFecha_hora().equals(sesionDTO.getFecha())){
 					return null;
@@ -52,6 +57,14 @@ public class SesionServicioImpl implements SesionServicio {
 				}else if(fechaSesionDTOTerminaMillis >= fechaSesionComienzaMillis && fechaSesionDTOTerminaMillis <= fechaSesionTerminaMillis){
 					return null;
 				}else if(fechaSesionDTOComienzaMillis <= fechaSesionComienzaMillis && fechaSesionDTOTerminaMillis >= fechaSesionTerminaMillis){
+					return null;
+				}else if(fechaFinSesionDTO.after(fechaInicioSesion) && fechaFinSesionDTO.before(fechaFinSesion)) {
+					return null;
+				}else if(fechaInicioSesionDTO.after(fechaInicioSesion) && fechaInicioSesionDTO.before(fechaFinSesion)) {
+					return null;
+				}else if(fechaInicioSesionDTO.after(fechaInicioSesion) && fechaFinSesionDTO.before(fechaFinSesion)) {
+					return null;
+				}else if(fechaInicioSesion.after(fechaInicioSesionDTO) && fechaFinSesion.before(fechaFinSesionDTO)) {
 					return null;
 				}
 			}
