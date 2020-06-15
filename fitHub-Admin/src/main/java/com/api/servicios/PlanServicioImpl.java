@@ -97,7 +97,7 @@ public class PlanServicioImpl implements PlanServicio {
 		Plan plan = usuario.getPlan();
 		plan.setSesionesAsistidas(sesionesAsistidas);
 		plan.setSesionesReservadas(sesionesReservadasNueva);
-		if(plan.getSesionesAsistidas().size() == plan.getTipoPlan().getCantSesiones() || plan.getFechaInicio().before(fecha_actual))
+		if(plan.getSesionesAsistidas().size() == plan.getTipoPlan().getCantSesiones() || plan.getFechaFin().before(fecha_actual))
 			plan.setActivo(false);
 		usuario.setPlan(plan);
 		
