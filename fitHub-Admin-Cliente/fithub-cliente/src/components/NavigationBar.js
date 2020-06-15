@@ -55,7 +55,7 @@ class NavigationBar extends React.Component {
                                 <Link to={"ClassUser"} className="navbar-brand">
                                     <Button>Mis Clases</Button>
                                 </Link>
-                                <Link to={"/"} className="navbar-brand">
+                                <Link to={"/PlanUser"} className="navbar-brand">
                                     <Button>Mis Planes</Button>
                                 </Link>
                             </Nav>

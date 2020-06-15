@@ -16,8 +16,9 @@ import Link from '@material-ui/core/Link';
 import { withStyles } from '@material-ui/core/styles';
 
 import MainFeaturedPost from './MainFeaturedPost';
-import FeaturedPost from "./FeaturedPost"
-import Pricing from "./Pricing"
+import FeaturedPost from "./FeaturedPost";
+import Pricing from "./Pricing";
+import FooterPage from "./FooterPage";
 
 const useStyles = theme => ({
     root: {
@@ -47,7 +48,7 @@ function Copyright() {
 const mainFeaturedPost = {
     title: 'Bienvenido a Fithub',
     description:
-      "Somos el gimnasio numero 1 para que entrenes en las últimas tendencias del Fitness mundial",
+      "Somos el gimnasio numero 1 para que entrenes con las últimas tendencias del Fitness mundial",
     title2: 'Registrate y obten una clase de prueba Gratis',
     title3: 'Si ya eres miembro Inicia Sesion y reserva tus clases',
     
@@ -152,14 +153,8 @@ class Welcome extends React.Component{
               </Container>
 
               <br></br>
-              <footer className={classes.footer}>
-                <Container maxWidth="xl">
-                  <Typography variant="body1" align="center">
-                    Poner cosas en el footer :v 
-                    </Typography>
-                  <Copyright />
-                </Container>
-              </footer>
+              <FooterPage/>
+              
               
         </Container>
       )

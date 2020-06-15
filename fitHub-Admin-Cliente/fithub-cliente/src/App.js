@@ -20,6 +20,7 @@ import classes from "./sample/classes.json";
 
 import WelcomeUser from "./components/User/WelcomeUser";
 import ClassUser from "./components/User/ClassUser";
+import PlanUser from "./components/User/PlanUser";
 
 class App extends Component{
 
@@ -54,6 +55,7 @@ class App extends Component{
               <Route exact path="/login"  component={Login} />
               <Route exact path="/ClassForm"  component={ClassForm} />
               <Route exact path="/ClassUser"  component={ClassUser} />
+              <Route exact path="/PlanUser" component={PlanUser} />
             </Switch>
           </Col>
         </Row>
