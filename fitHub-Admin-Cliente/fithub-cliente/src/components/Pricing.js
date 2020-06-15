@@ -11,7 +11,9 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from "prop-types";
 import AuthService from '../services/AuthService';
 import { render } from '@testing-library/react';
+
 import PlanService from '../services/PlanService';
+import ModificarService from '../services/ModificarService';
 
 
 
@@ -42,15 +44,23 @@ class Pricing extends Component{
     this.reservarPlan = this.reservarPlan.bind(this)
   }
 
-  reservarPlan(e, id){
+  reservarPlan(e, plan){
     e.preventDefault();
+    console.log(plan)
     let user = AuthService.getCurrentUser()
     if(user == null){
       alert("Ingrese para poder adquirir un plan")
     }else if(user.Rol == "USER"){
-      PlanService.reservarPlan(id)
-      this.props.reloadInfo();
-      window.location.reload();
+      PlanService.reservarPlan(plan.id)
+        .then(response => {
+          this.props.reloadInfo();
+          window.location.reload();
+        })
+    }else if(user.Rol == "ADMIN"){
+      ModificarService.deleteTipoPlan(plan.title)
+      .then(response => {
+        window.location.reload();
+      })
     }
   }
 
@@ -86,7 +96,7 @@ class Pricing extends Component{
             </ul>
           </CardContent>
           <CardActions>
-            <Button fullWidth variant={tier.buttonVariant} color="primary" onClick={(e) => {this.reservarPlan(e, tier.id)}}>
+            <Button fullWidth variant={tier.buttonVariant} color="primary" onClick={(e) => {this.reservarPlan(e, tier)}}>
               {tier.buttonText}
             </Button>
           </CardActions>

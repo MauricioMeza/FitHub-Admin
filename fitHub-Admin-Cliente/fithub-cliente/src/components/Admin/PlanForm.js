@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import "react-datepicker/dist/react-datepicker.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DatePicker from 'react-datepicker';
  
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -11,13 +10,14 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
 import {withStyles} from '@material-ui/core/styles';
+
+import ModService from "../../services/ModificarService";
+import PlanService from "../../services/PlanService";
+
+import Pricing from "../Pricing";
 
 const styles = theme => ({
   paper: {
@@ -53,6 +53,11 @@ class PlanForm extends React.Component{
     super(props)
 
     this.state = {
+      nombre: "",
+      cantDias: 0,
+      cantSesiones: 0,
+      precio: 0,
+      planes: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -61,6 +66,25 @@ class PlanForm extends React.Component{
     }
 
   componentDidMount(){
+    this.reloadPlanInfo()
+  }
+
+  reloadPlanInfo(){
+    PlanService.getPlanesList()
+    .then(response => {
+      const PlanListBack = response.data;
+      var planListFront = [];
+
+      PlanListBack.map((plan) => {
+        let descripcion = [plan.cantSesiones + " Clases Incluidas", plan.cantDias + " Dias de Duracion"]
+        let planFront = {id: plan.id, title: plan.nombre, price: plan.precio, description: descripcion, buttonText: "Adquirir " + plan.nombre}
+        planListFront.push(planFront)
+      })
+
+      this.setState({
+        planes: planListFront
+      })
+    })
   }
 
   handleChange(event) {
@@ -72,29 +96,30 @@ class PlanForm extends React.Component{
 
   onFormSubmit(e){
     e.preventDefault();
+    const plan = this.state
+    ModService.addTipoPlan(plan.nombre, plan.cantDias, plan.cantSesiones, plan.precio)
+      .then(response => {
+        console.log(response)
+        this.reloadPlanInfo()
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
 
-  render(){
-    
+  render(){ 
     const {classes} = this.props;
-    const {instructores, clases} = this.state;
+    const {planes} = this.state;
 
     return(
       <React.Fragment>
-        <Container className={classes.containerC} component="main" maxWidth="xl">
-          <Grid container 
-                  spacing={3} 
-                  direction = "column" 
-                  display="flex" 
-                  alignItems="center" 
-                  justify="center">
-            <Typography component="h1" variant="h5">
-                Tipos de Planes Creados
-            </Typography>
-            <br></br>
-            <div>Inserte sesiones aquí</div>
-          </Grid>
+        <Container component="main" maxWidth="xl">
+        <Grid container maxwidth="md" spacing={5} alignItems="flex-start" justify="center">
+                {planes.map((plan, i) => (
+                  <Pricing tier={plan} key={i} />
+                ))}
+              </Grid>
         </Container>
 
         <Container component="main" maxWidth="xs">
@@ -111,40 +136,61 @@ class PlanForm extends React.Component{
           </Typography>
           </Grid>
 
-          <form>
-          <Grid item xs={12} >
-                    <br></br>
-          </Grid>
-          <Grid container 
-                  spacing={3} 
-                  direction = "column" 
-                  display="flex" 
-                  alignItems="center" 
-                  justify="center">
-                  
-                  <Grid item xs={12} >
-                    <TextField id="plan-type" label="Nombre del tipo de plan" />
-                  </Grid>
-                  <Grid item xs={12} >
-                    <TextField id="num-days" label="Cantidad de días" />
-                  </Grid>
-                  <Grid item xs={12} >
-                    <TextField id="num-sessions" label="Cantidad de sesiones" />
-                  </Grid>
-                  <Grid item xs={12} >
-                    <TextField id="num-sessions" label="Precio" />
-                  </Grid>
+          <form className={classes.form} onSubmit={this.onFormSubmit}>
+            <Grid container 
+              spacing={3} 
+              direction = "column" 
+              display="flex" 
+              alignItems="center" 
+              justify="center">
+              
+              <Grid item xs={12} >
+                <TextField 
+                  required
+                  name="nombre" 
+                  id="plan-type" 
+                  label="Nombre del tipo de plan" 
+                  onChange={this.handleChange} 
+                  value={this.state.nombre}/>
+              </Grid>
+              <Grid item xs={12} >
+                <TextField 
+                  required
+                  name="cantDias"
+                  id="num-days" 
+                  label="Cantidad de días"
+                  onChange={this.handleChange} 
+                  value={this.state.cantDias} />
+              </Grid>
+              <Grid item xs={12} >
+                <TextField 
+                  required
+                  name="cantSesiones"
+                  id="num-sessions" 
+                  label="Cantidad de sesiones"
+                  onChange={this.handleChange} 
+                  value={this.state.cantSesiones} />
+              </Grid>
+              <Grid item xs={12} >
+                <TextField
+                  required
+                  name="precio" 
+                  id="num-sessions" 
+                  label="Precio"
+                  onChange={this.handleChange} 
+                  value={this.state.precio} />
+              </Grid>
 
-                </Grid>
+            </Grid>
 
-                <Button
-                  className={classes.submit}
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                > Añadir tipo de plan
-                </Button>
+            <Button
+              className={classes.submit}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            > Añadir tipo de plan
+            </Button>
             </form>
           </div>
         </Container>
