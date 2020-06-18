@@ -1,9 +1,14 @@
 package com.api.controladores;
 
 import com.api.modelos.Plan;
+import com.api.modelos.Sesion;
+import com.api.modelos.TipoPlan;
 import com.api.modelos.Usuario;
+import com.api.repositorios.SesionRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
 import com.api.seguridad.UserPrincipalDetailsService;
+import com.api.servicios.SesionServicio;
+import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.UsuarioServicio;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,8 +48,17 @@ public class IndexControladorTest {
     @MockBean
     private UsuarioServicio usuarioServicio;
 
+    @MockBean
+    private SesionRepositorio sesionRepositorio;
+
+    @MockBean
+    private SesionServicio sesionServicio;
+
+    @MockBean
+    private TipoPlanServicio tipoPlanServicio;
+
     @Test
-    public void registroUsuario() throws Exception {
+    public void registroUsuarioTest() throws Exception {
 
     	Plan plan = new Plan();
         Usuario mockUsuario = new Usuario("usuarioTest",
@@ -65,6 +81,36 @@ public class IndexControladorTest {
 
         assertEquals(HttpStatus.ACCEPTED.value(), response.getStatus());
 
+    }
+
+    @Test
+    public void buscarSesionesTest() throws Exception{
+
+        List<Sesion> mockSesiones = sesionServicio.findAllSesionesByFecha();
+
+        Mockito.when(sesionServicio.findAllSesionesByFecha()).thenReturn(mockSesiones);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/listaSesiones").
+                accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        assertEquals(mockSesiones.toString(), result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void buscarTipoPlanesTest() throws Exception{
+
+        List<TipoPlan> mockPlanes = tipoPlanServicio.getAllTypePlans();
+
+        Mockito.when(tipoPlanServicio.getAllTypePlans()).thenReturn(mockPlanes);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/listaTipoPlanes").
+                accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+        assertEquals(mockPlanes.toString(), result.getResponse().getContentAsString());
     }
 
 }
