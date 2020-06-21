@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css"
 
-import {Row, Col, Alert} from "react-bootstrap";
+import {Row, Col} from "react-bootstrap";
 import {BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Container} from '@material-ui/core';
+
+import ProtectedRouteAdmin from "./components/RouteComponents/ProtectedRouteAdmin"
+import ProtectedRouteUser from "./components/RouteComponents/ProtectedRouteUser"
+import MainRoute from "./components/RouteComponents/MainRoute"
 
 
 //importar componentes
@@ -51,15 +55,17 @@ class App extends Component{
         <Row>
           <Col lg={12} >
             <Switch>
-              <Route exact path={"/"}  component={Welcome} />
-              <Route exact path="/welcomeUser"  component={WelcomeUser} />
-              <Route exact path="/welcomeAdmin"  component={WelcomeAdmin} />
+              <MainRoute exact path={"/"}  component={Welcome} />
               <Route exact path="/registro"  component={SignUp} />
               <Route exact path="/login"  component={Login} />
-              <Route exact path="/ClassForm"  component={ClassForm} />
-              <Route exact path="/PlanForm"  component={PlanForm} />
-              <Route exact path="/ClassUser"  component={ClassUser} />
-              <Route exact path="/PlanUser" component={PlanUser} />
+              
+              <ProtectedRouteAdmin exact path="/welcomeAdmin"  component={WelcomeAdmin} />
+              <ProtectedRouteAdmin exact path="/ClassForm"  component={ClassForm} />
+              <ProtectedRouteAdmin exact path="/PlanForm"  component={PlanForm} />
+
+              <ProtectedRouteUser exact path="/welcomeUser"  component={WelcomeUser} />
+              <ProtectedRouteUser exact path="/ClassUser"  component={ClassUser} />
+              <ProtectedRouteUser exact path="/PlanUser" component={PlanUser} />
             </Switch>
           </Col>
         </Row>

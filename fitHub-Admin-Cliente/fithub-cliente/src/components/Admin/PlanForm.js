@@ -132,7 +132,7 @@ class PlanForm extends React.Component{
                   alignItems="center" 
                   justify="center">
           <Typography component="h1" variant="h5">
-                Agregar tipo de sesión
+                Agregar Nuevo Tipo de Plan
           </Typography>
           </Grid>
 

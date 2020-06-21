@@ -70,13 +70,6 @@ class Welcome extends React.Component{
   }
 
   componentDidMount(){
-      const userRole = AuthService.getCurrentUserRole()
-      if(userRole == "USER"){
-          this.props.history.push('/welcomeUser')
-      }else if(userRole == "ADMIN"){
-          this.props.history.push('/welcomeAdmin')
-      }
-
       PlanService.getPlanesList()
       .then(response => {
         const PlanListBack = response.data;
