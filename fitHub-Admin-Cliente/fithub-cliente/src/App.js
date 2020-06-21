@@ -22,6 +22,7 @@ import FooterPage from "./components/FooterPage";
 
 import WelcomeAdmin from "./components/Admin/WelcomeAdmin";
 import ClassForm from "./components/Admin/ClassForm";
+import ClasTypeForm from "./components/Admin/ClassTypeForm";
 import PlanForm from "./components/Admin/PlanForm";
 import classes from "./sample/classes.json";
 
@@ -62,6 +63,7 @@ class App extends Component{
               <ProtectedRouteAdmin exact path="/welcomeAdmin"  component={WelcomeAdmin} />
               <ProtectedRouteAdmin exact path="/ClassForm"  component={ClassForm} />
               <ProtectedRouteAdmin exact path="/PlanForm"  component={PlanForm} />
+              <ProtectedRouteAdmin exact path="/ClasTypeForm"  component={ClasTypeForm} />
 
               <ProtectedRouteUser exact path="/welcomeUser"  component={WelcomeUser} />
               <ProtectedRouteUser exact path="/ClassUser"  component={ClassUser} />

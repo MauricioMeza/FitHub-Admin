@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+
 import Button from '@material-ui/core/Button';
 
 import {withStyles} from '@material-ui/core/styles';
@@ -18,6 +18,7 @@ import ModService from "../../services/ModificarService";
 import PlanService from "../../services/PlanService";
 
 import Pricing from "../Pricing";
+import ClaseService from "../../services/ClaseService";
 
 const styles = theme => ({
   paper: {
@@ -54,37 +55,27 @@ class PlanForm extends React.Component{
 
     this.state = {
       nombre: "",
-      cantDias: 0,
-      cantSesiones: 0,
-      precio: 0,
-      planes: []
+      cupos: 0,
+      duracion: 0,
+      clases: []
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);    
     
-    }
-
-  componentDidMount(){
-    this.reloadPlanInfo()
   }
 
-  reloadPlanInfo(){
-    PlanService.getPlanesList()
-    .then(response => {
-      const PlanListBack = response.data;
-      var planListFront = [];
+  componentDidMount(){
+    this.reloadClasInfo()
+  }
 
-      PlanListBack.map((plan) => {
-        let descripcion = [plan.cantSesiones + " Clases Incluidas", plan.cantDias + " Dias de Duracion"]
-        let planFront = {id: plan.id, title: plan.nombre, price: plan.precio, description: descripcion, buttonText: "Adquirir " + plan.nombre}
-        planListFront.push(planFront)
+  reloadClasInfo(){
+    ClaseService.getClasesNombres()
+      .then(response => {
+        this.setState({
+          clases: response.data
+        })
       })
-
-      this.setState({
-        planes: planListFront
-      })
-    })
   }
 
   handleChange(event) {
@@ -96,11 +87,10 @@ class PlanForm extends React.Component{
 
   onFormSubmit(e){
     e.preventDefault();
-    const plan = this.state
-    ModService.addTipoPlan(plan.nombre, plan.cantDias, plan.cantSesiones, plan.precio)
+    const sesion = this.state
+    ModService.addTipoSesion(sesion.nombre, sesion.cupos, sesion.duracion)
       .then(response => {
-        console.log(response)
-        this.reloadPlanInfo()
+        this.reloadClasInfo()
       })
       .catch(error => {
         console.log(error)
@@ -114,13 +104,6 @@ class PlanForm extends React.Component{
 
     return(
       <React.Fragment>
-        <Container component="main" maxWidth="xl">
-          <Grid container maxwidth="md" spacing={5} alignItems="flex-start" justify="center">
-                {planes.map((plan, i) => (
-                  <Pricing tier={plan} key={i} />
-                ))}
-          </Grid>
-        </Container>
 
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -132,7 +115,7 @@ class PlanForm extends React.Component{
                   alignItems="center" 
                   justify="center">
           <Typography component="h1" variant="h5">
-                Agregar Nuevo Tipo de Plan
+                Agregar Nuevo Tipo de Sesion
           </Typography>
           </Grid>
 
@@ -149,38 +132,28 @@ class PlanForm extends React.Component{
                   required
                   name="nombre" 
                   id="plan-type" 
-                  label="Nombre Tipo de Plan" 
+                  label="Nombre Tipo de Clase" 
                   onChange={this.handleChange} 
                   value={this.state.nombre}/>
               </Grid>
               <Grid item xs={12} >
                 <TextField 
                   required
-                  name="cantDias"
-                  id="num-days" 
-                  label="Cantidad de días"
+                  name="cupos"
+                  id="cupos" 
+                  label="Cantidad de Cupos"
                   onChange={this.handleChange} 
-                  value={this.state.cantDias} />
+                  value={this.state.cupos} />
               </Grid>
               <Grid item xs={12} >
                 <TextField 
                   required
-                  name="cantSesiones"
-                  id="num-sessions" 
-                  label="Cantidad de sesiones"
+                  name="duracion"
+                  id="duracion" 
+                  label="Duracion de Clase (min)"
                   onChange={this.handleChange} 
-                  value={this.state.cantSesiones} />
+                  value={this.state.duracion} />
               </Grid>
-              <Grid item xs={12} >
-                <TextField
-                  required
-                  name="precio" 
-                  id="num-sessions" 
-                  label="Precio"
-                  onChange={this.handleChange} 
-                  value={this.state.precio} />
-              </Grid>
-
             </Grid>
 
             <Button
@@ -189,7 +162,7 @@ class PlanForm extends React.Component{
               fullWidth
               variant="contained"
               color="primary"
-            > Añadir tipo de plan
+            > Añadir tipo de sesion
             </Button>
             </form>
           </div>

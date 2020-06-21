@@ -171,6 +171,7 @@ class ClassForm extends React.Component{
     })    
   }
 
+  // Funcion que recibe el Submit del Formulario
   onFormSubmit(e) {
     e.preventDefault();
     console.log(this.state.type)
@@ -187,21 +188,25 @@ class ClassForm extends React.Component{
     })
   }
 
+  // Funciones Modificadores del Scheduler
   onPopupOpen(args) {
     if(args.data.Id){
       if(args.type == "DeleteAlert"){
         args.cancel = true
         ClaseService.deleteSesion(args.data.Id)
           .then(response => {
-          console.log(response)
-          this.reloadClases();  
-        })
+            this.reloadClases();  
+          })
+          .catch(error => {
+            if(error.response.status === 400){
+              alert(error.response.data.errors[0].defaultMessage) 
+            }
+          })
       }
     }else{
       args.cancel = false
     }
   }
-
   onActionBegin(args) {
     if(args.requestType === "eventChange"){  
       args.cancel = true
@@ -235,7 +240,6 @@ class ClassForm extends React.Component{
       console.log(args)
     }
   }
-    
   content(props) {
     if (props.elementType === 'cell') {
       return(<div className="e-cell-content e-template">
@@ -251,14 +255,13 @@ class ClassForm extends React.Component{
     } else {
       return(<div className="e-event-content e-template">
       <div className="e-subject-wrap">
-          {(props.Instructor !== undefined) ? <div className="subject">{props.Instructor}</div> : ""}
-          {(props.Duracion !== undefined) ? <div className="duracion">{props.Duracion}</div> : ""}
-          {(props.Cupos !== undefined) ? <div className="duracion">{props.Cupos}</div> : ""}
+          {(props.Instructor !== undefined) ? <div className="subject">Instructor: {props.Instructor}</div> : ""}
+          {(props.Duracion !== undefined) ? <div className="duracion">Duracion: {props.Duracion}</div> : ""}
+          {(props.Cupos !== undefined) ? <div className="duracion">Cupos: {props.Cupos}</div> : ""}
       </div>
     </div>)
     }
   }
-
   footer(props) {
     if (props.elementType === 'cell') {
       return(<div className="e-cell-footer">
@@ -273,7 +276,6 @@ class ClassForm extends React.Component{
       );
     }
   }
-
   editorWindowTemplate(props){
     if(props !== undefined) {
       return(<table className="custom-event-editor" style={{ width: '100%', cellpadding: '5' }}><tbody>

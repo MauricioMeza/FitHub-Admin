@@ -1,6 +1,5 @@
 import React from "react";
 
-import AuthService from "../services/AuthService";
 import PlanService from "../services/PlanService";
 import ClaseService from "../services/ClaseService";
 
@@ -17,7 +16,6 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import Link from '@material-ui/core/Link';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -38,19 +36,6 @@ const useStyles = theme => ({
     },
     });
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" to="/">
-            FITHUB Admin
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-        </Typography>
-    );
-}
-
 const mainFeaturedPost = {
     title: 'Bienvenido a Fithub',
     description:
@@ -70,6 +55,7 @@ class Welcome extends React.Component{
   }
 
   componentDidMount(){
+    //Traer Info de la lista de Planes
       PlanService.getPlanesList()
       .then(response => {
         const PlanListBack = response.data;
@@ -86,6 +72,7 @@ class Welcome extends React.Component{
         })
       })
 
+    //Traer Info de la lista de Clases 
       ClaseService.getClases()
       .then(response => {
         this.setState({
@@ -93,13 +80,16 @@ class Welcome extends React.Component{
         })
       })
       
+    //Traer Info de la lista de Instructores
       this.setState({
           instructores: InfoService.getInstructoresList()
       }) 
   }   
   
+  // Funciones de Configuracion SCHEDULER
   onPopupOpen(args) {
-    if(args.type != "QuickInfo"){
+    console.log(args)
+    if(args.type != "QuickInfo" || !args.data.Id){
       args.cancel = true
     }
   }

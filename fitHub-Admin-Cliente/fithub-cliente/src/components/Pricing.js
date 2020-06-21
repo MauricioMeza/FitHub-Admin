@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from "prop-types";
 import AuthService from '../services/AuthService';
-import { render } from '@testing-library/react';
 
 import PlanService from '../services/PlanService';
 import ModificarService from '../services/ModificarService';
@@ -52,13 +51,13 @@ class Pricing extends Component{
       alert("Ingrese para poder adquirir un plan")
     }else if(user.Rol == "USER"){
       PlanService.reservarPlan(plan.id)
-        .then(response => {
+        .then(() => {
           this.props.reloadInfo();
           window.location.reload();
         })
     }else if(user.Rol == "ADMIN"){
       ModificarService.deleteTipoPlan(plan.title)
-      .then(response => {
+      .then(() => {
         window.location.reload();
       })
     }
