@@ -10,6 +10,13 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Divider from "@material-ui/core/Divider"
+import DeleteIcon from '@material-ui/icons/Delete';
+
 import Button from '@material-ui/core/Button';
 
 import {withStyles} from '@material-ui/core/styles';
@@ -46,6 +53,42 @@ const styles = theme => ({
   containerCalendar: {
     padding: theme.spacing(10, 0, 10)
   },
+  root: {
+    minWidth: 200,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+  rootList: {
+      width: '100%',
+      maxWidth: '36ch',
+      backgroundColor: theme.palette.background.paper,
+  },
+  inlineList: {
+      display: 'inline',
+  },
+  button: {
+   margin: theme.spacing(1),
+  },
+  rootGrid: {
+      flexGrow: 1,
+  },
+  CardHeader: {
+      textAlign: 'center',
+      spacing: 10,
+    },
+    action: {
+      display: 'flex',
+      justifyContent: 'space-around',
+    },
 });
 
 class PlanForm extends React.Component{
@@ -104,6 +147,55 @@ class PlanForm extends React.Component{
 
     return(
       <React.Fragment>
+
+        <Grid container className={classes.rootGrid} spacing={1} justify="center">
+          <Grid container justify="center" spacing={1}>
+            <Card className={classes.root} variant="outlined">
+                <CardHeader title="Tipo de clase" className={classes.CardHeader}/>
+                <Divider variant="middle" />
+                <CardContent>
+                    <Typography className={classes.pos} variant="body2" component="p" align="center">
+                    Cupos disponibles :
+                    <br />
+                    Duracion :
+                    </Typography>
+                </CardContent>
+                <CardActions className={classes.action}>
+                  <Button 
+                      variant="contained" 
+                      color="primary"
+                      className={classes.button}
+                      startIcon={<DeleteIcon />}
+                      >
+                      Eliminar
+                  </Button>
+                </CardActions>
+            </Card>
+
+            <Card className={classes.root} variant="outlined">
+                <CardHeader title="Tipo de clase" className={classes.CardHeader}/>
+                <Divider variant="middle" />
+                <CardContent>
+                    <Typography className={classes.pos} variant="body2" component="p" align="center">
+                    Cupos disponibles :
+                    <br />
+                    Duracion :
+                    </Typography>
+                </CardContent>
+                <CardActions className={classes.action}>
+                  <Button 
+                      variant="contained" 
+                      color="primary"
+                      className={classes.button}
+                      startIcon={<DeleteIcon />}
+                      >
+                      Eliminar
+                  </Button>
+                </CardActions>
+            </Card>
+
+          </Grid>
+        </Grid>
 
         <Container component="main" maxWidth="xs">
           <CssBaseline />
