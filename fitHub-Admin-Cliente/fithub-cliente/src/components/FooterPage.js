@@ -56,7 +56,7 @@ const FooterPage = () => {
               <i className="fab fa-pinterest" /> FitHub
             </p>
           </MDBCol>
-          <MDBCol md="4" lg="3" xl="2" className="mb-4 dark-grey-text">
+          <MDBCol md="4" lg="3" xl="3" className="mb-4 dark-grey-text">
             <h6 className="text-uppercase font-weight-bold">
               <strong>Contactanos</strong>
             </h6>
