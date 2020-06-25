@@ -50,14 +50,6 @@ public class Plan {
 		
 	}
 	
-	public Date SumarMinutos(Date fecha, int minutos) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(fecha);
-		calendar.add(Calendar.MINUTE, minutos);
-		return calendar.getTime();
-		
-	}
-	
 	public List<Sesion> getSesionesAsistidas() {
 		return sesionesAsistidas;
 	}

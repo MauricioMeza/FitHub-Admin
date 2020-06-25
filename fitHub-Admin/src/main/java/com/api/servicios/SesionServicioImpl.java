@@ -37,7 +37,6 @@ public class SesionServicioImpl implements SesionServicio {
 		TipoSesion tipo = repositorioTses.findByNombre(sesionDTO.getTipoSesion());
 		sesionDTO.setTipo(tipo);
 
-        long fechaSesionDTOComienzaMillis = sesionDTO.getFecha().getTime();
         long fechaSesionDTOTerminaMillis = sesionDTO.getFecha().getTime() + sesionDTO.getTipo().getDuracion() * 60 * 1000;
         Date fechaInicioSesionDTO = sesionDTO.getFecha();
         Date fechaFinSesionDTO = new Date(fechaSesionDTOTerminaMillis);
@@ -51,12 +50,6 @@ public class SesionServicioImpl implements SesionServicio {
 			Date fechaFinSesion = new Date(fechaSesionTerminaMillis);
 			if(sesion.getInstructor().equals(instructor)){
 				if(sesion.getFecha_hora().equals(sesionDTO.getFecha())){
-					return null;
-				}else if(sesionDTO.getFecha().after(sesion.getFecha_hora()) && fechaSesionDTOComienzaMillis <= fechaSesionTerminaMillis){
-					return null;
-				}else if(fechaSesionDTOTerminaMillis >= fechaSesionComienzaMillis && fechaSesionDTOTerminaMillis <= fechaSesionTerminaMillis){
-					return null;
-				}else if(fechaSesionDTOComienzaMillis <= fechaSesionComienzaMillis && fechaSesionDTOTerminaMillis >= fechaSesionTerminaMillis){
 					return null;
 				}else if(fechaFinSesionDTO.after(fechaInicioSesion) && fechaFinSesionDTO.before(fechaFinSesion)) {
 					return null;

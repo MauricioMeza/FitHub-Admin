@@ -1,8 +1,6 @@
 package com.api.controladores;
 
-import com.api.dto.LoginDTO;
 import com.api.dto.SesionDTO;
-import com.api.dto.TipoPlanDTO;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Sesion;
 import com.api.modelos.TipoPlan;
@@ -11,7 +9,6 @@ import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;

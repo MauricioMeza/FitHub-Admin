@@ -1,18 +1,11 @@
 package com.api.servicios;
 
 import com.api.dto.TipoPlanDTO;
-import com.api.dto.TipoSesionDTO;
-import com.api.modelos.Sesion;
 import com.api.modelos.TipoPlan;
-import com.api.modelos.TipoSesion;
 import com.api.repositorios.TipoPlanRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 import java.util.List;
-
-import javax.validation.constraints.NotEmpty;
 
 @Component
 public class TipoPlanServicioImpl implements TipoPlanServicio {

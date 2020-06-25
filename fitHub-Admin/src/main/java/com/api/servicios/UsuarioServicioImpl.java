@@ -3,7 +3,6 @@ package com.api.servicios;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.TipoPlan;
 import com.api.modelos.Usuario;
-import com.api.repositorios.TipoPlanRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
 import com.api.seguridad.JwtProperties;
 import io.jsonwebtoken.Claims;

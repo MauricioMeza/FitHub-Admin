@@ -3,10 +3,7 @@ package com.api.servicios;
 import com.api.dto.UsuarioDTO;
 import com.api.modelos.Usuario;
 import java.util.List;
-
-import com.api.seguridad.JwtProperties;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
 @Service

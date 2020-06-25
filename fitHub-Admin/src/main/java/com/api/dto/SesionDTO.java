@@ -5,11 +5,8 @@ import java.util.List;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import com.api.modelos.Instructor;
 import com.api.modelos.TipoSesion;
-import com.api.modelos.Usuario;
+
 
 public class SesionDTO {
 	@Future(message = "La fecha debe ser en el futuro")
