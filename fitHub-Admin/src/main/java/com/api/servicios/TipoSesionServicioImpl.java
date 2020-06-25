@@ -32,7 +32,7 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
     }
 
     @Override
-    public TipoSesion getTipoSesionByNombre(String nombre) {
+    public TipoSesion getTipoSesionByName(String nombre) {
         return repositorio.findByNombre(nombre);
     }
 

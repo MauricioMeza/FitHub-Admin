@@ -36,10 +36,10 @@ public class IndexControlador {
     @PostMapping("/register")
     public ResponseEntity<String> registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
         if (!result.hasErrors()) {
-            if ((usuarioServicio.getUserByCorreo(accountDto.getCorreo()) == null) && (usuarioServicio.getUserByCedula(accountDto.getCedula()) == null)){
+            if ((usuarioServicio.getUserByEmail(accountDto.getCorreo()) == null) && (usuarioServicio.getUserById(accountDto.getCedula()) == null)){
                 usuarioServicio.addUsuario(accountDto);
                 return ResponseEntity.accepted().body("Usuario creado");
-            } else if(!(usuarioServicio.getUserByCedula(accountDto.getCedula())==null)) {
+            } else if(!(usuarioServicio.getUserById(accountDto.getCedula())==null)) {
             	return ResponseEntity.badRequest().body("Ya existe esa cédula en BD");
         	} else {
         		return ResponseEntity.badRequest().body("Ya existe ese correo en BD");
@@ -54,7 +54,7 @@ public class IndexControlador {
     
     @GetMapping("/listaSesiones")
     public List<SesionDTO> BuscarSesiones( ) {
-		List<Sesion> sesiones = servicioSes.findAllSesionesByFecha();
+		List<Sesion> sesiones = servicioSes.findAllSesionsByDate();
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();

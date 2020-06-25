@@ -50,7 +50,7 @@ public class PlanServicioImpl implements PlanServicio {
 
 		plan.setClasesDisponibles(tipoPlan.getCantSesiones());
 		plan.setFechaInicio(new Date());
-		plan.setFechaFin(this.SumarDias(fecha, tipoPlan.getCantDias()));
+		plan.setFechaFin(this.addDays(fecha, tipoPlan.getCantDias()));
 		plan.setSesionesAsistidas(new ArrayList<>());
 		plan.setSesionesReservadas(new ArrayList<>());
 		plan.setTipoPlan(tipoPlan);
@@ -62,7 +62,7 @@ public class PlanServicioImpl implements PlanServicio {
 		return usuario;
 	}
 	@Override
-	public List<Usuario> usuariosInscritos(String idPlan) {
+	public List<Usuario> signedUser(String idPlan) {
 		List<Usuario> usuarios = usuarioRepositorio.findAll();
 		List<Usuario> usuariosIns = new ArrayList<>();
 		for (Usuario usuario: usuarios) {
@@ -72,7 +72,7 @@ public class PlanServicioImpl implements PlanServicio {
 		return usuariosIns;
 	}
 	@Override
-	public void actuaizarListasSesiones(String idUsuario) {
+	public void updateSesionsLists(String idUsuario) {
 		Usuario usuario = usuarioRepositorio.findByCedula(idUsuario);
 		List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
 		List<Sesion> sesionesAsistidas = usuario.getPlan().getSesionesAsistidas();
@@ -155,7 +155,7 @@ public class PlanServicioImpl implements PlanServicio {
 	 * @Override public void deletePlan(Plan plan) { repositorio.delete(plan); }
 	 */
 	@Override
-	public Date SumarDias(Date fecha, int dias) {
+	public Date addDays(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha);
 		calendar.add(Calendar.DAY_OF_YEAR, dias);

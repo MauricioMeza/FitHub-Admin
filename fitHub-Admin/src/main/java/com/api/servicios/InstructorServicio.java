@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 public interface InstructorServicio {
 
 	//Instructor getInstructorByCorreo(String correo);
-	Instructor getInstructorByCedula(String cedula);
-    Instructor getInstructorByNombre(String nombre);
+	Instructor getInstructorById(String id);
+    Instructor getInstructorByName(String name);
     List<Instructor> getAllInstructors();
     Instructor addInstructor(Instructor instructor);
     void deleteInstructor(Instructor instructor);

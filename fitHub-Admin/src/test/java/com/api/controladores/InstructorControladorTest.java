@@ -60,9 +60,9 @@ class InstructorControladorTest {
     @Test
     public void registroSesion() throws Exception {
 
-        Instructor instructor = instructorServicio.getInstructorByNombre("admin");
+        Instructor instructor = instructorServicio.getInstructorByName("admin");
 
-        Usuario usuario = usuarioServicio.getUserByCorreo("duvan@micorreo.com");
+        Usuario usuario = usuarioServicio.getUserByEmail("duvan@micorreo.com");
 
         List<Usuario> usuarioList = new ArrayList<>();
 

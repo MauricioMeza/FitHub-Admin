@@ -37,7 +37,7 @@ public class UsuarioControlador {
 
 	@GetMapping("getInfoUsuario/{correo}")
 	public UsuarioDTO getInfoUsuario(@PathVariable String correo){
-		Usuario user = servicioUsuario.getUserByCorreo(correo);
+		Usuario user = servicioUsuario.getUserByEmail(correo);
 		Plan plan = user.getPlan();
 		UsuarioDTO userSend = new UsuarioDTO();
 		PlanDTO planSend = new PlanDTO();
@@ -57,7 +57,7 @@ public class UsuarioControlador {
 		userSend.setRole(user.getRole());
 		userSend.setPlanDTO(planSend);
 		
-		servicioPlan.actuaizarListasSesiones(userSend.getCedula());
+		servicioPlan.updateSesionsLists(userSend.getCedula());
 
 		return userSend;
 	}
@@ -67,16 +67,16 @@ public class UsuarioControlador {
 
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
 	public String reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
-		return servicioSesion.reservarCupo(idSesion, idUsuario);
+		return servicioSesion.addUserToSesion(idSesion, idUsuario);
 	}
 
 	@GetMapping("/verSesionesReservadas/{email}")
 	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String correo){
-		Usuario usuario = servicioUsuario.getUserByCorreo(correo);
-		List <Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
+		Usuario usuario = servicioUsuario.getUserByEmail(correo);
+		List <Sesion> sesiones = servicioSesion.findAllSesionsByDate();
 		List <SesionDTO> sesionesInscritas = new ArrayList<>();
 		for(Sesion ses: sesiones) {
-			if (servicioSesion.usuarioInscrito(ses, usuario)){
+			if (servicioUsuario.signedUser(ses, usuario)){
 				SesionDTO sesionSend = new SesionDTO();
 				sesionSend.setId(ses.getId());
 				sesionSend.setInstructor(ses.getInstructor().getNombre());
@@ -93,8 +93,8 @@ public class UsuarioControlador {
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")
 	public String cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
-		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);		
-		return servicioSesion.cancelarCupo(sesion, usuario);
+		Usuario usuario = servicioUsuario.getUserByEmail(idUsuario);		
+		return servicioSesion.deleteUserFromSesion(sesion, usuario);
 	}
 
 	// -------------- Controladores Plan --------------------------
@@ -102,7 +102,7 @@ public class UsuarioControlador {
 	@GetMapping("/reservarPlan/{id}/{idTipoPlan}")
 	public String reservarPlan(@PathVariable("id") String idUsuario,@PathVariable("idTipoPlan") String idTipoPlan) {
 		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanById(idTipoPlan);
-		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
+		Usuario usuario = servicioUsuario.getUserByEmail(idUsuario);
 		
 		usuario = servicioPlan.addNewPlan(tipoPlan, usuario);
 		servicioUsuario.updateUser(usuario);

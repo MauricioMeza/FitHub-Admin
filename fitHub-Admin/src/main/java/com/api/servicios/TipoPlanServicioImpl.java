@@ -36,7 +36,7 @@ public class TipoPlanServicioImpl implements TipoPlanServicio {
 	}
 
 	@Override
-	public TipoPlan getTipoPlanByNombre(String nombre) {
+	public TipoPlan getTipoPlanByName(String nombre) {
 		return repositorio.findTipoPlanByNombre(nombre);
 	}
 

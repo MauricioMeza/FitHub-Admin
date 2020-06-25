@@ -16,14 +16,14 @@ public interface PlanServicio {
 	Plan getPlanById(String idPlan);
     //List<Plan> getAllPlans();
     //List<Plan> getAllActivePlans();
-    Usuario addNewPlan(TipoPlan tipoPlan, Usuario usuario);
+    Usuario addNewPlan(TipoPlan tipoPlan, Usuario user);
     Plan addPlan(PlanDTO planDTO);
     Plan addPlan(Plan plan);
-    List<Usuario> usuariosInscritos(String idPlan);
-    void actuaizarListasSesiones(String idUsuario);
+    List<Usuario> signedUser(String idPlan);
+    void updateSesionsLists(String idUser);
     //void cancelarPlan(String idPlan);
     //void deletePlan(Plan plan);
     //void cambiarPlan(PlanDTO planDTO);
-    Date SumarDias(Date fecha, int dias);
+    Date addDays(Date fecha, int dias);
 
 }

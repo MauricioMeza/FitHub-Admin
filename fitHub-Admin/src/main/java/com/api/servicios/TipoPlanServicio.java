@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public interface TipoPlanServicio {
 
 	TipoPlan getTipoPlanById(String id);
-	TipoPlan getTipoPlanByNombre(String nombre);
+	TipoPlan getTipoPlanByName(String name);
     List<TipoPlan> getAllTypePlans();
     TipoPlan addTipoPlan(TipoPlanDTO tipoPlanDTO);
     void deleteTipoPlan(TipoPlan tipoPlan);

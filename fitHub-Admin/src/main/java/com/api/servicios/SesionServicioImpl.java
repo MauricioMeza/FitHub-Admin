@@ -38,8 +38,8 @@ public class SesionServicioImpl implements SesionServicio {
     @Override
     public Sesion addSesion(SesionDTO sesionDTO) {
         Sesion nuevaSesion = new Sesion();
-		Instructor instructor = servicioIns.getInstructorByNombre(sesionDTO.getInstructor());
-		TipoSesion tipo = servicioTses.getTipoSesionByNombre(sesionDTO.getTipoSesion());
+		Instructor instructor = servicioIns.getInstructorByName(sesionDTO.getInstructor());
+		TipoSesion tipo = servicioTses.getTipoSesionByName(sesionDTO.getTipoSesion());
 		sesionDTO.setTipo(tipo);
 
         long fechaSesionDTOTerminaMillis = sesionDTO.getFecha().getTime() + sesionDTO.getTipo().getDuracion() * 60 * 1000;
@@ -76,12 +76,12 @@ public class SesionServicioImpl implements SesionServicio {
     }
 
 	@Override
-	public Sesion cambiarSesion(SesionDTO sesionDTO) {
+	public Sesion updateSesion(SesionDTO sesionDTO) {
     	Sesion viejaSesion = repositorio.findById(sesionDTO.getId());
 		Sesion nuevaSesion = new Sesion();
 
-		Instructor instructor = servicioIns.getInstructorByNombre(sesionDTO.getInstructor());
-		TipoSesion tipo = servicioTses.getTipoSesionByNombre(sesionDTO.getTipoSesion());
+		Instructor instructor = servicioIns.getInstructorByName(sesionDTO.getInstructor());
+		TipoSesion tipo = servicioTses.getTipoSesionByName(sesionDTO.getTipoSesion());
 		TipoSesion tipoAnt = viejaSesion.getTipo();
 		nuevaSesion.setAsistentes(viejaSesion.getAsistentes());
 		nuevaSesion.setCupos(tipo.getCupos() - (tipoAnt.getCupos() - sesionDTO.getCupos()));
@@ -94,7 +94,7 @@ public class SesionServicioImpl implements SesionServicio {
 	}
 
     @Override
-    public List<Sesion> findAllSesionesByFecha() {
+    public List<Sesion> findAllSesionsByDate() {
         return repositorio.findAll(Sort.by(Sort.Direction.ASC, "fecha_hora") );
     }
 
@@ -110,29 +110,13 @@ public class SesionServicioImpl implements SesionServicio {
 
     
     @Override
-	public void cambiarSesion(Sesion sesion) 
+	public void updateSesion(Sesion sesion) 
 	{
 		repositorio.save(sesion);
 	}
 
 	@Override
-	public boolean usuarioInscrito(Sesion sesion, Usuario usuario) {
-		
-		boolean inscrito = false;
-		List<Usuario> usuariosInscritos = sesion.getAsistentes();
-		for(int i = 0; i < usuariosInscritos.size(); i++)
-		{
-			String cedulaUsuarioLista = usuariosInscritos.get(i).getCedula();
-			String cedulaUsuario = usuario.getCedula();
-			if(usuariosInscritos.size()== 0) break;
-			else if(cedulaUsuarioLista.equals(cedulaUsuario))
-				inscrito = true; 
-		}
-		return inscrito;  
-	}
-
-	@Override
-	public String cancelarCupo(Sesion sesion, Usuario usuario) {
+	public String deleteUserFromSesion(Sesion sesion, Usuario usuario) {
 
 		Date fecha_actual = new Date();
 		long fechaActualMili = fecha_actual.getTime();
@@ -142,9 +126,11 @@ public class SesionServicioImpl implements SesionServicio {
 		}else if(fechaActualMili > fechaLimiteCancelarMili){
 			return "No puede cancelar, la sesión esta a punto de comenzar";
 		}
-		boolean inscrito = this.usuarioInscrito(sesion, usuario);
-		if (!inscrito) 
-			return "El usuario no está inscrito en la sesion";
+		
+		  boolean inscrito = servicioUsuario.signedUser(sesion, usuario); 
+		  if (!inscrito)
+			  return "El usuario no está inscrito en la sesion";
+		 
 		else {
 			List<Usuario> inscritos = sesion.quitarAsistente(usuario);
 			List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
@@ -160,22 +146,22 @@ public class SesionServicioImpl implements SesionServicio {
 			sesion.setAsistentes(inscritos);
 			int cupos = sesion.getCupos();
 			sesion.setCupos(cupos+ 1);
-			this.cambiarSesion(sesion);
+			this.updateSesion(sesion);
 			servicioPlan.addPlan(plan);
 			return "El usuario ha cancelado su cupo en la sesion";
 		}
 	}
 
 	@Override
-	public String reservarCupo(String idSesion, String idUsuario) {
-		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
+	public String addUserToSesion(String idSesion, String idUsuario) {
+		Usuario usuario = servicioUsuario.getUserByEmail(idUsuario);
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		Date fecha_actual = new Date();
 		
 		if(sesion.getFecha_hora().before(fecha_actual))
 			return "La sesión ya pasó";
 		
-		if(servicioSesion.usuarioInscrito(sesion, usuario)) {
+		if(servicioUsuario.signedUser(sesion, usuario)) {
 			return "El usuario " + usuario.getNombre() + " ya está inscrito en la Sesion";
 		}
 		else{
@@ -202,7 +188,7 @@ public class SesionServicioImpl implements SesionServicio {
 				usuario.setPlan(plan);
 				servicioPlan.addPlan(plan);
 				servicioUsuario.updateUser(usuario);
-				servicioSesion.cambiarSesion(sesion);
+				servicioSesion.updateSesion(sesion);
 			}
 		}
 		return "El usuario ha reservado un cupo con éxito";

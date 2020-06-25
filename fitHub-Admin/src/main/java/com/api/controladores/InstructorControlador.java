@@ -71,7 +71,7 @@ public class InstructorControlador {
 	
 	@DeleteMapping("/eliminarInstructor")
 	public ResponseEntity<String> eliminarInstructor(@RequestBody String cedula) {
-		Instructor instructor = servicioInstructor.getInstructorByCedula(cedula);
+		Instructor instructor = servicioInstructor.getInstructorById(cedula);
 		if (instructor != null) {
 			servicioInstructor.deleteInstructor(instructor);
 			return ResponseEntity.ok().body("Instructor eliminado");
@@ -93,7 +93,7 @@ public class InstructorControlador {
 	@GetMapping("/buscarTodasSesiones")
 	public List<SesionDTO> BuscarSesiones( ) {
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
-		List<Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
+		List<Sesion> sesiones = servicioSesion.findAllSesionsByDate();
 		for (Sesion ses: sesiones) {
 			SesionDTO sesionData = new SesionDTO();
 			sesionData.setFecha(ses.getFecha_hora());
@@ -131,7 +131,7 @@ public class InstructorControlador {
 
 	@PutMapping("/actualizarSesion")
 	public String actualizarSesion(@Valid @RequestBody SesionDTO sesion) {
-		servicioSesion.cambiarSesion(sesion);
+		servicioSesion.updateSesion(sesion);
 		return "Sesion Actualizada";
 	}
 
@@ -168,7 +168,7 @@ public class InstructorControlador {
 	}
 	@DeleteMapping("/eliminarTipoPlan")
 	public ResponseEntity<String> eliminarTipoPlan(@RequestBody String nombre) {
-		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanByNombre(nombre);
+		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanByName(nombre);
 		if (tipoPlan != null) {
 			servicioTipoPlan.deleteTipoPlan(tipoPlan);
 			return ResponseEntity.ok().body("Tipo de Plan eliminado");
@@ -193,7 +193,7 @@ public class InstructorControlador {
 
 	@DeleteMapping("/eliminarTipoSesion")
 	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String nombre) {
-		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByNombre(nombre);
+		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByName(nombre);
 		if (tipoSesion != null) {
 			servicioTipoSesion.deleteTipoSesion(tipoSesion);
 			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
