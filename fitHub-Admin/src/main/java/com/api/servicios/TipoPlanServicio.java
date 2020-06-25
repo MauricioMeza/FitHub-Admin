@@ -15,6 +15,6 @@ public interface TipoPlanServicio {
     List<TipoPlan> getAllTypePlans();
     TipoPlan addTipoPlan(TipoPlanDTO tipoPlanDTO);
     void deleteTipoPlan(TipoPlan tipoPlan);
-    void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO);
+    //void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO);
 
 }

@@ -16,10 +16,10 @@ public class InstructorServicioImpl implements InstructorServicio {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-	@Override
+	/*@Override
 	public Instructor getInstructorByCorreo(String correo) {
 		return repositorio.findByCorreo(correo);
-	}
+	}*/
 	@Override
 	public Instructor getInstructorByCedula(String cedula) { return repositorio.findByCedula(cedula); }
 
@@ -37,6 +37,11 @@ public class InstructorServicioImpl implements InstructorServicio {
 		inst.setContrasena(passwordEncoder.encode(inst.getContrasena()));
 		inst.setRole("ADMIN");
 		return repositorio.save(inst);
+	}
+	@Override
+	public void deleteInstructor(Instructor instructor) {
+		repositorio.delete(instructor);
+		
 	}
 
 }

@@ -19,6 +19,7 @@ public interface SesionServicio {
     void cambiarSesion(Sesion sesion);
     boolean usuarioInscrito(Sesion sesion, Usuario usuario); 
     String cancelarCupo(Sesion sesion, Usuario usuario);
+    String reservarCupo(String idSesion, String idUsuario);
 
 
 }

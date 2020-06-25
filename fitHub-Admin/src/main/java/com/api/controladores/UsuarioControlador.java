@@ -56,6 +56,8 @@ public class UsuarioControlador {
 		userSend.setCedula(user.getCedula());
 		userSend.setRole(user.getRole());
 		userSend.setPlanDTO(planSend);
+		
+		servicioPlan.actuaizarListasSesiones(userSend.getCedula());
 
 		return userSend;
 	}
@@ -65,45 +67,7 @@ public class UsuarioControlador {
 
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
 	public String reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
-
-		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
-		Sesion sesion = servicioSesion.getSesionById(idSesion);
-		Date fecha_actual = new Date();
-		
-		if(sesion.getFecha_hora().before(fecha_actual))
-			return "La sesión ya pasó";
-		
-		if(servicioSesion.usuarioInscrito(sesion, usuario)) {
-			return "El usuario " + usuario.getNombre() + " ya está inscrito en la Sesion";
-		}
-		else{
-			if(sesion.getCupos() <= 0) {
-				return "La sesión no tiene cupos suficientes para realizar la inscripción";
-			}
-			else{	
-				if(usuario.getPlan() == null) {
-					return "El usuario no tiene ningún plan inscrito";
-				}
-				int cupos = sesion.getCupos() - 1;
-				sesion.setCupos(cupos);
-				List<Usuario> asistentes = sesion.getAsistentes();   
-				asistentes.add(usuario);
-				sesion.setAsistentes(asistentes);
-
-				Plan plan = usuario.getPlan();
-				if(plan.getClasesDisponibles()<=0)
-					return "El plan del Usuario no cuenta con clases disponibles";
-				List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
-				sesionesReservadas.add(sesion);
-				plan.setSesionesReservadas(sesionesReservadas);
-				plan.setClasesDisponibles(plan.getClasesDisponibles()-1);
-				usuario.setPlan(plan);
-				servicioPlan.addPlan(plan);
-				servicioUsuario.updateUser(usuario);
-				servicioSesion.cambiarSesion(sesion);
-			}
-		}
-		return "El usuario ha reservado un cupo con éxito";
+		return servicioSesion.reservarCupo(idSesion, idUsuario);
 	}
 
 	@GetMapping("/verSesionesReservadas/{email}")
@@ -122,8 +86,6 @@ public class UsuarioControlador {
 				sesionesInscritas.add(sesionSend); 
 			}
 		}
-
-		servicioPlan.actuaizarListasSesiones(usuario.getCedula());
 		
 		return sesionesInscritas;
 	}
@@ -131,16 +93,7 @@ public class UsuarioControlador {
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")
 	public String cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
-		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);
-		Date fecha_actual = new Date();
-		long fechaActualMili = fecha_actual.getTime();
-		long fechaLimiteCancelarMili = sesion.getFecha_hora().getTime() - 3600 * 2000;
-		if(sesion.getFecha_hora().before(fecha_actual)) {
-			return "No puede cancelar, la sesión ya comenzó";
-		}else if(fechaActualMili > fechaLimiteCancelarMili){
-			return "No puede cancelar, la sesión esta a punto de comenzar";
-		}
-		
+		Usuario usuario = servicioUsuario.getUserByCorreo(idUsuario);		
 		return servicioSesion.cancelarCupo(sesion, usuario);
 	}
 
@@ -157,7 +110,7 @@ public class UsuarioControlador {
 		return "Plan reservado con éxito " + usuario.getPlan();
 	}
 	
-	@GetMapping("/cancelarPlan/{idPlan}")
+	/*@GetMapping("/cancelarPlan/{idPlan}")
 	public String cancelarPlan(@PathVariable("idPlan") String idPlan){
 		servicioPlan.cancelarPlan(idPlan);
 		return "Plan con id:" + idPlan + " cancelado";
@@ -173,7 +126,7 @@ public class UsuarioControlador {
 	public List<Plan> BuscarPlanesActivos(){
 		List<Plan> planes = servicioPlan.getAllActivePlans();
 		return planes;
-	}
+	}*/
 	
 	
 }

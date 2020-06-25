@@ -14,5 +14,5 @@ public interface TipoSesionServicio {
     TipoSesion getTipoSesionByNombre(String nombre);
     TipoSesion getTipoSesionById(String id);
     void deleteTipoSesion(TipoSesion tipoSesion);
-    void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO);
+    //void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO);
 }

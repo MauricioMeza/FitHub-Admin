@@ -45,15 +45,15 @@ public class TipoPlanServicioImpl implements TipoPlanServicio {
         repositorio.delete(tipoPlan);
     }
 
-    @Override
-    public void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO) {
-        TipoPlan nuevoTipoPlan = new TipoPlan();
-
-        nuevoTipoPlan.setId(tipoPlanDTO.getId());
-        nuevoTipoPlan.setNombre(tipoPlanDTO.getNombre());
-        nuevoTipoPlan.setCantDias(tipoPlanDTO.getCantDias());
-        nuevoTipoPlan.setPrecio(tipoPlanDTO.getPrecio());
-        nuevoTipoPlan.setCantSesiones(tipoPlanDTO.getCantSesiones());
-        repositorio.save(nuevoTipoPlan);
-    }
+	/*
+	 * @Override public void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO) { TipoPlan
+	 * nuevoTipoPlan = new TipoPlan();
+	 * 
+	 * nuevoTipoPlan.setId(tipoPlanDTO.getId());
+	 * nuevoTipoPlan.setNombre(tipoPlanDTO.getNombre());
+	 * nuevoTipoPlan.setCantDias(tipoPlanDTO.getCantDias());
+	 * nuevoTipoPlan.setPrecio(tipoPlanDTO.getPrecio());
+	 * nuevoTipoPlan.setCantSesiones(tipoPlanDTO.getCantSesiones());
+	 * repositorio.save(nuevoTipoPlan); }
+	 */
 }

@@ -46,15 +46,15 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
         repositorio.delete(tipoSesion);
     }
 
-    @Override
-    public void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO) {
-        TipoSesion nuevoTipoSesion = new TipoSesion();
-
-        nuevoTipoSesion.setId(tipoSesionDTO.getId());
-        nuevoTipoSesion.setNombre(tipoSesionDTO.getNombre());
-        nuevoTipoSesion.setCupos(tipoSesionDTO.getCupos());
-        nuevoTipoSesion.setDuracion(tipoSesionDTO.getDuracion());
-
-        repositorio.save(nuevoTipoSesion);
-    }
+	/*
+	 * @Override public void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO) {
+	 * TipoSesion nuevoTipoSesion = new TipoSesion();
+	 * 
+	 * nuevoTipoSesion.setId(tipoSesionDTO.getId());
+	 * nuevoTipoSesion.setNombre(tipoSesionDTO.getNombre());
+	 * nuevoTipoSesion.setCupos(tipoSesionDTO.getCupos());
+	 * nuevoTipoSesion.setDuracion(tipoSesionDTO.getDuracion());
+	 * 
+	 * repositorio.save(nuevoTipoSesion); }
+	 */
 }

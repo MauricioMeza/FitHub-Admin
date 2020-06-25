@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.api.dto.TipoPlanDTO;
-import com.api.dto.PlanDTO;
+//import com.api.dto.PlanDTO;
 import com.api.dto.SesionDTO;
 import com.api.dto.TipoSesionDTO;
 import com.api.modelos.Sesion;
@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Instructor;
-import com.api.modelos.Plan;
+//import com.api.modelos.Plan;
 
 import javax.validation.Valid;
 
@@ -35,17 +35,17 @@ public class InstructorControlador {
 	private TipoSesionServicio servicioTipoSesion;
 	@Autowired
 	private UsuarioServicio servicioUsuario;
-	@Autowired
-	private PlanServicio servicioPlan;
+	//@Autowired
+	//private PlanServicio servicioPlan;
 
 
 
 
 	// ----------- Controladores Instructor ----------------
-	@GetMapping("/encontrarInstructor/{id}")
+	/*@GetMapping("/encontrarInstructor/{id}")
 	public Instructor getInstructor(@PathVariable String id){
 		return servicioInstructor.getInstructorByCedula(id);
-	}
+	}*/
 
 	@GetMapping("/encontrarTodosLosInstructores")
 	public List<Instructor> getInstructores(){
@@ -67,6 +67,17 @@ public class InstructorControlador {
 	public String GuardarInstructor(@RequestBody Instructor instructor) {
 		servicioInstructor.addInstructor(instructor);
 		return "Instructor añadido con id: "+ instructor.getCedula();
+	}
+	
+	@DeleteMapping("/eliminarInstructor")
+	public ResponseEntity<String> eliminarInstructor(@RequestBody String cedula) {
+		Instructor instructor = servicioInstructor.getInstructorByCedula(cedula);
+		if (instructor != null) {
+			servicioInstructor.deleteInstructor(instructor);
+			return ResponseEntity.ok().body("Instructor eliminado");
+		} else {
+			return ResponseEntity.badRequest().body("No existe ningún instructor con este id");
+		}
 	}
 
 
@@ -124,7 +135,7 @@ public class InstructorControlador {
 		return "Sesion Actualizada";
 	}
 
-	@ResponseBody
+	/*@ResponseBody
 	@GetMapping("/buscarTodasSesionesConAsistentes")
 	public List<SesionDTO> BuscarSesionesConAsistentes( ) {
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
@@ -146,7 +157,7 @@ public class InstructorControlador {
 			}
 		}
 		return sesionFormat;
-	}
+	}*/
 
 	// ---------------- Controladores TipoPlan -----------------------
 
@@ -166,11 +177,11 @@ public class InstructorControlador {
 		}
 	}
 
-	@PutMapping("/actualizarTipoPlan")
+	/*@PutMapping("/actualizarTipoPlan")
 	public String actualizarTipoPlan(@Valid @RequestBody TipoPlanDTO tipoPlanDTO) {
 		servicioTipoPlan.cambiarTipoPlan(tipoPlanDTO);
 		return "Tipo de Plan Actualizado";
-	}
+	}*/
 
 	// ---------------- Controladores TipoSesion -----------------------
 
@@ -191,11 +202,11 @@ public class InstructorControlador {
 		}
 	}
 
-	@PutMapping("/actualizarTipoSesion")
+	/*@PutMapping("/actualizarTipoSesion")
 	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
 		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
 		return "Tipo de Sesion Actualizado";
-	}
+	}*/
 
 	@ResponseBody
 	@GetMapping("/buscarTodosTiposSesiones")
@@ -211,7 +222,7 @@ public class InstructorControlador {
 		}
 		return tipoSesionFormat;
 	}
-
+	/*
 	@ResponseBody
 	@GetMapping("/buscarTiposSesionesNombres")
 	public List<String> BuscarTipoSesionesNombres( ) {
@@ -221,11 +232,11 @@ public class InstructorControlador {
 			tipoSesionNombres.add(tSes.getNombre());
 		}
 		return tipoSesionNombres;
-	}
+	}*/
 	
 	//---------------------- Controladores Plan -----------------
 	
-	@PostMapping("/crearPlan")
+	/*@PostMapping("/crearPlan")
 	public String crearPlan(@RequestBody PlanDTO planDTO) {
 		servicioPlan.addPlan(planDTO);
 		return "Plan añadido con id: "+ planDTO.getId();
@@ -257,6 +268,6 @@ public class InstructorControlador {
 	public List<Plan> BuscarPlanesActivos(){
 		List<Plan> planes = servicioPlan.getAllActivePlans();
 		return planes;
-	}
+	}*/
 	
 }
