@@ -97,6 +97,7 @@ public class UsuarioControlador {
 		return servicioSesion.deleteUserFromSesion(sesion, usuario);
 	}
 
+
 	// -------------- Controladores Plan --------------------------
 
 	@GetMapping("/reservarPlan/{id}/{idTipoPlan}")
@@ -109,24 +110,4 @@ public class UsuarioControlador {
 		
 		return "Plan reservado con éxito " + usuario.getPlan();
 	}
-	
-	/*@GetMapping("/cancelarPlan/{idPlan}")
-	public String cancelarPlan(@PathVariable("idPlan") String idPlan){
-		servicioPlan.cancelarPlan(idPlan);
-		return "Plan con id:" + idPlan + " cancelado";
-	}
-	
-	@GetMapping("/buscarPlanes")
-	public List<Plan> BuscarPlanes(){
-		List<Plan> planes = servicioPlan.getAllPlans();
-		return planes;
-	}
-	
-	@GetMapping("/buscarPlanesActivos")
-	public List<Plan> BuscarPlanesActivos(){
-		List<Plan> planes = servicioPlan.getAllActivePlans();
-		return planes;
-	}*/
-	
-	
 }

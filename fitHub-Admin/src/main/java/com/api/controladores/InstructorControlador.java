@@ -35,26 +35,17 @@ public class InstructorControlador {
 	private TipoSesionServicio servicioTipoSesion;
 	@Autowired
 	private UsuarioServicio servicioUsuario;
-	//@Autowired
-	//private PlanServicio servicioPlan;
-
-
-
 
 	// ----------- Controladores Instructor ----------------
-	/*@GetMapping("/encontrarInstructor/{id}")
-	public Instructor getInstructor(@PathVariable String id){
-		return servicioInstructor.getInstructorByCedula(id);
-	}*/
 
 	@GetMapping("/encontrarTodosLosInstructores")
-	public List<Instructor> getInstructores(){
+	public List<Instructor> buscarInstructores(){
 		return servicioInstructor.getAllInstructors();
 	}
 
 	@ResponseBody
 	@GetMapping("/instructoresNombres")
-	public List<String> getInstructoresNombres(){
+	public List<String> buscarInstructoresNombres(){
 		List<Instructor> instructores = servicioInstructor.getAllInstructors();
 		ArrayList<String> insNombres = new ArrayList<>();
 		for (Instructor ins: instructores) {
@@ -64,7 +55,7 @@ public class InstructorControlador {
 	}
 
 	@PostMapping("/agregarInstructor")
-	public String GuardarInstructor(@RequestBody Instructor instructor) {
+	public String agregarInstructor(@RequestBody Instructor instructor) {
 		servicioInstructor.addInstructor(instructor);
 		return "Instructor añadido con id: "+ instructor.getCedula();
 	}
@@ -81,17 +72,19 @@ public class InstructorControlador {
 	}
 
 
-
 	// ---------------- Controladores Usuario ----------------------
+
 	@GetMapping("/encontrarTodosLosUsuarios")
-	public List<Usuario> getUsuarios(){
+	public List<Usuario> buscarUsuarios(){
 		return servicioUsuario.getAllUsers();
 	}
 
+
 	// ---------------- Controladores Sesion -----------------------
+
 	@ResponseBody
 	@GetMapping("/buscarTodasSesiones")
-	public List<SesionDTO> BuscarSesiones( ) {
+	public List<SesionDTO> buscarSesiones( ) {
 		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
 		List<Sesion> sesiones = servicioSesion.findAllSesionsByDate();
 		for (Sesion ses: sesiones) {
@@ -113,7 +106,7 @@ public class InstructorControlador {
 	}
 
 	@PostMapping("/agregarSesion")
-	public String GuardarSesion(@RequestBody @Valid SesionDTO sesion) {
+	public String agregarSesion(@RequestBody @Valid SesionDTO sesion) {
 		servicioSesion.addSesion(sesion);
 		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
 	}
@@ -135,29 +128,6 @@ public class InstructorControlador {
 		return "Sesion Actualizada";
 	}
 
-	/*@ResponseBody
-	@GetMapping("/buscarTodasSesionesConAsistentes")
-	public List<SesionDTO> BuscarSesionesConAsistentes( ) {
-		ArrayList<SesionDTO> sesionFormat = new ArrayList<>();
-		List<Sesion> sesiones = servicioSesion.findAllSesionesByFecha();
-		for (Sesion ses: sesiones) {
-			if(ses.getAsistentes().size()>0) {
-				SesionDTO sesionData = new SesionDTO();
-				sesionData.setFecha(ses.getFecha_hora());
-				sesionData.setTipo(ses.getTipo());
-				sesionData.setInstructor(ses.getInstructor().getNombre());
-				sesionData.setId(ses.getId());
-				sesionData.setCupos(ses.getCupos());
-				List<String> nombres = new ArrayList<>();
-				for(int i = 0; i < ses.getAsistentes().size(); i++ ) {
-					nombres.add(ses.getAsistentes().get(i).getNombre());
-				}
-				sesionData.setNombresAsistentes(nombres);
-				sesionFormat.add(sesionData);
-			}
-		}
-		return sesionFormat;
-	}*/
 
 	// ---------------- Controladores TipoPlan -----------------------
 
@@ -177,11 +147,6 @@ public class InstructorControlador {
 		}
 	}
 
-	/*@PutMapping("/actualizarTipoPlan")
-	public String actualizarTipoPlan(@Valid @RequestBody TipoPlanDTO tipoPlanDTO) {
-		servicioTipoPlan.cambiarTipoPlan(tipoPlanDTO);
-		return "Tipo de Plan Actualizado";
-	}*/
 
 	// ---------------- Controladores TipoSesion -----------------------
 
@@ -202,15 +167,9 @@ public class InstructorControlador {
 		}
 	}
 
-	/*@PutMapping("/actualizarTipoSesion")
-	public String actualizarTipoSesion(@Valid @RequestBody TipoSesionDTO tipoSesionDTO) {
-		servicioTipoSesion.cambiarTipoSesion(tipoSesionDTO);
-		return "Tipo de Sesion Actualizado";
-	}*/
-
 	@ResponseBody
 	@GetMapping("/buscarTodosTiposSesiones")
-	public List<TipoSesionDTO> BuscarTipoSesiones( ) {
+	public List<TipoSesionDTO> buscarTipoSesiones( ) {
 		List<TipoSesion> tipoSesiones = servicioTipoSesion.findAllTipos();
 		ArrayList<TipoSesionDTO> tipoSesionFormat = new ArrayList<>();
 		for (TipoSesion tSes: tipoSesiones) {
@@ -223,52 +182,4 @@ public class InstructorControlador {
 		}
 		return tipoSesionFormat;
 	}
-	/*
-	@ResponseBody
-	@GetMapping("/buscarTiposSesionesNombres")
-	public List<String> BuscarTipoSesionesNombres( ) {
-		List<TipoSesion> tipoSesiones = servicioTipoSesion.findAllTipos();
-		ArrayList<String> tipoSesionNombres = new ArrayList<>();
-		for (TipoSesion tSes: tipoSesiones) {
-			tipoSesionNombres.add(tSes.getNombre());
-		}
-		return tipoSesionNombres;
-	}*/
-	
-	//---------------------- Controladores Plan -----------------
-	
-	/*@PostMapping("/crearPlan")
-	public String crearPlan(@RequestBody PlanDTO planDTO) {
-		servicioPlan.addPlan(planDTO);
-		return "Plan añadido con id: "+ planDTO.getId();
-	}
-	@DeleteMapping("/eliminarPlan")
-	public ResponseEntity<String> eliminarPlan(@RequestBody String idPlan) {
-		Plan Plan = servicioPlan.getPlanById(idPlan);
-		if (Plan != null) {
-			servicioPlan.deletePlan(Plan);
-			return ResponseEntity.ok().body("Plan eliminado");
-		} else {
-			return ResponseEntity.badRequest().body("No existe ningún plan con este id");
-		}
-	}
-
-	@PutMapping("/actualizarPlan")
-	public String actualizarPlan(@Valid @RequestBody PlanDTO PlanDTO) {
-		servicioPlan.cambiarPlan(PlanDTO);
-		return "Plan Actualizado";
-	}
-	
-	@GetMapping("/buscarPlanes")
-	public List<Plan> BuscarPlanes(){
-		List<Plan> planes = servicioPlan.getAllPlans();
-		return planes;
-	}
-	
-	@GetMapping("/buscarPlanesActivos")
-	public List<Plan> BuscarPlanesActivos(){
-		List<Plan> planes = servicioPlan.getAllActivePlans();
-		return planes;
-	}*/
-	
 }

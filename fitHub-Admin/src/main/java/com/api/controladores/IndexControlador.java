@@ -33,7 +33,7 @@ public class IndexControlador {
 
     // ------------------- Registro de Usuario --------------------------
 
-    @PostMapping("/register")
+    @PostMapping("/registro")
     public ResponseEntity<String> registroUsuario(@RequestBody @Valid UsuarioDTO accountDto, BindingResult result, WebRequest request, Errors errors) {
         if (!result.hasErrors()) {
             if ((usuarioServicio.getUserByEmail(accountDto.getCorreo()) == null) && (usuarioServicio.getUserById(accountDto.getCedula()) == null)){
