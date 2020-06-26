@@ -1,9 +1,9 @@
 package com.api.servicios;
 
 import com.api.dto.UsuarioDTO;
+import com.api.modelos.Sesion;
 import com.api.modelos.TipoPlan;
 import com.api.modelos.Usuario;
-import com.api.repositorios.TipoPlanRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
 import com.api.seguridad.JwtProperties;
 import io.jsonwebtoken.Claims;
@@ -27,17 +27,17 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     PasswordEncoder passwordEncoder;
 
     @Override
-    public Usuario getUserByCorreo(String correo){
+    public Usuario getUserByEmail(String correo){
         return repositorio.findByCorreo(correo);
     }
 
     @Override
-    public Usuario getUserByCedula(String cedula){
+    public Usuario getUserById(String cedula){
         return repositorio.findByCedula(cedula);
     }
 
     @Override
-    public Usuario getUserByNombre(String nombre){
+    public Usuario getUserByName(String nombre){
         return  repositorio.findByNombre(nombre);
     }
 
@@ -70,7 +70,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         user.setRole("USER");
         addUser(user);
 
-        TipoPlan planPrueba = servicioTipoPlan.getTipoPlanByNombre("Plan de Prueba");
+        TipoPlan planPrueba = servicioTipoPlan.getTipoPlanByName("Plan de Prueba");
         servicioPlan.addNewPlan(planPrueba, user);
         this.updateUser(user);
     };
@@ -83,5 +83,21 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
         return info;
     }
+
+    @Override
+	public boolean signedUser(Sesion sesion, Usuario usuario) {
+		
+		boolean inscrito = false;
+		List<Usuario> usuariosInscritos = sesion.getAsistentes();
+		for(int i = 0; i < usuariosInscritos.size(); i++)
+		{
+			String cedulaUsuarioLista = usuariosInscritos.get(i).getCedula();
+			String cedulaUsuario = usuario.getCedula();
+			if(usuariosInscritos.size()== 0) break;
+			else if(cedulaUsuarioLista.equals(cedulaUsuario))
+				inscrito = true; 
+		}
+		return inscrito;  
+	}
 
 }

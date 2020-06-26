@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(InstructorControlador.class)
@@ -61,9 +60,9 @@ class InstructorControladorTest {
     @Test
     public void registroSesion() throws Exception {
 
-        Instructor instructor = instructorServicio.getInstructorByNombre("admin");
+        Instructor instructor = instructorServicio.getInstructorByName("admin");
 
-        Usuario usuario = usuarioServicio.getUserByCorreo("duvan@micorreo.com");
+        Usuario usuario = usuarioServicio.getUserByEmail("duvan@micorreo.com");
 
         List<Usuario> usuarioList = new ArrayList<>();
 

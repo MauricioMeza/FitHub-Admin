@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 public interface SesionServicio {
 
 	Sesion addSesion(SesionDTO sesionDTO);
-    Sesion cambiarSesion(SesionDTO sesionDTO);
-    List<Sesion> findAllSesionesByFecha();
+    Sesion updateSesion(SesionDTO sesionDTO);
+    List<Sesion> findAllSesionsByDate();
     Sesion getSesionById(String idSesion);
     void deleteSesion(Sesion sesion);
-    void cambiarSesion(Sesion sesion);
-    boolean usuarioInscrito(Sesion sesion, Usuario usuario); 
-    String cancelarCupo(Sesion sesion, Usuario usuario);
+    void updateSesion(Sesion sesion);
+    String deleteUserFromSesion(Sesion sesion, Usuario user);
+    String addUserToSesion(String idSesion, String idUser);
 
 
 }
