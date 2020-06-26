@@ -73,7 +73,7 @@ public class UsuarioControlador {
 	@GetMapping("/verSesionesReservadas/{email}")
 	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String correo){
 		Usuario usuario = servicioUsuario.getUserByEmail(correo);
-		List <Sesion> sesiones = servicioSesion.findAllFutureSesionsByDate();
+		List <Sesion> sesiones = servicioSesion.findAllSesionsByDate();
 		List <SesionDTO> sesionesInscritas = new ArrayList<>();
 		for(Sesion ses: sesiones) {
 			if (servicioUsuario.signedUser(ses, usuario)){

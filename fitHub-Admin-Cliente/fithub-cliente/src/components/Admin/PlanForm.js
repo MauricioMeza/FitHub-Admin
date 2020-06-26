@@ -99,11 +99,10 @@ class PlanForm extends React.Component{
     const plan = this.state
     ModService.addTipoPlan(plan.nombre, plan.cantDias, plan.cantSesiones, plan.precio)
       .then(response => {
-        console.log(response)
         this.reloadPlanInfo()
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response)
       })
   }
 

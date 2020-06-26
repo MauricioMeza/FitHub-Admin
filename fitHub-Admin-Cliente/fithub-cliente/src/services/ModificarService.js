@@ -47,7 +47,6 @@ class ModificarService {
     }
 
     deleteTipoPlan(nom) {
-        console.log(nom)
         return Axios.delete( API_URL_Admin + "eliminarTipoPlan", {headers:{"Authorization": token}, data: nom})
     }
 }

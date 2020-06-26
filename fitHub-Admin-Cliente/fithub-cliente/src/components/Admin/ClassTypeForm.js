@@ -85,10 +85,10 @@ const styles = theme => ({
       textAlign: 'center',
       spacing: 10,
     },
-    action: {
-      display: 'flex',
-      justifyContent: 'space-around',
-    },
+  action: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
 });
 
 class PlanForm extends React.Component{
@@ -136,18 +136,17 @@ class PlanForm extends React.Component{
         this.reloadClasInfo()
       })
       .catch(error => {
-        console.log(error)
+        alert(error.response.data)
       })
   }
 
   deleteClase(id){
     ModService.deleteTipoSesion(id)
       .then(response => {
-        console.log(response);
         this.reloadClasInfo()
       })
       .catch(error => {
-        console.log(error);
+        alert(error.response.data)
       })
   }
 
@@ -163,10 +162,9 @@ class PlanForm extends React.Component{
         <Container component="main" maxWidth="xl">
           <Grid container maxwidth="md" spacing={5} alignItems="flex-start" justify="center">
             {clases.map((clase, i) => {
-              console.log(clase)
               return(
-              <Card className={classes.root} variant="outlined">
-                <CardHeader title={clase.nombre} className={classes.CardHeader}/>
+              <Card className={classes.root} key={i} variant="outlined">
+                <CardHeader title={clase.nombre}  className={classes.CardHeader}/>
                 <Divider variant="middle" />
                 <CardContent>
                     <Typography className={classes.pos} variant="body2" component="p" align="center">
@@ -180,7 +178,6 @@ class PlanForm extends React.Component{
                       variant="contained" 
                       color="primary"
                       className={classes.button}
-                      startIcon={<DeleteIcon />}
                       onClick = {(e) => {e.preventDefault(); this.deleteClase(clase.id)}}
                       >
                       Eliminar

@@ -47,7 +47,6 @@ class Pricing extends Component{
 
   reservarPlan(e, plan){
     e.preventDefault();
-    console.log(plan)
     let user = this.state.user
     if(user == null){
       alert("Ingrese para poder adquirir un plan")
@@ -59,9 +58,12 @@ class Pricing extends Component{
         })
     }else if(user.Rol == "ADMIN"){
       ModificarService.deleteTipoPlan(plan.title)
-      .then(() => {
-        window.location.reload();
-      })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch(error => {
+          alert(error.response.data)
+        })
     }
   }
 

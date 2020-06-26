@@ -57,7 +57,6 @@ class PlanUser extends React.Component{
   getUserInfo(){
     InfoService.getUserInfo()
       .then(response => {
-        console.log(response)
         this.setState({
           user: response.data,
           planUser: response.data.planDTO,

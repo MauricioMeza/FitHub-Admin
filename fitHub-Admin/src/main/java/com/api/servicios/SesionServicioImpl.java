@@ -127,7 +127,7 @@ public class SesionServicioImpl implements SesionServicio {
     		List<Sesion> sesionesReservadas = user.getPlan().getSesionesReservadas();
     		for(Sesion ses: sesionesReservadas) {
     			if(ses.getId().equals(sesion.getId()))
-    				return ResponseEntity.badRequest().body("Hay usuarios con ésta clase inscrita");
+    				return ResponseEntity.badRequest().body("Hay usuarios inscritos en ésta clase");
     		}
     	}
         repositorio.delete(sesion);

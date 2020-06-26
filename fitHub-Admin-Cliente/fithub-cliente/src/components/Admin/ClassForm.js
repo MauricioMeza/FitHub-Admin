@@ -145,9 +145,11 @@ class ClassForm extends React.Component{
   reloadClases(){
     ClaseService.getClasesAdmin()
     .then(response => {
-      console.log(response)
       var clas = response.data.map((c, i) => {
+        var fechaActual = new Date()
         var fecha = new Date(c.fecha)
+        var actual = true;
+        if(fecha.getTime() < fechaActual.getTime()){actual = false}
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
         var horaMin = fecha.getMinutes()
         if(horaMin == 0) horaMin = "00"
@@ -158,8 +160,10 @@ class ClassForm extends React.Component{
           "instructor": " " + c.instructor + " ",
           "id": c.id,
           "cupos": c.cupos,
-          "duracion": c.duracion
+          "duracion": c.duracion,
+          "actual": actual
         }
+        
       })
       this.setState({
         clasesBD : clas,
@@ -198,8 +202,11 @@ class ClassForm extends React.Component{
             this.reloadClases();  
           })
           .catch(error => {
-            if(error.response.status === 400){
-              alert(error.response.data.errors[0].defaultMessage) 
+            const e = error.response.data;
+            if(e.errors){
+              alert(e.errors[0].defaultMessage) 
+            }else{
+              alert(e) 
             }
           })
       }
@@ -216,10 +223,12 @@ class ClassForm extends React.Component{
           this.reloadClases()
         })
         .catch(error => {
-          if(error.response.status === 400){
-            alert(error.response.data.errors[0].defaultMessage) 
+          const e = error.response.data;
+          if(e.errors){
+            alert(e.errors[0].defaultMessage) 
+          }else{
+            alert(e) 
           }
-          console.log(error.response.data)
         })
       console.log(args)
     }else if(args.requestType === "eventCreate"){
@@ -228,16 +237,16 @@ class ClassForm extends React.Component{
       console.log(clase)
       ClaseService.addClase(clase.StartTime, clase.Subject, clase.Instructor)
         .then(response => {
-          console.log(response)
           this.reloadClases()
         })
         .catch(error => {
-          if(error.response.status === 400){
-            alert(error.response.data.errors[0].defaultMessage) 
+          const e = error.response.data;
+          if(e.errors){
+            alert(e.errors[0].defaultMessage) 
+          }else{
+            alert(e) 
           }
-          console.log(error.response.data)
         })
-      console.log(args)
     }
   }
   content(props) {

@@ -74,8 +74,12 @@ class ClassUser extends React.Component{
   reloadClases(){
     ClaseService.getClasesUser()
     .then(response => {
+      console.log(response.data)
       var clas = response.data.map((c, i) => {
+        var fechaActual = new Date()
         var fecha = new Date(c.fecha)
+        var actual = true;
+        if(fecha.getTime() < fechaActual.getTime()){actual = false}
         var months = ["Ene/", "Feb/", "Mar/", "Abr/", "May/", "Jun/", "Jul/", "Ago/", "Sep/", "Oct/", "Nov/", "Dec/"];
         var horaMin = fecha.getMinutes()
         if(horaMin == 0) horaMin = "00"
@@ -85,9 +89,12 @@ class ClassUser extends React.Component{
           "tipo" : c.tipo,
           "instructor": " " + c.instructor + " ",
           "id": c.id,
-          "cupos": c.cupos
+          "cupos": c.cupos,
+          "actual": actual
         }
+        
       })
+    console.log(clas)
       this.setState({
         clasesBD : clas, 
         clasesList : response.data 
@@ -111,24 +118,20 @@ class ClassUser extends React.Component{
         args.cancel = true
         ClaseService.cancelClase(args.data.Id)
           .then(response => {
-          if(response.data == "El usuario ha cancelado su cupo en la sesion"){
-            console.log(response)
             this.reloadClases();
-          }else{
-            alert(response.data)
-          }
-        })
+          })
+          .catch(error => {
+            alert(error.response.data)
+          })
       }else if(args.type == "Editor"){
           args.cancel = true
           ClaseService.reserveClase(args.data.Id)
             .then(response => {
-            if(response.data == "El usuario ha reservado un cupo con éxito"){
-              console.log(response)
               this.reloadClases();
-            }else{
-              alert(response.data)
-            }
-          })
+            })
+            .catch(error => {
+              alert(error.response.data)
+            })
       }else{
         args.cancel = false
       }
