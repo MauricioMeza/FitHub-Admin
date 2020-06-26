@@ -6,19 +6,20 @@ import com.api.modelos.Usuario;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface SesionServicio {
 
-	Sesion addSesion(SesionDTO sesionDTO);
+	ResponseEntity<String> addSesion(SesionDTO sesionDTO);
     Sesion updateSesion(SesionDTO sesionDTO);
     List<Sesion> findAllSesionsByDate();
     Sesion getSesionById(String idSesion);
-    void deleteSesion(Sesion sesion);
+    ResponseEntity<String> deleteSesion(Sesion sesion);
     void updateSesion(Sesion sesion);
-    String deleteUserFromSesion(Sesion sesion, Usuario user);
-    String addUserToSesion(String idSesion, String idUser);
-
+    ResponseEntity<String> deleteUserFromSesion(Sesion sesion, Usuario user);
+    ResponseEntity<String> addUserToSesion(String idSesion, String idUser);
+    public List<Sesion> findAllFutureSesionsByDate();
 
 }

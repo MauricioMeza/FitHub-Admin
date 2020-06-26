@@ -2,8 +2,10 @@ package com.api.servicios;
 
 import com.api.dto.TipoPlanDTO;
 import com.api.modelos.TipoPlan;
+import com.api.modelos.Usuario;
 import com.api.repositorios.TipoPlanRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
@@ -12,6 +14,8 @@ public class TipoPlanServicioImpl implements TipoPlanServicio {
 
     @Autowired
     TipoPlanRepositorio repositorio; 
+    @Autowired
+    UsuarioServicio servicioUsuario;
 
 	@Override
 	public TipoPlan getTipoPlanById(String id) {
@@ -41,8 +45,14 @@ public class TipoPlanServicioImpl implements TipoPlanServicio {
 	}
 
 	@Override
-    public void deleteTipoPlan(TipoPlan tipoPlan) {
+    public ResponseEntity<String> deleteTipoPlan(TipoPlan tipoPlan) {
+		List<Usuario> usuarios = servicioUsuario.getAllUsers();
+		for(Usuario user: usuarios) {
+			if(user.getPlan().getTipoPlan().getId().equals(tipoPlan.getId()))
+				return ResponseEntity.badRequest().body("Hay usuarios con éste tipo de plan inscrito");
+		}
         repositorio.delete(tipoPlan);
+        return ResponseEntity.ok().body("Tipo de plan borrado con éxito");
     }
 
 	/*

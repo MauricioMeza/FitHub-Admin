@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.api.dto.TipoPlanDTO;
-//import com.api.dto.PlanDTO;
 import com.api.dto.SesionDTO;
 import com.api.dto.TipoSesionDTO;
 import com.api.modelos.Sesion;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Instructor;
-//import com.api.modelos.Plan;
 
 import javax.validation.Valid;
 
@@ -55,9 +53,9 @@ public class InstructorControlador {
 	}
 
 	@PostMapping("/agregarInstructor")
-	public String agregarInstructor(@RequestBody Instructor instructor) {
+	public ResponseEntity<String> agregarInstructor(@RequestBody Instructor instructor) {
 		servicioInstructor.addInstructor(instructor);
-		return "Instructor añadido con id: "+ instructor.getCedula();
+		return ResponseEntity.ok().body("Instructor añadido con id: "+ instructor.getCedula());
 	}
 	
 	@DeleteMapping("/eliminarInstructor")
@@ -106,42 +104,39 @@ public class InstructorControlador {
 	}
 
 	@PostMapping("/agregarSesion")
-	public String agregarSesion(@RequestBody @Valid SesionDTO sesion) {
-		servicioSesion.addSesion(sesion);
-		return "Sesion añadida para la fecha: " + sesion.getFecha() ;
+	public ResponseEntity<String> agregarSesion(@RequestBody @Valid SesionDTO sesion) {
+		return servicioSesion.addSesion(sesion);
 	}
 
 	@DeleteMapping("/eliminarSesion")
 	public ResponseEntity<String> eliminarSesion(@RequestBody String id) {
 		Sesion sesion = servicioSesion.getSesionById(id);
 		if (sesion != null) {
-			servicioSesion.deleteSesion(sesion);
-			return ResponseEntity.ok().body("Sesion eliminada");
+			return servicioSesion.deleteSesion(sesion);
 		} else {
 			return ResponseEntity.badRequest().body("No existe ninguna sesion con este id");
 		}
 	}
 
 	@PutMapping("/actualizarSesion")
-	public String actualizarSesion(@Valid @RequestBody SesionDTO sesion) {
+	public ResponseEntity<String> actualizarSesion(@Valid @RequestBody SesionDTO sesion) {
 		servicioSesion.updateSesion(sesion);
-		return "Sesion Actualizada";
+		return ResponseEntity.ok().body("Sesion Actualizada");
 	}
 
 
 	// ---------------- Controladores TipoPlan -----------------------
 
 	@PostMapping("/crearTipoPlan")
-	public String crearTipoPlan(@RequestBody TipoPlanDTO tipoPlanDTO) {
+	public ResponseEntity<String> crearTipoPlan(@RequestBody TipoPlanDTO tipoPlanDTO) {
 		servicioTipoPlan.addTipoPlan(tipoPlanDTO);
-		return "Tipo de Plan añadido con Nombre: "+ tipoPlanDTO.getNombre();
+		return ResponseEntity.ok().body("Tipo de Plan añadido con Nombre: "+ tipoPlanDTO.getNombre());
 	}
 	@DeleteMapping("/eliminarTipoPlan")
 	public ResponseEntity<String> eliminarTipoPlan(@RequestBody String nombre) {
 		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanByName(nombre);
 		if (tipoPlan != null) {
-			servicioTipoPlan.deleteTipoPlan(tipoPlan);
-			return ResponseEntity.ok().body("Tipo de Plan eliminado");
+			return servicioTipoPlan.deleteTipoPlan(tipoPlan);
 		} else {
 			return ResponseEntity.badRequest().body("No existe ningún tipo de plan con este nombre");
 		}
@@ -151,17 +146,16 @@ public class InstructorControlador {
 	// ---------------- Controladores TipoSesion -----------------------
 
 	@PostMapping("/agregarTipoSesion")
-	public String guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
+	public ResponseEntity<String> guardarTipoSesion(@RequestBody @Valid TipoSesionDTO tipoSesionDTO) {
 		servicioTipoSesion.addTipoSesion(tipoSesionDTO);
-		return "Tipo de Sesion añadida";
+		return ResponseEntity.ok().body("Tipo de Sesion añadida");
 	}
 
 	@DeleteMapping("/eliminarTipoSesion")
 	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String id) {
 		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionById(id);
 		if (tipoSesion != null) {
-			servicioTipoSesion.deleteTipoSesion(tipoSesion);
-			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
+			return servicioTipoSesion.deleteTipoSesion(tipoSesion);
 		} else {
 			return ResponseEntity.badRequest().body("No existe ningún tipo de sesion con este nombre");
 		}

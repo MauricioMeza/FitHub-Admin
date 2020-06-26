@@ -5,6 +5,7 @@ import com.api.modelos.TipoPlan;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +15,7 @@ public interface TipoPlanServicio {
 	TipoPlan getTipoPlanByName(String name);
     List<TipoPlan> getAllTypePlans();
     TipoPlan addTipoPlan(TipoPlanDTO tipoPlanDTO);
-    void deleteTipoPlan(TipoPlan tipoPlan);
+    ResponseEntity<String> deleteTipoPlan(TipoPlan tipoPlan);
     //void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO);
 
 }

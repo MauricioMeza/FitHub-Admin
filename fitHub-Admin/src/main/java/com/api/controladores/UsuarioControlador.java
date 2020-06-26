@@ -1,7 +1,6 @@
 package com.api.controladores;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.api.dto.PlanDTO;
@@ -12,6 +11,7 @@ import com.api.servicios.SesionServicio;
 import com.api.servicios.TipoPlanServicio;
 import com.api.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.api.modelos.Plan;
@@ -66,14 +66,14 @@ public class UsuarioControlador {
 	// -------------- Controladores Sesion --------------------------
 
 	@GetMapping("/reservarCupo/{id}/{idSesion}")
-	public String reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
+	public ResponseEntity<String> reservarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion){
 		return servicioSesion.addUserToSesion(idSesion, idUsuario);
 	}
 
 	@GetMapping("/verSesionesReservadas/{email}")
 	public List<SesionDTO> verSesionesReservadas(@PathVariable("email") String correo){
 		Usuario usuario = servicioUsuario.getUserByEmail(correo);
-		List <Sesion> sesiones = servicioSesion.findAllSesionsByDate();
+		List <Sesion> sesiones = servicioSesion.findAllFutureSesionsByDate();
 		List <SesionDTO> sesionesInscritas = new ArrayList<>();
 		for(Sesion ses: sesiones) {
 			if (servicioUsuario.signedUser(ses, usuario)){
@@ -91,7 +91,7 @@ public class UsuarioControlador {
 	}
 	
 	@GetMapping("/cancelarCupo/{id}/{idSesion}")
-	public String cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
+	public ResponseEntity<String> cancelarCupo(@PathVariable("id") String idUsuario,@PathVariable("idSesion") String idSesion) {
 		Sesion sesion = servicioSesion.getSesionById(idSesion);
 		Usuario usuario = servicioUsuario.getUserByEmail(idUsuario);		
 		return servicioSesion.deleteUserFromSesion(sesion, usuario);
@@ -101,13 +101,13 @@ public class UsuarioControlador {
 	// -------------- Controladores Plan --------------------------
 
 	@GetMapping("/reservarPlan/{id}/{idTipoPlan}")
-	public String reservarPlan(@PathVariable("id") String idUsuario,@PathVariable("idTipoPlan") String idTipoPlan) {
+	public ResponseEntity<String> reservarPlan(@PathVariable("id") String idUsuario,@PathVariable("idTipoPlan") String idTipoPlan) {
 		TipoPlan tipoPlan = servicioTipoPlan.getTipoPlanById(idTipoPlan);
 		Usuario usuario = servicioUsuario.getUserByEmail(idUsuario);
 		
 		usuario = servicioPlan.addNewPlan(tipoPlan, usuario);
 		servicioUsuario.updateUser(usuario);
 		
-		return "Plan reservado con éxito " + usuario.getPlan();
+		return ResponseEntity.ok().body("Plan reservado con éxito " + usuario.getPlan());
 	}
 }
