@@ -3,8 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from "prop-types";
 import Class from './ClassT';
 
-//let cd = new classData();
-
 class Classes extends Component{
     constructor(props) {
         super(props)

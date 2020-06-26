@@ -192,8 +192,8 @@ public class InstructorControlador {
 	}
 
 	@DeleteMapping("/eliminarTipoSesion")
-	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String nombre) {
-		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionByName(nombre);
+	public ResponseEntity<String> eliminarTipoSesion(@RequestBody String id) {
+		TipoSesion tipoSesion = servicioTipoSesion.getTipoSesionById(id);
 		if (tipoSesion != null) {
 			servicioTipoSesion.deleteTipoSesion(tipoSesion);
 			return ResponseEntity.ok().body("Tipo de Sesion eliminado");
@@ -215,6 +215,7 @@ public class InstructorControlador {
 		ArrayList<TipoSesionDTO> tipoSesionFormat = new ArrayList<>();
 		for (TipoSesion tSes: tipoSesiones) {
 			TipoSesionDTO tipoSesionData = new TipoSesionDTO();
+			tipoSesionData.setDuracion(tSes.getDuracion());
 			tipoSesionData.setNombre(tSes.getNombre());
 			tipoSesionData.setCupos(tSes.getCupos());
 			tipoSesionData.setId(tSes.getId());
