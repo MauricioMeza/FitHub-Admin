@@ -140,24 +140,39 @@ class PlanForm extends React.Component{
       })
   }
 
+  deleteClase(id){
+    ModService.deleteTipoSesion(id)
+      .then(response => {
+        console.log(response);
+        this.reloadClasInfo()
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
 
   render(){ 
     const {classes} = this.props;
-    const {planes} = this.state;
+    const {clases} = this.state;
 
     return(
       <React.Fragment>
-
-        <Grid container className={classes.rootGrid} spacing={1} justify="center">
-          <Grid container justify="center" spacing={1}>
-            <Card className={classes.root} variant="outlined">
-                <CardHeader title="Tipo de clase" className={classes.CardHeader}/>
+        <br></br>
+        <br></br>
+        <Container component="main" maxWidth="xl">
+          <Grid container maxwidth="md" spacing={5} alignItems="flex-start" justify="center">
+            {clases.map((clase, i) => {
+              console.log(clase)
+              return(
+              <Card className={classes.root} variant="outlined">
+                <CardHeader title={clase.nombre} className={classes.CardHeader}/>
                 <Divider variant="middle" />
                 <CardContent>
                     <Typography className={classes.pos} variant="body2" component="p" align="center">
-                    Cupos disponibles :
+                    Cupos : {clase.cupos}
                     <br />
-                    Duracion :
+                    Duracion : {clase.duracion} min
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.action}>
@@ -166,36 +181,17 @@ class PlanForm extends React.Component{
                       color="primary"
                       className={classes.button}
                       startIcon={<DeleteIcon />}
+                      onClick = {(e) => {e.preventDefault(); this.deleteClase(clase.id)}}
                       >
                       Eliminar
                   </Button>
                 </CardActions>
-            </Card>
-
-            <Card className={classes.root} variant="outlined">
-                <CardHeader title="Tipo de clase" className={classes.CardHeader}/>
-                <Divider variant="middle" />
-                <CardContent>
-                    <Typography className={classes.pos} variant="body2" component="p" align="center">
-                    Cupos disponibles :
-                    <br />
-                    Duracion :
-                    </Typography>
-                </CardContent>
-                <CardActions className={classes.action}>
-                  <Button 
-                      variant="contained" 
-                      color="primary"
-                      className={classes.button}
-                      startIcon={<DeleteIcon />}
-                      >
-                      Eliminar
-                  </Button>
-                </CardActions>
-            </Card>
-
+              </Card>
+              )    
+            })}  
           </Grid>
-        </Grid>
+        </Container>
+
 
         <Container component="main" maxWidth="xs">
           <CssBaseline />

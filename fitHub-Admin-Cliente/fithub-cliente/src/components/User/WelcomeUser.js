@@ -39,13 +39,12 @@ class WelcomeUser extends React.Component{
         const { classes } = this.props;
         return(
             <Container maxWidth="lg">
-
-                <Divider variant="middle" />
                 <Container fixed={true}  disableGutters={true} component="main">
                 <br></br>
                 <Typography variant="h4" align="center" gutterBottom>
                 {"Conoce todos los beneficios que FitHub te ofrece"}
                 </Typography >
+                <Divider variant="middle" />
                 <br></br>
                 <Typography variant="h5" align="center" gutterBottom>
                 {"Disfruta todo lo que tenemos para ti por ser parte del mejor gimnasio de Colombia"}

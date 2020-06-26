@@ -89,10 +89,11 @@ class Welcome extends React.Component{
   // Funciones de Configuracion SCHEDULER
   onPopupOpen(args) {
     console.log(args)
-    if(args.type != "QuickInfo" || !args.data.Id){
-      args.cancel = true
-    }
+      if(args.type != "QuickInfo" || !args.data.Id){
+        args.cancel = true
+      }
   }
+
   content(props) {
     this.render()
     return (

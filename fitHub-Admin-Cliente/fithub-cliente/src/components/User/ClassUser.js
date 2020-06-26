@@ -132,6 +132,8 @@ class ClassUser extends React.Component{
       }else{
         args.cancel = false
       }
+    }else{
+      args.cancel = true;
     }
   }
 

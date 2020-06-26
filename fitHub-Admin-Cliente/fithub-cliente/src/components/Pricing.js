@@ -40,13 +40,15 @@ class Pricing extends Component{
 
   constructor(props){
     super(props);
+    this.state = {user : AuthService.getCurrentUser()}
+
     this.reservarPlan = this.reservarPlan.bind(this)
   }
 
   reservarPlan(e, plan){
     e.preventDefault();
     console.log(plan)
-    let user = AuthService.getCurrentUser()
+    let user = this.state.user
     if(user == null){
       alert("Ingrese para poder adquirir un plan")
     }else if(user.Rol == "USER"){
@@ -96,7 +98,7 @@ class Pricing extends Component{
           </CardContent>
           <CardActions>
             <Button fullWidth variant={tier.buttonVariant} color="primary" onClick={(e) => {this.reservarPlan(e, tier)}}>
-              {tier.buttonText}
+              {this.state.user == null ? tier.buttonText : this.state.user.Rol == 'ADMIN' ? 'Eliminar' : tier.buttonText }
             </Button>
           </CardActions>
         </Card>
