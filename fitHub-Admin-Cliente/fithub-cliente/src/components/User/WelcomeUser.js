@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { Jumbotron } from "react-bootstrap";
 
 const useStyles = theme => ({
     root: {
@@ -39,6 +40,11 @@ class WelcomeUser extends React.Component{
         const { classes } = this.props;
         return(
             <Container maxWidth="lg">
+                <Jumbotron className = "bg-dark text-white">
+                  <h1 className="text-center">¡Bienvenido a FitHub-User {currentUser.User}!</h1>
+                  <br></br>
+                  <h2 className="text-center">Esta es la Pagina Principal para que los usuarios puedan Reservar y manejar sus Planes y Clases</h2>
+                </Jumbotron>
                 <Container fixed={true}  disableGutters={true} component="main">
                 <br></br>
                 <Typography variant="h4" align="center" gutterBottom>
