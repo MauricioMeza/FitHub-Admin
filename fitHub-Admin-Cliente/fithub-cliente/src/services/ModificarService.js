@@ -19,7 +19,6 @@ class ModificarService {
             cupos: cup,
             duracion: dur,
         })
-        console.log(tipoSesion)
 
         return Axios.post( API_URL_Admin + "agregarTipoSesion", tipoSesion, 
         {headers:{"Content-Type" : "application/json",
@@ -40,7 +39,6 @@ class ModificarService {
             cantSesiones: sesiones,
             precio: precio
         })
-        console.log(tipoPlan)
 
         return Axios.post( API_URL_Admin + "crearTipoPlan", tipoPlan, 
         {headers:{"Content-Type" : "application/json",

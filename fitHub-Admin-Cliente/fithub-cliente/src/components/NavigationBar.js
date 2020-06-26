@@ -39,7 +39,7 @@ class NavigationBar extends React.Component {
 
 
     render(){
-        const{currentUser, showUserBoard} = this.state
+        const{showUserBoard} = this.state
         const {classes} = this.props;
 
         switch(showUserBoard){
@@ -82,6 +82,9 @@ class NavigationBar extends React.Component {
                                 </Link>
                                 <Link to={"/PlanForm"} className="navbar-brand">
                                     <Button>Modificar Planes</Button>
+                                </Link>
+                                <Link to={"/ClasTypeForm"} className="navbar-brand">
+                                    <Button>Modificar Clases</Button>
                                 </Link>
                             </Nav>
                             <Nav>
