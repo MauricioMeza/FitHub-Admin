@@ -2,7 +2,6 @@ class classData {
     getClassData = (clasData: [{id: string, tipo: {id: string, nombre: string, cupos: number, duracion: number }, instructor: string, fecha: Date, cupos: number }], 
                     clasRes: [{id: string, tipo: {id: string, nombre: string, cupos: number, duracion: number }, instructor: string, fecha: Date, cupos: number }]) => {
        var dataSource: {}[] =[];
-       console.log(clasRes);  
        clasData.forEach(clas => {
             var reserved = false;
             for (const clasR of clasRes) {

@@ -1,14 +1,10 @@
 package com.api.seguridad;
 
-import com.api.modelos.Usuario;
-import com.api.modelos.Instructor;
 import com.api.repositorios.InstructorRepositorio;
 import com.api.repositorios.UsuarioRepositorio;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,9 +53,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private Authentication getUsernamePasswordAuthentication(HttpServletRequest request){
 
         String token = request.getHeader(JwtProperties.HEADER_STRING);
-        Instructor instructor;
-        UserPrincipal principal;
-        Usuario usuario;
         List<GrantedAuthority> authorityList = new ArrayList<>();
 
         if(token != null){
@@ -71,13 +64,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             if(userName != null){
             	if(userName.contains("@Fithub.com")) {
-            		//instructor = instructorRepositorio.findByCorreo(userName);
             		authorityList.add(new SimpleGrantedAuthority("ROLE_" + "ADMIN"));
-            		//principal = new UserPrincipal(instructor);
             	} else{
-            		//usuario = usuarioRepositorio.findByCorreo(userName);
             		authorityList.add(new SimpleGrantedAuthority("ROLE_" + "USER"));
-            		//principal = new UserPrincipal(instructor);
             	}
 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userName,null,authorityList);

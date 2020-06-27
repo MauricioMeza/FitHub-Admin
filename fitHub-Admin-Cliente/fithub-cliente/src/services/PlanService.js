@@ -12,7 +12,7 @@ const API_URL_User = "http://localhost:8080/User/"
 class InfoService {
 
     getPlanesList(){
-      return Axios.get( API_URL +"listaTipoPlanes")  
+      return Axios.get(API_URL +"listaTipoPlanes")  
     }
 
     reservarPlan(planId){

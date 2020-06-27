@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,11 +38,11 @@ public class PlanServicioImpl implements PlanServicio {
 		Plan plan = repositorio.findById(idPlan);
 		return plan;
 	}
-	@Override
-	public List<Plan> getAllPlans() {
-		List<Plan> planes  = repositorio.findAll(); 
-		return planes;
-	}
+
+	/*
+	 * @Override public List<Plan> getAllPlans() { List<Plan> planes =
+	 * repositorio.findAll(); return planes; }
+	 */
 	@Override
 	public Usuario addNewPlan(TipoPlan tipoPlan, Usuario usuario){
 		Plan plan = new Plan();
@@ -49,7 +50,7 @@ public class PlanServicioImpl implements PlanServicio {
 
 		plan.setClasesDisponibles(tipoPlan.getCantSesiones());
 		plan.setFechaInicio(new Date());
-		plan.setFechaFin(plan.SumarDias(fecha, tipoPlan.getCantDias()));
+		plan.setFechaFin(this.addDays(fecha, tipoPlan.getCantDias()));
 		plan.setSesionesAsistidas(new ArrayList<>());
 		plan.setSesionesReservadas(new ArrayList<>());
 		plan.setTipoPlan(tipoPlan);
@@ -61,7 +62,7 @@ public class PlanServicioImpl implements PlanServicio {
 		return usuario;
 	}
 	@Override
-	public List<Usuario> usuariosInscritos(String idPlan) {
+	public List<Usuario> signedUser(String idPlan) {
 		List<Usuario> usuarios = usuarioRepositorio.findAll();
 		List<Usuario> usuariosIns = new ArrayList<>();
 		for (Usuario usuario: usuarios) {
@@ -71,7 +72,7 @@ public class PlanServicioImpl implements PlanServicio {
 		return usuariosIns;
 	}
 	@Override
-	public void actuaizarListasSesiones(String idUsuario) {
+	public void updateSesionsLists(String idUsuario) {
 		Usuario usuario = usuarioRepositorio.findByCedula(idUsuario);
 		List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
 		List<Sesion> sesionesAsistidas = usuario.getPlan().getSesionesAsistidas();
@@ -104,22 +105,19 @@ public class PlanServicioImpl implements PlanServicio {
 		usuarioRepositorio.save(usuario);
 		planRepositorio.save(plan);
 	}
-	@Override
-	public void cancelarPlan(String idPlan) {
-		Plan plan = repositorio.findById(idPlan);
-		plan.setActivo(false);
-	}
-	@Override
-	public List<Plan> getAllActivePlans() {
-		List<Plan> planes  = repositorio.findAll(); 
-		List<Plan> planesActivos  = new ArrayList<>();
-		for(Plan plan: planes) {
-			if(plan.isActivo())
-				planesActivos.add(plan);
-		}
-		
-		return planesActivos;
-	}
+
+	/*
+	 * @Override public void cancelarPlan(String idPlan) { Plan plan =
+	 * repositorio.findById(idPlan); plan.setActivo(false); }
+	 */
+	/*
+	 * @Override public List<Plan> getAllActivePlans() { List<Plan> planes =
+	 * repositorio.findAll(); List<Plan> planesActivos = new ArrayList<>(); for(Plan
+	 * plan: planes) { if(plan.isActivo()) planesActivos.add(plan); }
+	 * 
+	 * return planesActivos; }
+	 */
+	
 	@Override
 	public Plan addPlan(PlanDTO planDTO) {
 		Plan plan = new Plan();
@@ -140,22 +138,27 @@ public class PlanServicioImpl implements PlanServicio {
 		repositorio.save(plan);
 		return null;
 	}
+	//@Override
+	/*
+	 * public void cambiarPlan(PlanDTO planDTO) { Plan plan = new Plan();
+	 * plan.setActivo(true);
+	 * plan.setClasesDisponibles(planDTO.getClasesDisponibles());
+	 * plan.setFechaFin(planDTO.getFechaFin());
+	 * plan.setFechaInicio(planDTO.getFechaInicio()); plan.setId(planDTO.getId());
+	 * plan.setSesionesAsistidas(planDTO.getSesionesAsistidas());
+	 * plan.setSesionesReservadas(planDTO.getSesionesReservadas()); TipoPlan
+	 * tipoPlan = repositorioTipoPlan.findTipoPlanByNombre(planDTO.getTipoPlan());
+	 * plan.setTipoPlan(tipoPlan); repositorio.save(plan); }
+	 */
+
+	/*
+	 * @Override public void deletePlan(Plan plan) { repositorio.delete(plan); }
+	 */
 	@Override
-	public void cambiarPlan(PlanDTO planDTO) {
-		Plan plan = new Plan();
-		plan.setActivo(true);
-		plan.setClasesDisponibles(planDTO.getClasesDisponibles());
-		plan.setFechaFin(planDTO.getFechaFin());
-		plan.setFechaInicio(planDTO.getFechaInicio());
-		plan.setId(planDTO.getId());
-		plan.setSesionesAsistidas(planDTO.getSesionesAsistidas());
-		plan.setSesionesReservadas(planDTO.getSesionesReservadas());
-		TipoPlan  tipoPlan = repositorioTipoPlan.findTipoPlanByNombre(planDTO.getTipoPlan());
-		plan.setTipoPlan(tipoPlan);
-		repositorio.save(plan);
-	}
-	@Override
-	public void deletePlan(Plan plan) {
-		repositorio.delete(plan);
+	public Date addDays(Date fecha, int dias) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.DAY_OF_YEAR, dias);
+		return calendar.getTime();
 	}
 }

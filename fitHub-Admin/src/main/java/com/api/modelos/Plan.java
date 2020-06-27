@@ -41,22 +41,6 @@ public class Plan {
 	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
-
-	public Date SumarDias(Date fecha, int dias) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(fecha);
-		calendar.add(Calendar.DAY_OF_YEAR, dias);
-		return calendar.getTime();
-		
-	}
-	
-	public Date SumarMinutos(Date fecha, int minutos) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(fecha);
-		calendar.add(Calendar.MINUTE, minutos);
-		return calendar.getTime();
-		
-	}
 	
 	public List<Sesion> getSesionesAsistidas() {
 		return sesionesAsistidas;

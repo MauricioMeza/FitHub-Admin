@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,7 +32,6 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(InstructorControlador.class)
@@ -61,9 +61,9 @@ class InstructorControladorTest {
     @Test
     public void registroSesion() throws Exception {
 
-        Instructor instructor = instructorServicio.getInstructorByNombre("admin");
+        Instructor instructor = instructorServicio.getInstructorByName("admin");
 
-        Usuario usuario = usuarioServicio.getUserByCorreo("duvan@micorreo.com");
+        Usuario usuario = usuarioServicio.getUserByEmail("duvan@micorreo.com");
 
         List<Usuario> usuarioList = new ArrayList<>();
 
@@ -75,7 +75,7 @@ class InstructorControladorTest {
 
         String sesion = "{\"fecha\":\"2020-05-17\",\"sesion\":\"Clase de cardio\",\"instructor\":\"admin\"}";
 
-        Mockito.when(sesionServicio.addSesion(Mockito.any(SesionDTO.class))).thenReturn(mockSesion);
+        Mockito.when(sesionServicio.addSesion(Mockito.any(SesionDTO.class))).thenReturn(ResponseEntity.ok(mockSesion.toString())); 
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Admin/agregarSesion").
                 accept(MediaType.APPLICATION_JSON).content(sesion).contentType(MediaType.APPLICATION_JSON);

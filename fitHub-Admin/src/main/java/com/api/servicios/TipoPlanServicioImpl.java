@@ -1,24 +1,21 @@
 package com.api.servicios;
 
 import com.api.dto.TipoPlanDTO;
-import com.api.dto.TipoSesionDTO;
-import com.api.modelos.Sesion;
 import com.api.modelos.TipoPlan;
-import com.api.modelos.TipoSesion;
+import com.api.modelos.Usuario;
 import com.api.repositorios.TipoPlanRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 import java.util.List;
-
-import javax.validation.constraints.NotEmpty;
 
 @Component
 public class TipoPlanServicioImpl implements TipoPlanServicio {
 
     @Autowired
     TipoPlanRepositorio repositorio; 
+    @Autowired
+    UsuarioServicio servicioUsuario;
 
 	@Override
 	public TipoPlan getTipoPlanById(String id) {
@@ -43,24 +40,30 @@ public class TipoPlanServicioImpl implements TipoPlanServicio {
 	}
 
 	@Override
-	public TipoPlan getTipoPlanByNombre(String nombre) {
+	public TipoPlan getTipoPlanByName(String nombre) {
 		return repositorio.findTipoPlanByNombre(nombre);
 	}
 
 	@Override
-    public void deleteTipoPlan(TipoPlan tipoPlan) {
+    public ResponseEntity<String> deleteTipoPlan(TipoPlan tipoPlan) {
+		List<Usuario> usuarios = servicioUsuario.getAllUsers();
+		for(Usuario user: usuarios) {
+			if(user.getPlan().getTipoPlan().getId().equals(tipoPlan.getId()))
+				return ResponseEntity.badRequest().body("Hay usuarios con éste tipo de plan inscrito");
+		}
         repositorio.delete(tipoPlan);
+        return ResponseEntity.ok().body("Tipo de plan borrado con éxito");
     }
 
-    @Override
-    public void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO) {
-        TipoPlan nuevoTipoPlan = new TipoPlan();
-
-        nuevoTipoPlan.setId(tipoPlanDTO.getId());
-        nuevoTipoPlan.setNombre(tipoPlanDTO.getNombre());
-        nuevoTipoPlan.setCantDias(tipoPlanDTO.getCantDias());
-        nuevoTipoPlan.setPrecio(tipoPlanDTO.getPrecio());
-        nuevoTipoPlan.setCantSesiones(tipoPlanDTO.getCantSesiones());
-        repositorio.save(nuevoTipoPlan);
-    }
+	/*
+	 * @Override public void cambiarTipoPlan(TipoPlanDTO tipoPlanDTO) { TipoPlan
+	 * nuevoTipoPlan = new TipoPlan();
+	 * 
+	 * nuevoTipoPlan.setId(tipoPlanDTO.getId());
+	 * nuevoTipoPlan.setNombre(tipoPlanDTO.getNombre());
+	 * nuevoTipoPlan.setCantDias(tipoPlanDTO.getCantDias());
+	 * nuevoTipoPlan.setPrecio(tipoPlanDTO.getPrecio());
+	 * nuevoTipoPlan.setCantSesiones(tipoPlanDTO.getCantSesiones());
+	 * repositorio.save(nuevoTipoPlan); }
+	 */
 }

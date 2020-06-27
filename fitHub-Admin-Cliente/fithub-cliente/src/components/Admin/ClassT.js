@@ -45,20 +45,18 @@ class ClassT extends Component{
     if(user == "ADMIN"){
       ClaseService.deleteSesion(i)
       .then(response => {
-        console.log(response)
         this.props.reload()
       })
       .catch(error => {
-        console.log(error.response)
+        alert(error.response.data)
       })
     }else if(user == "USER"){
       ClaseService.cancelClase(i)
       .then(response => {
-        console.log(response)
         this.props.reload()
       })
       .catch(error => {
-        console.log(error.response)
+        alert(error.response.data)
       })  
     }
   }

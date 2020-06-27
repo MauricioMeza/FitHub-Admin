@@ -21,8 +21,8 @@ class InfoService {
         ,"correo":"ivan@Fithub.com",
         "image": 'https://source.unsplash.com/7kEpUPB8vNk'},
 
-        {"nombre":"Juan"
-        ,"correo":"juan@Fithub.com",
+        {"nombre":"Carolina"
+        ,"correo":"carolina@Fithub.com",
         "image": 'https://source.unsplash.com/rZmCg1_QOYQ'},
 
         {"nombre":"Daniela"

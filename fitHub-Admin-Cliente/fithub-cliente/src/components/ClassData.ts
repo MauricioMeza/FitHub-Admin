@@ -10,7 +10,6 @@ class classData {
                 StartTime: fechaClase,
                 Instructor: clas.instructor,
                 IsReadonly: true,
-                Reserved: false,
                 Cupos: clas.cupos + "/" + clas.tipo.cupos,
                 Duracion: clas.tipo.duracion + " min",
                 Cupo: clas.cupos

@@ -35,7 +35,7 @@ class AuthService {
         contrasenaRep: contrasenaRep
       })      
       
-      return Axios.post( API_URL +"register", usuario, {headers:{"Content-Type" : "application/json"}})
+      return Axios.post( API_URL +"registro", usuario, {headers:{"Content-Type" : "application/json"}})
   }
 
   getCurrentUser() {

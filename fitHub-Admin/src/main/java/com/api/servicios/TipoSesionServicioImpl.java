@@ -1,9 +1,11 @@
 package com.api.servicios;
 
 import com.api.dto.TipoSesionDTO;
+import com.api.modelos.Sesion;
 import com.api.modelos.TipoSesion;
 import com.api.repositorios.TipoSesionRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +15,8 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
 
     @Autowired
     TipoSesionRepositorio repositorio;
+    @Autowired
+    SesionServicio servicioSesion;
 
 
     @Override
@@ -32,7 +36,7 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
     }
 
     @Override
-    public TipoSesion getTipoSesionByNombre(String nombre) {
+    public TipoSesion getTipoSesionByName(String nombre) {
         return repositorio.findByNombre(nombre);
     }
 
@@ -42,19 +46,25 @@ public class TipoSesionServicioImpl implements TipoSesionServicio{
     }
 
     @Override
-    public void deleteTipoSesion(TipoSesion tipoSesion) {
+    public ResponseEntity<String> deleteTipoSesion(TipoSesion tipoSesion) {
+    	List<Sesion> sesiones = servicioSesion.findAllFutureSesionsByDate();
+    	for(Sesion ses: sesiones) {
+    		if(ses.getTipo().getId().equals(tipoSesion.getId()))
+    			return ResponseEntity.badRequest().body("Hay sesiones ligadas a éste tipo de sesion");
+    	}
         repositorio.delete(tipoSesion);
+        return ResponseEntity.ok().body("Tipo de sesión eliminado con éxito");
     }
 
-    @Override
-    public void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO) {
-        TipoSesion nuevoTipoSesion = new TipoSesion();
-
-        nuevoTipoSesion.setId(tipoSesionDTO.getId());
-        nuevoTipoSesion.setNombre(tipoSesionDTO.getNombre());
-        nuevoTipoSesion.setCupos(tipoSesionDTO.getCupos());
-        nuevoTipoSesion.setDuracion(tipoSesionDTO.getDuracion());
-
-        repositorio.save(nuevoTipoSesion);
-    }
+	/*
+	 * @Override public void cambiarTipoSesion(TipoSesionDTO tipoSesionDTO) {
+	 * TipoSesion nuevoTipoSesion = new TipoSesion();
+	 * 
+	 * nuevoTipoSesion.setId(tipoSesionDTO.getId());
+	 * nuevoTipoSesion.setNombre(tipoSesionDTO.getNombre());
+	 * nuevoTipoSesion.setCupos(tipoSesionDTO.getCupos());
+	 * nuevoTipoSesion.setDuracion(tipoSesionDTO.getDuracion());
+	 * 
+	 * repositorio.save(nuevoTipoSesion); }
+	 */
 }

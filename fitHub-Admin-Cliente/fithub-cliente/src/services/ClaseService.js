@@ -53,7 +53,6 @@ class ClaseService {
   getClasesNombres(){
     return Axios.get( API_URL_Admin +"buscarTodosTiposSesiones" , {headers:{"Authorization": token}})
   }
-
   deleteSesion(claseId){
     return Axios.delete(API_URL_Admin + "eliminarSesion", {headers:{"Authorization": token}, data: claseId})
   }
