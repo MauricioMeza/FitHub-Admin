@@ -162,13 +162,13 @@ public class SesionServicioImpl implements SesionServicio {
 			List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
 			Plan plan = usuario.getPlan();
 			for(int i = 0; i < sesionesReservadas.size(); i++) {
-				if(sesionesReservadas.get(i).getId().contentEquals(sesion.getId())) {
+				if(sesionesReservadas.get(i).getId().equals(sesion.getId())) {
 					sesionesReservadas.remove(i);
-					plan.setSesionesReservadas(sesionesReservadas);
 					plan.setClasesDisponibles(plan.getClasesDisponibles()+1);
-					usuario.setPlan(plan);
 				}
-			}			
+			}		
+			plan.setSesionesReservadas(sesionesReservadas);
+			usuario.setPlan(plan);
 			sesion.setAsistentes(inscritos);
 			int cupos = sesion.getCupos();
 			sesion.setCupos(cupos+ 1);
