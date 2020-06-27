@@ -225,7 +225,7 @@ public class SesionServicioImpl implements SesionServicio {
 		List<Usuario> asistentes = sesion.getAsistentes();
 		List<Usuario> asistentes_actualizado = new ArrayList<>();
 		for(int i = 0; i < asistentes.size(); i++) {
-			if(asistentes.get(i).getCedula().equals(usuario.getCedula()))
+			if(!asistentes.get(i).getCedula().equals(usuario.getCedula()))
 				asistentes_actualizado.add(asistentes.get(i));
 		}
 		return asistentes_actualizado;
