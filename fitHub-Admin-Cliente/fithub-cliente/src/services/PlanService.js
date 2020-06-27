@@ -6,7 +6,7 @@ if(AuthService.getCurrentUser() != null){
   token = AuthService.getCurrentUser().Authorization
 }
 
-const API_URL = "http://localhost:8080/"
+const API_URL = "https://fithub-admin.herokuapp.com/"
 const API_URL_Admin = API_URL + "Admin/";
 const API_URL_User = API_URL + "User/";
 

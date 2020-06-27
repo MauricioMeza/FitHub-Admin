@@ -2,7 +2,7 @@ import Axios from "axios";
 import {loginUser, logoutUser } from "../reducers/actions"
 import store from '../reducers/store';
 
-const API_URL = "http://localhost:8080/";
+const API_URL = "https://fithub-admin.herokuapp.com/";
 
 class AuthService {
 
