@@ -185,9 +185,12 @@ class ClassForm extends React.Component{
       this.reloadClases()
     })
     .catch(error => {
-      if(error.response.status == 400){
-        alert(error.response.data.errors[0].defaultMessage) 
-      }
+      const e = error.response.data;
+        if(e.errors){
+          alert(e.errors[0].defaultMessage) 
+        }else{
+          alert(e) 
+        }
       console.log(error.response.data)
     })
   }
