@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
+import {Link, Red} from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
+
 import AuthService from '../services/AuthService';
 
 
@@ -45,11 +46,9 @@ const styles = theme => ({
     event.preventDefault()
     AuthService.login(this.state.correo, this.state.contrasena)
     .then(() => {
-      const userRole = AuthService.getCurrentUserRole();
-      if(userRole == "USER"){
-        this.props.history.push('/welcomeUser')
-      }else if(userRole == "ADMIN"){
-        this.props.history.push('/welcomeAdmin')
+      const user = AuthService.getCurrentUser();
+      if(user){
+        this.props.history.push('/')
       }
       window.location.reload();
     })   

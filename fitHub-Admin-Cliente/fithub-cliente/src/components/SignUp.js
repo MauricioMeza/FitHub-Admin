@@ -41,7 +41,6 @@ class SignUp extends React.Component{
     AuthService.register(this.state.cedula, this.state.nombre, this.state.correo, this.state.contrasena, this.state.contrasenaRep)
     .then(()=> {
         this.props.history.push("/login");
-        window.location.reload();
     })
     .catch(error => {
       alert(error.response.data)
