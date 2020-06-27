@@ -21,5 +21,6 @@ public interface SesionServicio {
     ResponseEntity<String> deleteUserFromSesion(Sesion sesion, Usuario user);
     ResponseEntity<String> addUserToSesion(String idSesion, String idUser);
     public List<Sesion> findAllFutureSesionsByDate();
+    List<Usuario> quitarAsistente(Usuario usuario, Sesion sesion);
 
 }

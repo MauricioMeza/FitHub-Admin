@@ -158,7 +158,7 @@ public class SesionServicioImpl implements SesionServicio {
 			  return ResponseEntity.badRequest().body("El usuario no está inscrito en la sesion");
 		 
 		else {
-			List<Usuario> inscritos = sesion.quitarAsistente(usuario);
+			List<Usuario> inscritos = servicioSesion.quitarAsistente(usuario, sesion);
 			List<Sesion> sesionesReservadas = usuario.getPlan().getSesionesReservadas();
 			Plan plan = usuario.getPlan();
 			for(int i = 0; i < sesionesReservadas.size(); i++) {
@@ -220,4 +220,14 @@ public class SesionServicioImpl implements SesionServicio {
 		return ResponseEntity.ok().body("El usuario ha reservado un cupo con éxito");
 	}
 
+	
+	public List<Usuario> quitarAsistente(Usuario usuario, Sesion sesion){
+		List<Usuario> asistentes = sesion.getAsistentes();
+		List<Usuario> asistentes_actualizado = new ArrayList<>();
+		for(int i = 0; i < asistentes.size(); i++) {
+			if(asistentes.get(i).getCedula().equals(usuario.getCedula()))
+				asistentes_actualizado.add(asistentes.get(i));
+		}
+		return asistentes_actualizado;
+	}
 }
