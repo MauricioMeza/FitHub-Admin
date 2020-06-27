@@ -43,7 +43,7 @@ public class Sesion {
 		List<Usuario> asistentes = this.asistentes;
 		List<Usuario> asistentes_actualizado = new ArrayList<>();
 		for(int i = 0; i < asistentes.size(); i++) {
-			if(asistentes.get(i).getCedula() == usuario.getCedula())
+			if(asistentes.get(i).getCedula().equals(usuario.getCedula()))
 				asistentes_actualizado.add(asistentes.get(i));
 		}
 		return asistentes_actualizado;
