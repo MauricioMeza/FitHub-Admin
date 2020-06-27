@@ -7,7 +7,8 @@ if(AuthService.getCurrentUser() != null){
 }
 
 const API_URL = "http://localhost:8080/"
-const API_URL_User = "http://localhost:8080/User/"
+const API_URL_Admin = API_URL + "Admin/";
+const API_URL_User = API_URL + "User/";
 
 class InfoService {
   
